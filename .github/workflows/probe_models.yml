@@ -1,0 +1,40 @@
+name: Probe LLM Models (manual)
+
+# รันมือเมื่อต้องการรีเฟรชรายชื่อโมเดลที่ใช้จริง (เช่น LiteLLM proxy เพิ่ม/ลดโมเดล)
+# จะเขียน config/models.yaml ใหม่ แล้ว commit + push กลับ repo ให้อัตโนมัติด้วย GITHUB_TOKEN
+# (ไม่ต้องพึ่ง GitHub Desktop สำหรับขั้นนี้)
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Probe models and write config/models.yaml
+        env:
+          LITELLM_BASE_URL: ${{ secrets.LITELLM_BASE_URL }}
+          LITELLM_KEY_1: ${{ secrets.LITELLM_KEY_1 }}
+          LITELLM_KEY_2: ${{ secrets.LITELLM_KEY_2 }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python scripts/probe_models.py
+
+      - name: Commit updated models.yaml
+        run: |
+          git config user.name "money-chaser-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add config/models.yaml state/model_probe.json
+          git diff --cached --quiet && echo "ไม่มีอะไรเปลี่ยน ข้าม commit" || git commit -m "chore: refresh config/models.yaml from probe"
+          git push
