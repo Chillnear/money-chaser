@@ -1,0 +1,47 @@
+# ⚠️ ไฟล์นี้แก้ได้โดยมนุษย์เท่านั้น — LLM/Reflector ห้ามเขียนไฟล์นี้เด็ดขาด
+# อ้างอิงจาก BUILD-SPEC.md ข้อ 5
+
+mode_defaults:
+  max_open_positions: 1
+  max_trades_per_day: 1
+  max_leverage: 3.0
+  universe_mode: dynamic
+  min_24h_volume_usd: 20000000
+  min_open_interest_usd: 5000000
+  always_include: [PAXG]
+  screening_shortlist_size: 3
+
+sizing:
+  risk_per_trade_pct: 2.0
+  min_notional_usd: 10.0
+  max_notional_usd: 40.0
+  max_notional_pct_of_equity: 120.0
+  min_notional_override_max_risk_pct: 4.0
+
+stops:
+  atr_multiple: 1.5
+  stop_floor_pct: 2.0
+  stop_cap_pct: 6.0
+  reward_risk_ratio: 2.0
+  max_holding_days: 5
+
+gates:
+  min_judge_confidence: 60
+  min_analyst_agreement: 2
+  max_funding_pct_annual: 60
+
+breakers:
+  daily_loss_pct: 6.0
+  weekly_loss_pct: 12.0
+  max_drawdown_pct: 25.0
+  consecutive_losses_halve_size: 3
+
+costs:
+  taker_fee_pct: 0.045
+  assumed_slippage_pct: 0.05
+
+llm_budget:
+  monthly_usd_cap: 20.0
+  hard_stop_usd: 15.0
+  daily_soft_cap_usd: 0.50
+  degrade_thresholds_pct: [70, 90]

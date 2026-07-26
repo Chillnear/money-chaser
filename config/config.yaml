@@ -1,0 +1,45 @@
+# การตั้งค่าทั่วไปที่ไม่เกี่ยวกับความเสี่ยง (risk.yaml แยกออกไปโดยตั้งใจ)
+
+schedule:
+  run_hour_utc: 0
+  run_minute_utc: 20   # 00:20 UTC = 07:20 น. ไทย, เผื่อ GH Actions delay 5-30 นาที
+
+data:
+  hyperliquid_info_url: "https://api.hyperliquid.xyz/info"
+  candle_interval: "1d"
+  candle_lookback: 400
+  request_timeout_sec: 15
+  retry_attempts: 3
+  cache_dir: "state/cache"
+
+macro_sources:
+  fear_greed_url: "https://api.alternative.me/fng/"
+  news_rss:
+    - "https://www.coindesk.com/arc/outboundfeeds/rss/"
+    - "https://cointelegraph.com/rss"
+
+features:
+  ema_periods: [9, 21, 50, 200]
+  adx_period: 14
+  atr_period: 14
+  rsi_period: 14
+  donchian_period: 20
+  vol_lookback_days: 30
+  vol_percentile_lookback_days: 365
+  return_windows_days: [1, 7, 30]
+
+llm:
+  roles:
+    analyst_trend: {tier: mid}
+    analyst_positioning: {tier: mid}
+    analyst_macro: {tier: mid}
+    redteam: {tier: mid}
+    judge: {tier: frontier}
+    reflector: {tier: frontier}
+  min_provider_diversity: 3   # 4 บทบาทแรกต้องมาจาก >=3 ค่ายต่างกัน
+  input_token_cap: 8000
+  output_token_cap: 1500
+
+notify:
+  daily_summary: true
+  alert_on: [breaker_triggered, reconcile_mismatch, exception, budget_threshold, sl_tp_hit]

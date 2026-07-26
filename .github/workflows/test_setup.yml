@@ -1,0 +1,33 @@
+name: Test Setup (manual)
+
+# รันมือครั้งแรกเพื่อยืนยันว่าเชื่อมต่อ Hyperliquid / LiteLLM / Groq ได้จริง
+# ก่อนจะเดินหน้าไปสร้างส่วนที่เหลือ (P1 เป็นต้นไป)
+# วิธีสั่งรัน: ไปที่แท็บ "Actions" ของ repo บน GitHub -> เลือก "Test Setup (manual)" -> กด "Run workflow"
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run unit tests (ไม่แตะ network จริง)
+        run: pytest -q
+
+      - name: Live connectivity check (Hyperliquid / LiteLLM / Groq)
+        env:
+          LITELLM_BASE_URL: ${{ secrets.LITELLM_BASE_URL }}
+          LITELLM_KEY_1: ${{ secrets.LITELLM_KEY_1 }}
+          LITELLM_KEY_2: ${{ secrets.LITELLM_KEY_2 }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          HL_MAIN_ADDRESS: ${{ secrets.HL_MAIN_ADDRESS }}
+        run: python scripts/check_setup.py

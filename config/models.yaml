@@ -1,0 +1,18 @@
+# ⚠️ ห้ามแก้ไฟล์นี้ด้วยมือ — ต้องสร้างจาก scripts/probe_models.py เท่านั้น
+# เพราะต้องยืนยันว่าโมเดลที่ระบุมีจริงใน LiteLLM endpoint ของผู้ใช้ ไม่ hardcode เดา
+#
+# สถานะปัจจุบัน: ยังไม่ได้ probe เพราะยังไม่มี LITELLM_BASE_URL / LITELLM_KEY_1 / LITELLM_KEY_2
+# ขั้นต่อไป: รัน `python scripts/probe_models.py` หลังตั้งค่า .env แล้วไฟล์นี้จะถูกเขียนทับอัตโนมัติ
+#
+# รูปแบบที่คาดไว้ (ตัวอย่าง โครงสร้างจริงจะมาจากผลลัพธ์ probe):
+#
+# roles:
+#   analyst_trend:       {model: "provider/model-name", tier: mid,      provider: "..."}
+#   analyst_positioning: {model: "provider/model-name", tier: mid,      provider: "..."}
+#   analyst_macro:       {model: "provider/model-name", tier: mid,      provider: "..."}
+#   redteam:             {model: "provider/model-name", tier: mid,      provider: "..."}
+#   judge:               {model: "provider/model-name", tier: frontier, provider: "..."}
+#   reflector:           {model: "provider/model-name", tier: frontier, provider: "..."}
+#
+# probed_at: null
+# provider_diversity_ok: null
