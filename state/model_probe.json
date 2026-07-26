@@ -1,0 +1,1162 @@
+{
+  "probed_at": 1785085926.6546445,
+  "results": [
+    {
+      "model": "Azure-router",
+      "source": "litellm",
+      "provider_guess": "unknown",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 4292.1,
+      "usage": {
+        "completion_tokens": 1,
+        "prompt_tokens": 6,
+        "total_tokens": 212,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 205,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 151,
+          "text_tokens": 6,
+          "image_tokens": 0
+        },
+        "audio_prompt_tokens": 0,
+        "num_sources_used": 0
+      }
+    },
+    {
+      "model": "Claude Haiku 4.5",
+      "source": "litellm",
+      "provider_guess": "anthropic",
+      "tier_guess": "cheap",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 1775.1,
+      "usage": {
+        "completion_tokens": 4,
+        "prompt_tokens": 19,
+        "total_tokens": 23,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "text_tokens": 4
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "text_tokens": 19,
+          "cache_creation_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0
+      }
+    },
+    {
+      "model": "Claude Opus 4.5",
+      "source": "litellm",
+      "provider_guess": "anthropic",
+      "tier_guess": "frontier",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 2836.1,
+      "usage": {
+        "completion_tokens": 4,
+        "prompt_tokens": 19,
+        "total_tokens": 23,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "text_tokens": 4
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "text_tokens": 19,
+          "cache_creation_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0
+      }
+    },
+    {
+      "model": "Claude Opus 4.6",
+      "source": "litellm",
+      "provider_guess": "anthropic",
+      "tier_guess": "frontier",
+      "ok": false,
+      "status_code": 403,
+      "latency_ms": 459.8,
+      "usage": {}
+    },
+    {
+      "model": "Claude Sonnet 4.5",
+      "source": "litellm",
+      "provider_guess": "anthropic",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 1625.7,
+      "usage": {
+        "completion_tokens": 4,
+        "prompt_tokens": 19,
+        "total_tokens": 23,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "text_tokens": 4
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "text_tokens": 19,
+          "cache_creation_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0
+      }
+    },
+    {
+      "model": "Claude Sonnet 4.6",
+      "source": "litellm",
+      "provider_guess": "anthropic",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 3075.1,
+      "usage": {
+        "completion_tokens": 4,
+        "prompt_tokens": 19,
+        "total_tokens": 23,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "text_tokens": 4
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "text_tokens": 19,
+          "cache_creation_tokens": 0,
+          "cache_creation_token_details": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          }
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "inference_geo": "not_available"
+      }
+    },
+    {
+      "model": "Cohere-rerank-v3-5",
+      "source": "litellm",
+      "provider_guess": "unknown",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 11332.1,
+      "usage": {
+        "completion_tokens": 7,
+        "prompt_tokens": 6,
+        "total_tokens": 13,
+        "completion_tokens_details": {
+          "reasoning_tokens": 7,
+          "text_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "text_tokens": 6
+        }
+      }
+    },
+    {
+      "model": "DeepSeek-V4-Flash",
+      "source": "litellm",
+      "provider_guess": "deepseek",
+      "tier_guess": "cheap",
+      "ok": false,
+      "status_code": 403,
+      "latency_ms": 521.8,
+      "usage": {}
+    },
+    {
+      "model": "GPT 5.2",
+      "source": "litellm",
+      "provider_guess": "unknown",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 2050.8,
+      "usage": {
+        "completion_tokens": 5,
+        "prompt_tokens": 11,
+        "total_tokens": 16,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "latency_checkpoint": {
+          "engine_tbt_ms": 19,
+          "engine_ttft_ms": 53,
+          "engine_ttlt_ms": 149,
+          "pre_inference_ms": 125,
+          "service_tbt_ms": 18,
+          "service_ttft_ms": 243,
+          "service_ttlt_ms": 322,
+          "total_duration_ms": 206,
+          "user_visible_ttft_ms": 119
+        }
+      }
+    },
+    {
+      "model": "GPT 5.2 Chat",
+      "source": "litellm",
+      "provider_guess": "unknown",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 2361.6,
+      "usage": {
+        "completion_tokens": 10,
+        "prompt_tokens": 11,
+        "total_tokens": 21,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 10,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "latency_checkpoint": {
+          "engine_tbt_ms": 18,
+          "engine_ttft_ms": 117,
+          "engine_ttlt_ms": 296,
+          "pre_inference_ms": 107,
+          "service_tbt_ms": 18,
+          "service_ttft_ms": 281,
+          "service_ttlt_ms": 459,
+          "total_duration_ms": 357,
+          "user_visible_ttft_ms": 174
+        }
+      }
+    },
+    {
+      "model": "GPT 5.4",
+      "source": "litellm",
+      "provider_guess": "unknown",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 1737.8,
+      "usage": {
+        "completion_tokens": 5,
+        "prompt_tokens": 11,
+        "total_tokens": 16,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "latency_checkpoint": {
+          "engine_tbt_ms": 6,
+          "engine_ttft_ms": 68,
+          "engine_ttlt_ms": 99,
+          "pre_inference_ms": 79,
+          "service_tbt_ms": 10,
+          "service_ttft_ms": 194,
+          "service_ttlt_ms": 233,
+          "total_duration_ms": 165,
+          "user_visible_ttft_ms": 115
+        }
+      }
+    },
+    {
+      "model": "Gemini 2.5 flash",
+      "source": "litellm",
+      "provider_guess": "google",
+      "tier_guess": "cheap",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 1368.3,
+      "usage": {
+        "completion_tokens": 6,
+        "prompt_tokens": 6,
+        "total_tokens": 12,
+        "completion_tokens_details": {
+          "reasoning_tokens": 5,
+          "text_tokens": 1
+        },
+        "prompt_tokens_details": {
+          "text_tokens": 6
+        }
+      }
+    },
+    {
+      "model": "Gemini 2.5 flash lite",
+      "source": "litellm",
+      "provider_guess": "google",
+      "tier_guess": "cheap",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 1327.7,
+      "usage": {
+        "completion_tokens": 1,
+        "prompt_tokens": 6,
+        "total_tokens": 7,
+        "completion_tokens_details": {
+          "text_tokens": 1
+        },
+        "prompt_tokens_details": {
+          "text_tokens": 6
+        }
+      }
+    },
+    {
+      "model": "Gemini 2.5 pro",
+      "source": "litellm",
+      "provider_guess": "google",
+      "tier_guess": "cheap",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 2294.1,
+      "usage": {
+        "completion_tokens": 7,
+        "prompt_tokens": 6,
+        "total_tokens": 13,
+        "completion_tokens_details": {
+          "reasoning_tokens": 7,
+          "text_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "text_tokens": 6
+        }
+      }
+    },
+    {
+      "model": "Gemini 3.0 flash",
+      "source": "litellm",
+      "provider_guess": "google",
+      "tier_guess": "cheap",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 1418.8,
+      "usage": {
+        "completion_tokens": 7,
+        "prompt_tokens": 6,
+        "total_tokens": 13,
+        "completion_tokens_details": {
+          "reasoning_tokens": 7,
+          "text_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "text_tokens": 6
+        }
+      }
+    },
+    {
+      "model": "Gemini 3.0 pro",
+      "source": "litellm",
+      "provider_guess": "google",
+      "tier_guess": "cheap",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 2100.3,
+      "usage": {
+        "completion_tokens": 7,
+        "prompt_tokens": 6,
+        "total_tokens": 13,
+        "completion_tokens_details": {
+          "reasoning_tokens": 7,
+          "text_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "text_tokens": 6
+        }
+      }
+    },
+    {
+      "model": "Gemini 3.1 pro",
+      "source": "litellm",
+      "provider_guess": "google",
+      "tier_guess": "cheap",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 1806.8,
+      "usage": {
+        "completion_tokens": 7,
+        "prompt_tokens": 6,
+        "total_tokens": 13,
+        "completion_tokens_details": {
+          "reasoning_tokens": 7,
+          "text_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "text_tokens": 6
+        }
+      }
+    },
+    {
+      "model": "Gemini Deep Research Pro",
+      "source": "litellm",
+      "provider_guess": "google",
+      "tier_guess": "cheap",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 1727.0,
+      "usage": {
+        "completion_tokens": 7,
+        "prompt_tokens": 6,
+        "total_tokens": 13,
+        "completion_tokens_details": {
+          "reasoning_tokens": 7,
+          "text_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "text_tokens": 6
+        }
+      }
+    },
+    {
+      "model": "Grok 4.1 Fast Reasoning",
+      "source": "litellm",
+      "provider_guess": "xai",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 3174.4,
+      "usage": {
+        "completion_tokens": 1,
+        "prompt_tokens": 6,
+        "total_tokens": 197,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 190,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 161,
+          "text_tokens": 6,
+          "image_tokens": 0
+        },
+        "audio_prompt_tokens": 0,
+        "num_sources_used": 0
+      }
+    },
+    {
+      "model": "Nano Banana",
+      "source": "litellm",
+      "provider_guess": "unknown",
+      "tier_guess": "cheap",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 1120.6,
+      "usage": {
+        "completion_tokens": 1,
+        "prompt_tokens": 6,
+        "total_tokens": 7,
+        "completion_tokens_details": {
+          "text_tokens": 1
+        },
+        "prompt_tokens_details": {
+          "text_tokens": 6
+        }
+      }
+    },
+    {
+      "model": "Nano Banana 2",
+      "source": "litellm",
+      "provider_guess": "unknown",
+      "tier_guess": "cheap",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 1622.0,
+      "usage": {
+        "completion_tokens": 1,
+        "prompt_tokens": 6,
+        "total_tokens": 7,
+        "completion_tokens_details": {
+          "text_tokens": 1
+        },
+        "prompt_tokens_details": {
+          "text_tokens": 6
+        }
+      }
+    },
+    {
+      "model": "Nano Banana Pro",
+      "source": "litellm",
+      "provider_guess": "unknown",
+      "tier_guess": "cheap",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 2390.1,
+      "usage": {
+        "completion_tokens": 7,
+        "prompt_tokens": 6,
+        "total_tokens": 13,
+        "completion_tokens_details": {
+          "reasoning_tokens": 7,
+          "text_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "text_tokens": 6
+        }
+      }
+    },
+    {
+      "model": "Perplexity Deep Research",
+      "source": "litellm",
+      "provider_guess": "unknown",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 2126.8,
+      "usage": {
+        "completion_tokens": 7,
+        "prompt_tokens": 6,
+        "total_tokens": 13,
+        "completion_tokens_details": {
+          "reasoning_tokens": 7,
+          "text_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "text_tokens": 6
+        }
+      }
+    },
+    {
+      "model": "Perplexity Reasoning Pro",
+      "source": "litellm",
+      "provider_guess": "unknown",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 1429.0,
+      "usage": {
+        "completion_tokens": 7,
+        "prompt_tokens": 6,
+        "total_tokens": 13,
+        "completion_tokens_details": {
+          "reasoning_tokens": 7,
+          "text_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "text_tokens": 6
+        }
+      }
+    },
+    {
+      "model": "claude-opus-4-7",
+      "source": "litellm",
+      "provider_guess": "anthropic",
+      "tier_guess": "frontier",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 3447.4,
+      "usage": {
+        "completion_tokens": 6,
+        "prompt_tokens": 24,
+        "total_tokens": 30,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "text_tokens": 6
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "text_tokens": 24,
+          "cache_creation_tokens": 0,
+          "cache_creation_token_details": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          }
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "inference_geo": "not_available"
+      }
+    },
+    {
+      "model": "claude-opus-4-8",
+      "source": "litellm",
+      "provider_guess": "anthropic",
+      "tier_guess": "frontier",
+      "ok": false,
+      "status_code": 403,
+      "latency_ms": 460.8,
+      "usage": {}
+    },
+    {
+      "model": "claude-sonnet-5",
+      "source": "litellm",
+      "provider_guess": "anthropic",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 3175.1,
+      "usage": {
+        "completion_tokens": 4,
+        "prompt_tokens": 19,
+        "total_tokens": 23,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "text_tokens": 4
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "text_tokens": 19,
+          "cache_creation_tokens": 0,
+          "cache_creation_token_details": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          }
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "inference_geo": "not_available"
+      }
+    },
+    {
+      "model": "dashscope/deepseek-v4-flash",
+      "source": "litellm",
+      "provider_guess": "deepseek",
+      "tier_guess": "cheap",
+      "ok": false,
+      "status_code": 403,
+      "latency_ms": 284.6,
+      "usage": {}
+    },
+    {
+      "model": "dashscope/deepseek-v4-pro",
+      "source": "litellm",
+      "provider_guess": "deepseek",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 2064.1,
+      "usage": {
+        "completion_tokens": 11,
+        "prompt_tokens": 9,
+        "total_tokens": 20,
+        "completion_tokens_details": {
+          "reasoning_tokens": 10
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      }
+    },
+    {
+      "model": "dashscope/qwen3.7-max",
+      "source": "litellm",
+      "provider_guess": "alibaba",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 4890.4,
+      "usage": {
+        "completion_tokens": 221,
+        "prompt_tokens": 15,
+        "total_tokens": 236,
+        "completion_tokens_details": {
+          "reasoning_tokens": 215
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      }
+    },
+    {
+      "model": "dashscope/qwen3.7-plus",
+      "source": "litellm",
+      "provider_guess": "alibaba",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 4674.5,
+      "usage": {
+        "completion_tokens": 185,
+        "prompt_tokens": 15,
+        "total_tokens": 200,
+        "completion_tokens_details": {
+          "reasoning_tokens": 180,
+          "text_tokens": 185
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "text_tokens": 15
+        }
+      }
+    },
+    {
+      "model": "gemini-3.1-flash-lite-preview",
+      "source": "litellm",
+      "provider_guess": "google",
+      "tier_guess": "cheap",
+      "ok": false,
+      "status_code": 403,
+      "latency_ms": 443.6,
+      "usage": {}
+    },
+    {
+      "model": "gemini-3.1-flash-tts-preview",
+      "source": "litellm",
+      "provider_guess": "google",
+      "tier_guess": "cheap",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 1866.1,
+      "usage": {
+        "completion_tokens": 7,
+        "prompt_tokens": 6,
+        "total_tokens": 13,
+        "completion_tokens_details": {
+          "reasoning_tokens": 7,
+          "text_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "text_tokens": 6
+        }
+      }
+    },
+    {
+      "model": "gemini-3.5-flash",
+      "source": "litellm",
+      "provider_guess": "google",
+      "tier_guess": "cheap",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 1239.3,
+      "usage": {
+        "completion_tokens": 6,
+        "prompt_tokens": 6,
+        "total_tokens": 12,
+        "completion_tokens_details": {
+          "reasoning_tokens": 6,
+          "text_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "text_tokens": 6
+        }
+      }
+    },
+    {
+      "model": "glm-5.2",
+      "source": "litellm",
+      "provider_guess": "unknown",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 835.6,
+      "usage": {
+        "completion_tokens": 11,
+        "prompt_tokens": 23,
+        "total_tokens": 34,
+        "completion_tokens_details": {
+          "reasoning_tokens": 10
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      }
+    },
+    {
+      "model": "gpt-4o-mini-transcribe",
+      "source": "litellm",
+      "provider_guess": "openai",
+      "tier_guess": "frontier",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 2689.6,
+      "usage": {
+        "completion_tokens": 7,
+        "prompt_tokens": 6,
+        "total_tokens": 13,
+        "completion_tokens_details": {
+          "reasoning_tokens": 7,
+          "text_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "text_tokens": 6
+        }
+      }
+    },
+    {
+      "model": "gpt-4o-transcribe",
+      "source": "litellm",
+      "provider_guess": "openai",
+      "tier_guess": "frontier",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 2666.8,
+      "usage": {
+        "completion_tokens": 7,
+        "prompt_tokens": 6,
+        "total_tokens": 13,
+        "completion_tokens_details": {
+          "reasoning_tokens": 7,
+          "text_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "text_tokens": 6
+        }
+      }
+    },
+    {
+      "model": "gpt-5.5",
+      "source": "litellm",
+      "provider_guess": "openai",
+      "tier_guess": "frontier",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 1281.7,
+      "usage": {
+        "completion_tokens": 10,
+        "prompt_tokens": 11,
+        "total_tokens": 21,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 10,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "latency_checkpoint": {
+          "engine_tbt_ms": 8,
+          "engine_ttft_ms": 168,
+          "engine_ttlt_ms": 247,
+          "pre_inference_ms": 62,
+          "service_tbt_ms": 8,
+          "service_ttft_ms": 460,
+          "service_ttlt_ms": 534,
+          "total_duration_ms": 481,
+          "user_visible_ttft_ms": 398
+        }
+      }
+    },
+    {
+      "model": "gpt-image-2",
+      "source": "litellm",
+      "provider_guess": "openai",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 2332.3,
+      "usage": {
+        "completion_tokens": 7,
+        "prompt_tokens": 6,
+        "total_tokens": 13,
+        "completion_tokens_details": {
+          "reasoning_tokens": 7,
+          "text_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "text_tokens": 6
+        }
+      }
+    },
+    {
+      "model": "text-embedding-3-large",
+      "source": "litellm",
+      "provider_guess": "unknown",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 2196.3,
+      "usage": {
+        "completion_tokens": 7,
+        "prompt_tokens": 6,
+        "total_tokens": 13,
+        "completion_tokens_details": {
+          "reasoning_tokens": 7,
+          "text_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "text_tokens": 6
+        }
+      }
+    },
+    {
+      "model": "text-embedding-3-small",
+      "source": "litellm",
+      "provider_guess": "unknown",
+      "tier_guess": "cheap",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 1814.4,
+      "usage": {
+        "completion_tokens": 7,
+        "prompt_tokens": 6,
+        "total_tokens": 13,
+        "completion_tokens_details": {
+          "reasoning_tokens": 7,
+          "text_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "text_tokens": 6
+        }
+      }
+    },
+    {
+      "model": "allam-2-7b",
+      "source": "groq",
+      "provider_guess": "groq/unknown",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 341.2,
+      "usage": {
+        "queue_time": 0.234913307,
+        "prompt_tokens": 40,
+        "prompt_time": 0.001978861,
+        "completion_tokens": 10,
+        "completion_time": 0.007509716,
+        "total_tokens": 50,
+        "total_time": 0.009488577
+      }
+    },
+    {
+      "model": "canopylabs/orpheus-arabic-saudi",
+      "source": "groq",
+      "provider_guess": "groq/unknown",
+      "tier_guess": "mid",
+      "ok": false,
+      "status_code": 400,
+      "latency_ms": 111.2,
+      "usage": {}
+    },
+    {
+      "model": "canopylabs/orpheus-v1-english",
+      "source": "groq",
+      "provider_guess": "groq/unknown",
+      "tier_guess": "mid",
+      "ok": false,
+      "status_code": 400,
+      "latency_ms": 90.0,
+      "usage": {}
+    },
+    {
+      "model": "groq/compound",
+      "source": "groq",
+      "provider_guess": "groq/unknown",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 271.1,
+      "usage": {
+        "queue_time": 0.029328,
+        "prompt_tokens": 240,
+        "prompt_time": 0.010063,
+        "completion_tokens": 60,
+        "completion_time": 0.126233,
+        "total_tokens": 300,
+        "total_time": 0.136297
+      }
+    },
+    {
+      "model": "groq/compound-mini",
+      "source": "groq",
+      "provider_guess": "groq/unknown",
+      "tier_guess": "cheap",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 442.2,
+      "usage": {
+        "queue_time": 0.204479,
+        "prompt_tokens": 446,
+        "prompt_time": 0.022036,
+        "completion_tokens": 52,
+        "completion_time": 0.123706,
+        "total_tokens": 498,
+        "total_time": 0.145742
+      }
+    },
+    {
+      "model": "llama-3.1-8b-instant",
+      "source": "groq",
+      "provider_guess": "groq/meta",
+      "tier_guess": "cheap",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 280.6,
+      "usage": {
+        "queue_time": 0.176992205,
+        "prompt_tokens": 41,
+        "prompt_time": 0.001916243,
+        "completion_tokens": 2,
+        "completion_time": 0.004407437,
+        "total_tokens": 43,
+        "total_time": 0.00632368
+      }
+    },
+    {
+      "model": "llama-3.3-70b-versatile",
+      "source": "groq",
+      "provider_guess": "groq/meta",
+      "tier_guess": "frontier",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 301.7,
+      "usage": {
+        "queue_time": 0.175016319,
+        "prompt_tokens": 41,
+        "prompt_time": 0.001962125,
+        "completion_tokens": 3,
+        "completion_time": 0.016191014,
+        "total_tokens": 44,
+        "total_time": 0.018153139
+      }
+    },
+    {
+      "model": "meta-llama/llama-prompt-guard-2-22m",
+      "source": "groq",
+      "provider_guess": "groq/meta",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 142.7,
+      "usage": {
+        "queue_time": 0,
+        "prompt_tokens": 15,
+        "prompt_time": 0,
+        "completion_tokens": 0,
+        "completion_time": 0,
+        "total_tokens": 0,
+        "total_time": 0
+      }
+    },
+    {
+      "model": "meta-llama/llama-prompt-guard-2-86m",
+      "source": "groq",
+      "provider_guess": "groq/meta",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 147.7,
+      "usage": {
+        "queue_time": 0,
+        "prompt_tokens": 7,
+        "prompt_time": 0,
+        "completion_tokens": 0,
+        "completion_time": 0,
+        "total_tokens": 0,
+        "total_time": 0
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "source": "groq",
+      "provider_guess": "groq/openai",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 128.3,
+      "usage": {
+        "queue_time": 0.006232779,
+        "prompt_tokens": 76,
+        "prompt_time": 0.003113886,
+        "completion_tokens": 10,
+        "completion_time": 0.020829718,
+        "total_tokens": 86,
+        "total_time": 0.023943604,
+        "completion_tokens_details": {
+          "reasoning_tokens": 8
+        }
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "source": "groq",
+      "provider_guess": "groq/openai",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 329.7,
+      "usage": {
+        "queue_time": 0.213682373,
+        "prompt_tokens": 76,
+        "prompt_time": 0.004964628,
+        "completion_tokens": 10,
+        "completion_time": 0.018822208,
+        "total_tokens": 86,
+        "total_time": 0.023786836,
+        "completion_tokens_details": {
+          "reasoning_tokens": 8
+        }
+      }
+    },
+    {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "source": "groq",
+      "provider_guess": "groq/openai",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 197.9,
+      "usage": {
+        "queue_time": 0.083125938,
+        "prompt_tokens": 76,
+        "prompt_time": 0.008406026,
+        "completion_tokens": 10,
+        "completion_time": 0.010137501,
+        "total_tokens": 86,
+        "total_time": 0.018543527,
+        "completion_tokens_details": {
+          "reasoning_tokens": 8
+        }
+      }
+    },
+    {
+      "model": "qwen/qwen3.6-27b",
+      "source": "groq",
+      "provider_guess": "groq/alibaba",
+      "tier_guess": "mid",
+      "ok": true,
+      "status_code": 200,
+      "latency_ms": 172.0,
+      "usage": {
+        "queue_time": 0.065741986,
+        "prompt_tokens": 15,
+        "prompt_time": 0.000976951,
+        "completion_tokens": 10,
+        "completion_time": 0.01930373,
+        "total_tokens": 25,
+        "total_time": 0.020280681
+      }
+    },
+    {
+      "model": "whisper-large-v3",
+      "source": "groq",
+      "provider_guess": "groq/unknown",
+      "tier_guess": "mid",
+      "ok": false,
+      "status_code": 400,
+      "latency_ms": 98.7,
+      "usage": {}
+    },
+    {
+      "model": "whisper-large-v3-turbo",
+      "source": "groq",
+      "provider_guess": "groq/unknown",
+      "tier_guess": "mid",
+      "ok": false,
+      "status_code": 400,
+      "latency_ms": 98.5,
+      "usage": {}
+    }
+  ]
+}
