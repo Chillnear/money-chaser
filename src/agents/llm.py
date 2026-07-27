@@ -45,6 +45,22 @@ class LLMCallResult:
     abstained: bool = False
 
 
+def resolve_model_for_litellm(model: str, is_groq: bool) -> str:
+    """เติม provider prefix ที่ litellm SDK ต้องใช้ — พังจริงบน production พบว่า litellm.completion()
+    ยิงผ่าน LiteLLM proxy ของเราต้องมี prefix "openai/" เสมอ (proxy เป็น OpenAI-compatible endpoint)
+    ไม่งั้น litellm เดา provider จากชื่อโมเดลไม่ได้แล้ว raise BadRequestError ก่อนยิง network ด้วยซ้ำ
+    (เจอจริงตอน smoke test บน GitHub Actions: model="Claude Opus 4.5" ไม่มี "/" เลย ทำให้ abstain ทั้งวัน)
+
+    Groq เรียกตรง (ไม่ผ่าน proxy, ไม่ตั้ง api_base) — litellm รู้จัก provider จากชื่อโมเดลที่
+    scripts/probe_models.py บันทึกไว้แล้วอยู่แล้ว (เช่น "groq/llama-3.3-70b-versatile") ไม่ต้องเติมอะไรเพิ่ม
+    """
+    if is_groq:
+        return model
+    if model.startswith("openai/"):
+        return model
+    return f"openai/{model}"
+
+
 def parse_json_from_text(text: str) -> dict:
     """ตัด code fence (```json ... ```) ออกถ้ามี แล้ว json.loads — โมเดลบางตัวชอบห่อ JSON ด้วย markdown"""
     cleaned = text.strip()
@@ -185,6 +201,7 @@ class LLMClient:
         attempts = 0
         raw_text: str | None = None
         candidate_keys = self.rotator.all_keys_in_rotation_order()
+        resolved_model = resolve_model_for_litellm(model, is_groq)
 
         for attempt in range(self.max_validation_retries + 1):
             attempts += 1
@@ -195,7 +212,7 @@ class LLMClient:
                 try:
                     start = time.time()
                     kwargs = {
-                        "model": model,
+                        "model": resolved_model,
                         "messages": messages,
                         "timeout": self.timeout_sec,
                         "max_tokens": self.output_token_cap,
@@ -303,12 +320,13 @@ class LLMClient:
         ]
         candidate_keys = self.rotator.all_keys_in_rotation_order()
         last_error: str | None = None
+        resolved_model = resolve_model_for_litellm(model, is_groq)
 
         for key in candidate_keys:
             try:
                 start = time.time()
                 kwargs = {
-                    "model": model,
+                    "model": resolved_model,
                     "messages": messages,
                     "timeout": self.timeout_sec,
                     "max_tokens": self.output_token_cap,

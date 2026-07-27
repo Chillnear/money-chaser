@@ -18,8 +18,26 @@ from src.agents.llm import (
     compute_spend,
     get_degradation_level,
     parse_json_from_text,
+    resolve_model_for_litellm,
     roles_active_at_level,
 )
+
+
+# ---- resolve_model_for_litellm ----
+
+
+def test_resolve_model_for_litellm_prefixes_proxy_calls_with_openai():
+    # แก้บั๊กจริงที่เจอบน GitHub Actions: model="Claude Opus 4.5" ไม่มี "/" ทำให้ litellm เดา provider
+    # ไม่ได้แล้ว raise BadRequestError ก่อนยิง network ด้วยซ้ำ ("LLM Provider NOT provided")
+    assert resolve_model_for_litellm("Claude Opus 4.5", is_groq=False) == "openai/Claude Opus 4.5"
+
+
+def test_resolve_model_for_litellm_does_not_double_prefix():
+    assert resolve_model_for_litellm("openai/gpt-5.5", is_groq=False) == "openai/gpt-5.5"
+
+
+def test_resolve_model_for_litellm_leaves_groq_models_untouched():
+    assert resolve_model_for_litellm("groq/llama-3.3-70b-versatile", is_groq=True) == "groq/llama-3.3-70b-versatile"
 
 
 class DummySchema(BaseModel):
@@ -112,6 +130,30 @@ def test_roles_active_at_each_level():
 
 
 # ---- LLMClient.call_structured ----
+
+
+def test_call_structured_sends_openai_prefixed_model_to_completion_fn():
+    completion_fn = MagicMock(return_value=_fake_response('{"action": "long", "value": 1}'))
+    client = LLMClient(
+        base_url="https://fake-proxy.example.com", api_keys=["key1"], completion_fn=completion_fn,
+        cost_fn=MagicMock(return_value=0.001),
+    )
+
+    client.call_structured("Claude Opus 4.5", "system", "user", DummySchema)
+
+    assert completion_fn.call_args.kwargs["model"] == "openai/Claude Opus 4.5"
+
+
+def test_call_freeform_sends_openai_prefixed_model_to_completion_fn():
+    completion_fn = MagicMock(return_value=_fake_response("ok"))
+    client = LLMClient(
+        base_url="https://fake-proxy.example.com", api_keys=["key1"], completion_fn=completion_fn,
+        cost_fn=MagicMock(return_value=0.001),
+    )
+
+    client.call_freeform("gpt-5.5", "system", "user")
+
+    assert completion_fn.call_args.kwargs["model"] == "openai/gpt-5.5"
 
 
 def test_call_structured_success_first_try():
