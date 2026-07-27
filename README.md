@@ -24,6 +24,14 @@
   - macro (Yahoo Finance) เปลี่ยนจาก stooq เพราะ symbol เดิมผิด (0/4) — เป็น best-effort ไม่ critical จึงไม่ทำให้ workflow fail แม้ยังดึงไม่ได้
   - CryptoPanic ตอบ 403 Forbidden — ไม่กระทบอะไร (optional, ข้ามได้) แต่ถ้าจะใช้จริงควรเช็ค token ที่สมัครมาว่า valid ไหม
 
+### P2 — Risk engine / Paper broker (เขียนเสร็จ, unit test ผ่านหมด 148/148 รวมทุกเฟส)
+- [x] 2.1 `src/risk/sizing.py` — สูตร sizing เต็ม ตรงกับตัวอย่างที่คำนวณด้วยมือไว้ในแผน (equity 28$, ATR 2.5% -> notional 14.9$)
+- [x] 2.2 `src/risk/rules.py` — hard veto gates ทั้งหมด (confidence, universe whitelist, shortlist membership, analyst agreement, funding)
+- [x] 2.3 `src/risk/breaker.py` + `exit_rules.py` — daily/weekly loss, max drawdown -> KILL file, consecutive-loss halving, ตรรกะปิดไม้ 4 กรณี (SL/TP/time-exit/invalidation)
+- [x] 2.4 `src/execution/broker_base.py` + `broker_paper.py` — จำลอง fill/fee/slippage สมจริงทั้ง long/short, SL/TP trigger จาก high/low ของแท่งเทียน
+- [x] 2.5 `src/execution/reconcile.py` — run lock (idempotency) + reconcile position/equity ระหว่าง journal กับของจริง
+  - ⚠️ ทุกอย่างในเฟสนี้เป็น pure function / unit ที่ไม่ต้องพึ่ง network เลย จึงทดสอบและยืนยันความถูกต้องได้ครบ 100% ในสภาพแวดล้อมพัฒนา ไม่ต้องรอ verify บน GitHub Actions
+
 ## วิธีติดตั้ง (บนเครื่องที่มี network ปกติ)
 
 ```bash
