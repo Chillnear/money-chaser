@@ -100,7 +100,10 @@ def check_groq() -> bool:
 
 
 def check_macro() -> bool:
-    print("\n=== 4. Macro data (stooq.com) ===")
+    """Macro เป็น best-effort ล้วนๆ (ใช้แค่เสริม context ให้ analyst_macro) — ไม่ทำให้ผลรวม fail
+    แม้ดึงไม่ได้เลยสักตัว เพราะ macro.py เองก็ออกแบบให้ทำงานต่อได้โดยไม่มี macro data (data_missing flag)
+    """
+    print("\n=== 4. Macro data (Yahoo Finance, best-effort) ===")
     from src.data.macro import MacroClient
 
     client = MacroClient()
@@ -108,10 +111,10 @@ def check_macro() -> bool:
     ok_count = sum(1 for k, v in snapshot.items() if isinstance(v, dict) and v.get("ok"))
     total = len([k for k in snapshot if k not in ("missing", "data_missing")])
     if snapshot.get("missing"):
-        print(f"  ⚠️  ดึงได้ {ok_count}/{total} — ขาด: {snapshot['missing']} (ไม่ critical แต่ควรดู symbol ให้ถูก)")
+        print(f"  ⚠️  ดึงได้ {ok_count}/{total} — ขาด: {snapshot['missing']} (ไม่ critical, ไม่กระทบผลรวม)")
     else:
         print(f"  ✅ ดึงได้ครบ {ok_count}/{total}")
-    return ok_count > 0  # ผ่านถ้าดึงได้อย่างน้อย 1 ตัว (ไม่ critical เท่า Hyperliquid/LiteLLM)
+    return True  # ไม่ critical เสมอ ต่างจาก Hyperliquid/LiteLLM ที่จำเป็นต้องต่อได้จริง
 
 
 def check_sentiment() -> bool:

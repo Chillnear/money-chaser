@@ -20,7 +20,9 @@
 - [x] 1.3 `src/data/regime.py` — จำแนก 3x3 regime
 - [x] 1.4 `src/data/screening.py` — universe pool + composite score + top-3 shortlist
 - [x] 1.5 `render_feature_table()` — ตาราง prompt แบบ compact, เช็ค token budget แล้ว
-  - ⚠️ **macro.py/sentiment.py/news.py ยังไม่ได้ยิงทดสอบกับ network จริง** (เหตุผลเดียวกับ hl_market.py — sandbox บล็อก) ต้องรัน workflow "Test Setup (manual)" อีกรอบเพื่อ verify (ดูขั้นตอนด้านล่าง เพิ่ม check ใหม่แล้วใน `check_setup.py`)
+  - ✅ verify จริงบน GitHub Actions แล้ว: Hyperliquid/LiteLLM/Groq/Fear&Greed/RSS (34 หัวข้อข่าว) ผ่านหมด
+  - macro (Yahoo Finance) เปลี่ยนจาก stooq เพราะ symbol เดิมผิด (0/4) — เป็น best-effort ไม่ critical จึงไม่ทำให้ workflow fail แม้ยังดึงไม่ได้
+  - CryptoPanic ตอบ 403 Forbidden — ไม่กระทบอะไร (optional, ข้ามได้) แต่ถ้าจะใช้จริงควรเช็ค token ที่สมัครมาว่า valid ไหม
 
 ## วิธีติดตั้ง (บนเครื่องที่มี network ปกติ)
 

@@ -5,27 +5,35 @@ from unittest.mock import MagicMock
 from src.data.macro import MacroClient
 
 
-def _mock_csv_response(csv_text: str):
+def _mock_yahoo_response(closes: list[float | None], timestamps: list[int] | None = None):
+    if timestamps is None:
+        timestamps = list(range(1_700_000_000, 1_700_000_000 + len(closes) * 86400, 86400))
+    payload = {
+        "chart": {
+            "result": [
+                {
+                    "timestamp": timestamps,
+                    "indicators": {"quote": [{"close": closes}]},
+                }
+            ]
+        }
+    }
     resp = MagicMock()
     resp.status_code = 200
-    resp.text = csv_text
     resp.raise_for_status = MagicMock()
+    resp.json.return_value = payload
     return resp
-
-
-SAMPLE_CSV = "Date,Open,High,Low,Close,Volume\n2026-07-24,104.0,104.5,103.8,104.2,0\n2026-07-25,104.2,104.9,104.0,104.8,0\n"
 
 
 def test_get_series_success():
     client = MacroClient()
     client.session = MagicMock()
-    client.session.get.return_value = _mock_csv_response(SAMPLE_CSV)
+    client.session.get.return_value = _mock_yahoo_response([104.2, 104.8])
 
     series = client.get_series("dxy")
 
     assert series.ok is True
     assert series.last_close == 104.8
-    assert series.change_1d_pct is not None
     assert round(series.change_1d_pct, 4) == round((104.8 - 104.2) / 104.2 * 100, 4)
 
 
@@ -36,22 +44,33 @@ def test_get_series_unknown_name():
     assert series.error is not None
 
 
-def test_get_series_handles_empty_csv():
+def test_get_series_handles_empty_result():
     client = MacroClient()
     client.session = MagicMock()
-    client.session.get.return_value = _mock_csv_response("Date,Open,High,Low,Close,Volume\n")
+    client.session.get.return_value = _mock_yahoo_response([None, None])
 
     series = client.get_series("spx")
     assert series.ok is False
+
+
+def test_get_series_divides_us10y_by_10():
+    client = MacroClient()
+    client.session = MagicMock()
+    client.session.get.return_value = _mock_yahoo_response([42.0, 42.5])  # ^TNX x10
+
+    series = client.get_series("us10y")
+
+    assert series.ok is True
+    assert series.last_close == 4.25
 
 
 def test_get_macro_snapshot_reports_missing():
     client = MacroClient()
     client.session = MagicMock()
 
-    def side_effect(url, timeout):
-        if "usdidx" in url:
-            return _mock_csv_response(SAMPLE_CSV)
+    def side_effect(url, params, timeout, headers):
+        if "DX-Y.NYB" in url:
+            return _mock_yahoo_response([104.2, 104.8])
         raise ConnectionError("boom")
 
     client.session.get.side_effect = side_effect
