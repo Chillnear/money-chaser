@@ -248,6 +248,25 @@ class LLMClient:
             total_cost += cost or 0.0
 
             raw_text = response.choices[0].message.content
+
+            if raw_text is None:
+                # บั๊กจริงที่เจอ: บางโมเดล (เจอกับ redteam ตัวที่ 3-5 ตอนรัน bake-off) ตอบ content
+                # เป็น None ได้ (เช่น โดน content filter/ปฏิเสธตอบ) — ถ้าเรียก estimate_tokens(None)
+                # ตรงๆ จะพัง TypeError ทำให้ pipeline ทั้งรอบล้ม ทั้งที่ควรแค่ถือว่าพยายามครั้งนี้ล้มเหลว
+                # แล้ว retry ต่อเหมือนกรณี parse ไม่ผ่านปกติ
+                last_error = "โมเดลตอบเนื้อหาว่างเปล่า (content เป็น None) — อาจโดน content filter หรือปฏิเสธตอบ"
+                messages.append({"role": "assistant", "content": ""})
+                messages.append(
+                    {
+                        "role": "user",
+                        "content": (
+                            f"คำตอบก่อนหน้าว่างเปล่า: {last_error}\n"
+                            "กรุณาตอบใหม่เป็น JSON ที่ตรง schema เท่านั้น ห้ามมีข้อความอื่นปน"
+                        ),
+                    }
+                )
+                continue
+
             tokens_out = estimate_tokens(raw_text)
 
             try:
@@ -346,6 +365,13 @@ class LLMClient:
                 cost = 0.0
 
             raw_text = response.choices[0].message.content
+
+            if raw_text is None:
+                # เหมือนบั๊กที่เจอใน call_structured — content เป็น None ได้ (content filter/ปฏิเสธตอบ)
+                # ไม่มี retry loop ใน freeform ก็เลยลอง key ถัดไปแทน ถ้าหมดทุก key ค่อยถือว่า abstain
+                last_error = "โมเดลตอบเนื้อหาว่างเปล่า (content เป็น None) — อาจโดน content filter หรือปฏิเสธตอบ"
+                continue
+
             tokens_out = estimate_tokens(raw_text)
             return LLMCallResult(
                 parsed=None,

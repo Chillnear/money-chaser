@@ -198,6 +198,50 @@ def test_call_structured_retries_on_bad_json_then_succeeds():
     assert completion_fn.call_count == 2
 
 
+def test_call_structured_retries_when_model_returns_none_content_then_succeeds():
+    # บั๊กจริงที่เจอตอนรัน bake-off บน GitHub Actions: บางโมเดลตอบ content เป็น None
+    # (โดน content filter/ปฏิเสธตอบ) — ก่อนแก้ estimate_tokens(None) จะพัง TypeError ทันที
+    # ทำให้ bake-off ทั้งสคริปต์ล้ม (และถ้าเกิดใน pipeline จริงจะทำให้เทรดวันนั้นล้มทั้งรอบ)
+    empty_response = _fake_response(None)
+    good_response = _fake_response('{"action": "short", "value": 1}')
+    completion_fn = MagicMock(side_effect=[empty_response, good_response])
+    cost_fn = MagicMock(return_value=0.001)
+
+    client = LLMClient(
+        base_url="https://fake-proxy.example.com",
+        api_keys=["key1"],
+        completion_fn=completion_fn,
+        max_validation_retries=2,
+        cost_fn=cost_fn,
+    )
+
+    result = client.call_structured("fake-model", "system", "user", DummySchema)
+
+    assert result.abstained is False
+    assert result.parsed.action == "short"
+    assert completion_fn.call_count == 2
+
+
+def test_call_structured_abstains_when_model_always_returns_none_content():
+    empty_response = _fake_response(None)
+    completion_fn = MagicMock(return_value=empty_response)
+    cost_fn = MagicMock(return_value=0.001)
+
+    client = LLMClient(
+        base_url="https://fake-proxy.example.com",
+        api_keys=["key1"],
+        completion_fn=completion_fn,
+        max_validation_retries=1,
+        cost_fn=cost_fn,
+    )
+
+    result = client.call_structured("fake-model", "system", "user", DummySchema)
+
+    assert result.abstained is True
+    assert result.parsed is None
+    assert completion_fn.call_count == 2  # 1 attempt แรก + retry 1 ครั้ง ไม่ crash
+
+
 def test_call_structured_abstains_after_exhausting_retries():
     bad_response = _fake_response("still not json")
     completion_fn = MagicMock(return_value=bad_response)
@@ -278,6 +322,32 @@ def test_call_freeform_success_returns_raw_text_without_parsing():
     assert result.parsed is None
     assert result.raw_text == "# lessons.md\n- lesson 1"
     assert result.cost_usd == pytest.approx(0.003)
+
+
+def test_call_freeform_tries_next_key_when_model_returns_none_content():
+    # เหมือนบั๊กที่เจอใน call_structured — content เป็น None ได้ ไม่ใช่แค่ parse ผิด schema
+    completion_fn = MagicMock(side_effect=[_fake_response(None), _fake_response("ok text")])
+    client = LLMClient(
+        base_url="https://fake-proxy.example.com", api_keys=["key1", "key2"], completion_fn=completion_fn,
+    )
+
+    result = client.call_freeform("fake-model", "system", "user")
+
+    assert result.abstained is False
+    assert result.raw_text == "ok text"
+    assert completion_fn.call_count == 2
+
+
+def test_call_freeform_abstains_when_all_keys_return_none_content():
+    completion_fn = MagicMock(return_value=_fake_response(None))
+    client = LLMClient(
+        base_url="https://fake-proxy.example.com", api_keys=["key1", "key2"], completion_fn=completion_fn,
+    )
+
+    result = client.call_freeform("fake-model", "system", "user")
+
+    assert result.abstained is True
+    assert result.raw_text is None
 
 
 def test_call_freeform_falls_back_to_second_key_on_failure():
