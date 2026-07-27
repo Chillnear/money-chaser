@@ -57,6 +57,36 @@ PROVIDER_HINTS = [
 FRONTIER_HINTS = ["opus", "gpt-4o", "gpt-4.1", "gpt-5", "o1", "o3", "gemini-1.5-pro", "gemini-2", "405b", "70b"]
 CHEAP_HINTS = ["haiku", "mini", "flash", "8b", "nano", "small"]
 
+# โมเดลที่ไม่ใช่ chat/reasoning (embedding, rerank, แปลงเสียง, สร้างภาพ) — ต้องกันออกจากทุก role
+# เพราะพวกนี้ตอบ smoke test "OK" ผ่านได้ (proxy บางตัว handle แบบพิเศษ) แต่ใช้วิเคราะห์ข้อความไม่ได้จริง
+NON_CHAT_HINTS = ["embedding", "rerank", "transcribe", "-image", "image-", "tts", "banana", "prompt-guard"]
+
+# ลำดับความสำคัญของโมเดล "เรือธง" จริงๆ สำหรับ judge/reflector — เรียงจากดีที่สุดไปหาน้อยลง
+# ใช้แทนการเลือกด้วย latency ต่ำสุด เพราะ judge/reflector รันแค่วันละ/สัปดาห์ละครั้ง
+# ความเร็วไม่สำคัญเท่าความสามารถในการให้เหตุผล
+FRONTIER_PRIORITY = [
+    "opus",
+    "gpt-5.5", "gpt-5.4", "gpt-5.3", "gpt-5.2", "gpt-5.1", "gpt-5",
+    "grok-4", "grok-3",
+    "gemini-3.1-pro", "gemini-3-pro", "gemini-3.0-pro", "gemini-2.5-pro",
+    "deepseek-v4", "deepseek-v3",
+    "llama-3.3-70b", "llama-3.1-405b",
+]
+
+
+def is_non_chat_model(model_name: str) -> bool:
+    lower = model_name.lower()
+    return any(hint in lower for hint in NON_CHAT_HINTS)
+
+
+def frontier_priority_rank(model_name: str) -> int:
+    """คืนอันดับความสำคัญ (ยิ่งน้อยยิ่งดี) ตาม FRONTIER_PRIORITY ถ้าไม่ตรงเลยคืนเลขใหญ่มาก"""
+    lower = model_name.lower()
+    for i, hint in enumerate(FRONTIER_PRIORITY):
+        if hint in lower:
+            return i
+    return 9999
+
 
 def guess_provider(model_name: str) -> str:
     lower = model_name.lower()
@@ -171,10 +201,16 @@ def main() -> None:
         json.dump({"probed_at": time.time(), "results": results}, f, indent=2, ensure_ascii=False)
 
     print("\n=== ผลลัพธ์ (เรียงตาม provider) ===")
-    working = [r for r in results if r.get("ok")]
+    ok_results = [r for r in results if r.get("ok")]
+    excluded_non_chat = [r for r in ok_results if is_non_chat_model(r["model"])]
+    working = [r for r in ok_results if not is_non_chat_model(r["model"])]  # ใช้เลือก role เท่านั้น
     working.sort(key=lambda r: (r["provider_guess"], r["tier_guess"]))
     for r in working:
         print(f"  {r['provider_guess']:>15} | {r['tier_guess']:>8} | {r['latency_ms']:>7} ms | {r['model']}")
+
+    if excluded_non_chat:
+        names = ", ".join(r["model"] for r in excluded_non_chat)
+        print(f"\nℹ️  กันออก {len(excluded_non_chat)} โมเดลที่ไม่ใช่ chat/reasoning (embedding/rerank/image/tts): {names}")
 
     failed = [r for r in results if not r.get("ok")]
     if failed:
@@ -212,11 +248,15 @@ def main() -> None:
         if picked:
             role_assignment[role] = picked
 
-    frontier_pool = [r for r in working if r["tier_guess"] == "frontier"] or working
-    if frontier_pool:
-        best_frontier = min(frontier_pool, key=lambda r: r["latency_ms"] or 9999)
-        role_assignment["judge"] = best_frontier
-        role_assignment["reflector"] = best_frontier
+    # judge/reflector: เลือกจาก FRONTIER_PRIORITY (ความสามารถ) ไม่ใช่ latency ต่ำสุด
+    # เพราะรันแค่วันละ/สัปดาห์ละครั้ง ความเร็วไม่สำคัญเท่าคุณภาพการให้เหตุผล
+    ranked_by_capability = sorted(working, key=lambda r: (frontier_priority_rank(r["model"]), r["latency_ms"] or 9999))
+    if ranked_by_capability:
+        role_assignment["judge"] = ranked_by_capability[0]
+        # reflector: พยายามหาโมเดลที่ดีรองลงมาจาก provider อื่น เพื่อได้มุมมองที่ไม่ผูกกับ provider เดียวกับ judge
+        judge_provider = ranked_by_capability[0]["provider_guess"]
+        alt = next((r for r in ranked_by_capability[1:] if r["provider_guess"] != judge_provider), None)
+        role_assignment["reflector"] = alt or ranked_by_capability[0]
 
     models_yaml = {
         "roles": {

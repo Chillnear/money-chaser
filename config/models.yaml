@@ -20,15 +20,15 @@ roles:
     provider: google
     source: litellm
   judge:
-    model: llama-3.3-70b-versatile
+    model: Claude Opus 4.5
     tier: frontier
-    provider: groq/meta
-    source: groq
+    provider: anthropic
+    source: litellm
   reflector:
-    model: llama-3.3-70b-versatile
+    model: gpt-5.5
     tier: frontier
-    provider: groq/meta
-    source: groq
+    provider: openai
+    source: litellm
 probed_at: 1785085926.6556108
 provider_diversity_ok: true
 providers_available:
