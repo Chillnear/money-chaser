@@ -1,11 +1,11 @@
 roles:
   analyst_trend:
-    model: dashscope/qwen3.7-plus
+    model: dashscope/qwen3.7-max
     tier: mid
     provider: alibaba
     source: litellm
   analyst_positioning:
-    model: Claude Sonnet 4.5
+    model: claude-sonnet-5
     tier: mid
     provider: anthropic
     source: litellm
@@ -15,12 +15,12 @@ roles:
     provider: deepseek
     source: litellm
   redteam:
-    model: gemini-3.5-flash
-    tier: cheap
+    model: Gemini 3.1 pro
+    tier: frontier
     provider: google
     source: litellm
   judge:
-    model: Claude Opus 4.5
+    model: claude-opus-4-7
     tier: frontier
     provider: anthropic
     source: litellm

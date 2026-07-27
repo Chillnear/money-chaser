@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 import time
 from pathlib import Path
@@ -54,8 +55,11 @@ PROVIDER_HINTS = [
 ]
 
 # heuristic จับ tier — frontier = รุ่นเรือธง, mid = รุ่นกลาง, cheap = รุ่นเล็ก/เร็ว
-FRONTIER_HINTS = ["opus", "gpt-4o", "gpt-4.1", "gpt-5", "o1", "o3", "gemini-1.5-pro", "gemini-2", "405b", "70b"]
-CHEAP_HINTS = ["haiku", "mini", "flash", "8b", "nano", "small"]
+FRONTIER_HINTS = [
+    "opus", "gpt-4o", "gpt-4.1", "gpt-5", "o1", "o3", "405b", "70b",
+    "pro", "max",  # เช่น "Gemini 3.1 pro", "deepseek-v4-pro", "qwen3.7-max" — รุ่นใหญ่ของแต่ละค่าย
+]
+CHEAP_HINTS = ["haiku", "mini", "flash", "8b", "nano", "small", "lite"]
 
 # โมเดลที่ไม่ใช่ chat/reasoning (embedding, rerank, แปลงเสียง, สร้างภาพ) — ต้องกันออกจากทุก role
 # เพราะพวกนี้ตอบ smoke test "OK" ผ่านได้ (proxy บางตัว handle แบบพิเศษ) แต่ใช้วิเคราะห์ข้อความไม่ได้จริง
@@ -96,12 +100,26 @@ def guess_provider(model_name: str) -> str:
     return "unknown"
 
 
+def _hint_matches(hint: str, model_name_lower: str) -> bool:
+    """เทียบ hint แบบมีขอบเขตคำ ไม่ใช่ substring ดิบๆ
+
+    บั๊กจริงที่เจอ: "mini" เป็น substring ของ "ge-mini" ทำให้ Gemini **ทุกรุ่น** ถูกติดป้ายว่าเป็น
+    รุ่นประหยัด รวมถึง Gemini 3.1 pro ที่เป็นรุ่นท็อป — ทำให้ระบบเลือกโมเดลผิดพลาดแบบเงียบๆ
+    วิธีแก้: hint ต้องไม่ถูกขนาบด้วยตัวอักษร/ตัวเลขอื่น (คั่นด้วย -, ., ช่องว่าง หรืออยู่หัว/ท้ายเท่านั้น)
+    """
+    return re.search(rf"(?<![a-z0-9]){re.escape(hint)}(?![a-z0-9])", model_name_lower) is not None
+
+
 def guess_tier(model_name: str) -> str:
+    """เช็ค CHEAP ก่อน FRONTIER โดยตั้งใจ — คำว่า mini/flash/lite/haiku/nano เป็น "ตัวบอกรุ่นย่อ"
+    ที่ต้องชนะการเป็นสมาชิกตระกูลใหญ่เสมอ (เช่น gpt-4o-mini อยู่ตระกูล gpt-4o ที่เป็น frontier
+    แต่ตัวมันเองเป็นรุ่นเล็ก ต้องนับเป็น cheap ไม่ใช่ frontier)
+    """
     lower = model_name.lower()
-    if any(h in lower for h in FRONTIER_HINTS):
-        return "frontier"
-    if any(h in lower for h in CHEAP_HINTS):
+    if any(_hint_matches(h, lower) for h in CHEAP_HINTS):
         return "cheap"
+    if any(_hint_matches(h, lower) for h in FRONTIER_HINTS):
+        return "frontier"
     return "mid"
 
 

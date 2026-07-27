@@ -1,0 +1,41 @@
+name: Model Bake-off (manual)
+
+# ทดสอบเทียบโมเดลที่เข้าชิงด้วย prompt จริงของระบบ + ข้อมูลตลาดชุดเดียวกัน
+# ใช้ตัดสินว่าควรใช้โมเดลไหนในตำแหน่ง redteam/judge โดยดูจากงานจริง ไม่ใช่คะแนนลีดเดอร์บอร์ดข้างนอก
+# มีค่าใช้จ่าย LLM เล็กน้อยต่อครั้ง (ปกติไม่กี่เซนต์) จึงตั้งเป็น manual เท่านั้น ไม่ใช่ cron
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  bakeoff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run bake-off
+        env:
+          MODE: paper
+          LITELLM_BASE_URL: ${{ secrets.LITELLM_BASE_URL }}
+          LITELLM_KEY_1: ${{ secrets.LITELLM_KEY_1 }}
+          LITELLM_KEY_2: ${{ secrets.LITELLM_KEY_2 }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python scripts/bakeoff.py
+
+      - name: Commit bake-off results
+        run: |
+          git config user.name "money-chaser-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add state/bakeoff.json
+          git diff --cached --quiet && echo "ไม่มีอะไรเปลี่ยน ข้าม commit" || git commit -m "chore: model bake-off results $(date -u +%Y-%m-%d)"
+          git push

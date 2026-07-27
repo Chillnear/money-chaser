@@ -400,6 +400,69 @@ def test_manage_existing_position_holds_when_no_exit_condition(tmp_path, setting
     assert saved_state["open_position"]["asset"] == "BTC"
 
 
+def test_pipeline_writes_equity_jsonl_every_run(tmp_path, settings, hl_client):
+    responses = [_fake_llm_response(_analyst_json())] * 4 + [_fake_llm_response(_judge_json())]
+    llm_client = _make_llm_client(responses)
+    broker = PaperBroker(starting_equity_usd=28.0, taker_fee_pct=0.045, slippage_pct=0.05)
+    journal_dir = tmp_path / "journal"
+
+    run_daily_pipeline(
+        settings=settings, hl_client=hl_client, llm_client=llm_client, broker=broker,
+        model_registry=REGISTRY, today_date="2026-07-27", now_ts=time.time(),
+        journal_dir=journal_dir, kill_path=tmp_path / "KILL", last_run_path=tmp_path / "last_run.json",
+        starting_equity_usd=28.0,
+    )
+
+    lines = (journal_dir / "equity.jsonl").read_text(encoding="utf-8").strip().splitlines()
+    assert len(lines) == 1
+    record = json.loads(lines[0])
+    assert record["date"] == "2026-07-27"
+    assert record["equity_usd"] == pytest.approx(28.0)
+    assert record["has_open_position"] is True
+
+
+def test_pipeline_writes_llm_cost_jsonl_so_cost_governor_can_work(tmp_path, settings, hl_client):
+    # ถ้าไม่เขียนไฟล์นี้ degradation ladder จะไม่มีวันทำงาน (cost governor อ่านได้ค่าว่างตลอด)
+    responses = [_fake_llm_response(_analyst_json())] * 4 + [_fake_llm_response(_judge_json())]
+    llm_client = _make_llm_client(responses)
+    broker = PaperBroker(starting_equity_usd=28.0, taker_fee_pct=0.045, slippage_pct=0.05)
+    journal_dir = tmp_path / "journal"
+
+    run_daily_pipeline(
+        settings=settings, hl_client=hl_client, llm_client=llm_client, broker=broker,
+        model_registry=REGISTRY, today_date="2026-07-27", now_ts=time.time(),
+        journal_dir=journal_dir, kill_path=tmp_path / "KILL", last_run_path=tmp_path / "last_run.json",
+        starting_equity_usd=28.0,
+    )
+
+    lines = (journal_dir / "llm_cost.jsonl").read_text(encoding="utf-8").strip().splitlines()
+    records = [json.loads(line) for line in lines]
+    roles = {r["role"] for r in records}
+
+    assert roles == {"analyst_trend", "analyst_positioning", "analyst_macro", "redteam", "judge"}
+    assert all("cost_usd" in r and "ts" in r for r in records)
+    assert sum(r["cost_usd"] for r in records) > 0
+
+
+def test_pipeline_equity_jsonl_records_flat_days_too(tmp_path, settings, hl_client):
+    # วันที่ไม่เทรด (FLAT) ก็ต้องบันทึก equity ไว้ ไม่งั้นกราฟจะขาดช่วง
+    responses = [_fake_llm_response(_analyst_json())] * 4 + [_fake_llm_response(_judge_json(action="flat", asset=None))]
+    llm_client = _make_llm_client(responses)
+    broker = PaperBroker(starting_equity_usd=28.0, taker_fee_pct=0.045, slippage_pct=0.05)
+    journal_dir = tmp_path / "journal"
+
+    result = run_daily_pipeline(
+        settings=settings, hl_client=hl_client, llm_client=llm_client, broker=broker,
+        model_registry=REGISTRY, today_date="2026-07-27", now_ts=time.time(),
+        journal_dir=journal_dir, kill_path=tmp_path / "KILL", last_run_path=tmp_path / "last_run.json",
+        starting_equity_usd=28.0,
+    )
+
+    assert result.action_taken == "flat"
+    record = json.loads((journal_dir / "equity.jsonl").read_text(encoding="utf-8").strip())
+    assert record["has_open_position"] is False
+
+
 def test_load_and_save_journal_state_roundtrip(tmp_path):
     journal_dir = tmp_path / "journal"
     state = JournalState(

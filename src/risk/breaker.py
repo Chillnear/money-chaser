@@ -12,6 +12,7 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 
 HALVING_WINDOW_TRADES = 3
+CONSECUTIVE_LOSS_PAUSE_HOURS = 24  # แพ้ติดกันครบเกณฑ์ -> หยุดเทรด 1 วันเต็ม (ไม่ใช่แค่ลดขนาดไม้)
 
 
 @dataclass(frozen=True)
@@ -48,9 +49,21 @@ def should_pause_weekly(weekly_pnl_pct: float, weekly_loss_pct: float) -> bool:
     return weekly_pnl_pct <= -abs(weekly_loss_pct)
 
 
-def apply_trade_result(state: BreakerState, pnl_usd: float, consecutive_losses_halve_size: int) -> BreakerState:
-    """เรียกทุกครั้งที่ปิดไม้ (ไม่ใช่วันที่ FLAT) เพื่ออัปเดตสถานะ streak/halving"""
+def apply_trade_result(
+    state: BreakerState,
+    pnl_usd: float,
+    consecutive_losses_halve_size: int,
+    now_ts: float | None = None,
+) -> BreakerState:
+    """เรียกทุกครั้งที่ปิดไม้ (ไม่ใช่วันที่ FLAT) เพื่ออัปเดตสถานะ streak/halving
+
+    เมื่อแพ้ติดกันครบเกณฑ์: ทำ 2 อย่างพร้อมกัน (แนวคิดจาก Earthh Evans playbook No-Trade Rule #4
+    "ขาดทุน 3 ครั้งติด = หยุด 2-3 วัน" — เราเลือก 1 วันตามที่ผู้ใช้กำหนด)
+      1. ลดขนาดไม้ครึ่งหนึ่งใน 3 ไม้ถัดไป (ของเดิม)
+      2. หยุดเทรด 1 วันเต็มทันที (เพิ่มใหม่) — ให้ตลาดกับระบบได้ตั้งหลักก่อน ไม่ไล่แก้ตัวทันที
+    """
     is_loss = pnl_usd < 0
+    now_ts = now_ts if now_ts is not None else time.time()
 
     if state.halving_remaining > 0:
         new_halving = state.halving_remaining - 1
@@ -59,7 +72,16 @@ def apply_trade_result(state: BreakerState, pnl_usd: float, consecutive_losses_h
 
     new_consecutive = state.consecutive_losses + 1 if is_loss else 0
     if new_consecutive >= consecutive_losses_halve_size:
-        return replace(state, consecutive_losses=0, halving_remaining=HALVING_WINDOW_TRADES)
+        return replace(
+            state,
+            consecutive_losses=0,
+            halving_remaining=HALVING_WINDOW_TRADES,
+            paused_until_ts=now_ts + CONSECUTIVE_LOSS_PAUSE_HOURS * 3600,
+            pause_reason=(
+                f"ขาดทุนติดกัน {consecutive_losses_halve_size} ไม้ — หยุดเทรด "
+                f"{CONSECUTIVE_LOSS_PAUSE_HOURS} ชม. และลดขนาดไม้ครึ่งหนึ่งอีก {HALVING_WINDOW_TRADES} ไม้ถัดไป"
+            ),
+        )
     return replace(state, consecutive_losses=new_consecutive)
 
 

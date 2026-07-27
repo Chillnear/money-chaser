@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from src.risk.breaker import (
+    CONSECUTIVE_LOSS_PAUSE_HOURS,
     BreakerState,
     apply_daily_breaker,
     apply_trade_result,
@@ -15,6 +16,44 @@ from src.risk.breaker import (
     size_multiplier,
     write_kill_file,
 )
+
+
+def test_consecutive_loss_streak_also_pauses_trading_for_one_day():
+    # แนวคิดจาก playbook: แพ้ติดกันครบเกณฑ์ ต้องหยุดเทรดจริง ไม่ใช่แค่ลดขนาดไม้แล้วไล่แก้ตัวต่อทันที
+    now_ts = 1_000_000.0
+    state = BreakerState(consecutive_losses=2)
+
+    state = apply_trade_result(state, pnl_usd=-1.0, consecutive_losses_halve_size=3, now_ts=now_ts)
+
+    assert state.halving_remaining == 3  # ยังลดขนาดไม้เหมือนเดิม
+    assert state.paused_until_ts == now_ts + CONSECUTIVE_LOSS_PAUSE_HOURS * 3600
+    assert is_paused(state, now_ts) is True
+    assert "ขาดทุนติดกัน 3 ไม้" in state.pause_reason
+
+
+def test_consecutive_loss_pause_expires_after_one_day():
+    now_ts = 1_000_000.0
+    state = apply_trade_result(
+        BreakerState(consecutive_losses=2), pnl_usd=-1.0, consecutive_losses_halve_size=3, now_ts=now_ts
+    )
+
+    # ผ่านไป 1 วันเต็มแล้ว -> กลับมาเทรดได้เอง ไม่ต้องรอ ack (ต่างจาก weekly breaker)
+    assert is_paused(state, now_ts + CONSECUTIVE_LOSS_PAUSE_HOURS * 3600 + 1) is False
+    assert state.weekly_pause_needs_ack is False
+
+
+def test_winning_trade_does_not_pause():
+    now_ts = 1_000_000.0
+    state = apply_trade_result(BreakerState(consecutive_losses=2), pnl_usd=5.0, consecutive_losses_halve_size=3, now_ts=now_ts)
+    assert state.paused_until_ts is None
+    assert is_paused(state, now_ts) is False
+
+
+def test_single_loss_below_threshold_does_not_pause():
+    now_ts = 1_000_000.0
+    state = apply_trade_result(BreakerState(), pnl_usd=-1.0, consecutive_losses_halve_size=3, now_ts=now_ts)
+    assert state.consecutive_losses == 1
+    assert state.paused_until_ts is None
 
 
 def test_compute_drawdown_pct():

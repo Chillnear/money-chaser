@@ -118,6 +118,50 @@ def _agent_result_to_log_dict(r: AgentRunResult) -> dict:
     }
 
 
+def log_llm_costs(journal_dir: Path, today_date: str, now_ts: float, agent_results: list, judge_result=None) -> None:
+    """บันทึกต้นทุน LLM ทุก call ลง llm_cost.jsonl (BUILD-SPEC.md §4.2: "log ทุก call: role, model,
+    tokens in/out, cost ประมาณ, latency")
+
+    สำคัญ: ถ้าไม่เขียนไฟล์นี้ cost governor จะอ่านได้ค่าว่างตลอด แปลว่า degradation ladder
+    จะไม่มีวันทำงาน และงบ LLM จะบานโดยไม่มีอะไรเบรก
+    """
+    records = []
+    for r in agent_results:
+        records.append(
+            {
+                "ts": now_ts,
+                "date": today_date,
+                "role": r.role,
+                "model": r.model,
+                "provider": r.provider,
+                "cost_usd": r.cost_usd,
+                "latency_ms": r.latency_ms,
+                "tokens_in": r.tokens_in,
+                "tokens_out": r.tokens_out,
+                "attempts": r.attempts,
+                "abstained": r.abstained,
+            }
+        )
+    if judge_result is not None:
+        records.append(
+            {
+                "ts": now_ts,
+                "date": today_date,
+                "role": "judge",
+                "model": judge_result.model,
+                "provider": judge_result.provider,
+                "cost_usd": judge_result.cost_usd,
+                "latency_ms": judge_result.latency_ms,
+                "tokens_in": judge_result.tokens_in,
+                "tokens_out": judge_result.tokens_out,
+                "attempts": judge_result.attempts,
+                "abstained": judge_result.abstained,
+            }
+        )
+    for record in records:
+        append_jsonl(journal_dir / "llm_cost.jsonl", record)
+
+
 def _finish(
     journal_dir: Path,
     last_run_path: Path,
@@ -126,8 +170,19 @@ def _finish(
     action: str,
     reason: str,
 ) -> DailyRunResult:
-    """path ปิดท้ายที่ทุก branch ของ pipeline ใช้ร่วมกัน: save state + mark run complete + คืนผลสรุป"""
+    """path ปิดท้ายที่ทุก branch ของ pipeline ใช้ร่วมกัน: save state + บันทึก equity + mark run + คืนผลสรุป"""
     save_journal_state(journal_dir, journal_state)
+    append_jsonl(
+        journal_dir / "equity.jsonl",
+        {
+            "ts": time.time(),
+            "date": today_date,
+            "equity_usd": journal_state.equity_usd,
+            "peak_equity_usd": journal_state.peak_equity_usd,
+            "action": action,
+            "has_open_position": journal_state.open_position is not None,
+        },
+    )
     mark_run_complete(last_run_path, today_date, {"action": action})
     return DailyRunResult(date=today_date, action_taken=action, reason=reason, equity_usd=journal_state.equity_usd)
 
@@ -179,7 +234,10 @@ def manage_existing_position(
 
     closed_trade = broker.close_position(position, exit_price, now_ts, exit_decision.reason)
     journal_state.breaker = apply_trade_result(
-        journal_state.breaker, closed_trade.pnl_usd, settings.risk.breakers.consecutive_losses_halve_size
+        journal_state.breaker,
+        closed_trade.pnl_usd,
+        settings.risk.breakers.consecutive_losses_halve_size,
+        now_ts=now_ts,
     )
     journal_state.equity_usd = broker.get_account_equity()
     journal_state.peak_equity_usd = max(journal_state.peak_equity_usd, journal_state.equity_usd)
@@ -387,6 +445,8 @@ def run_daily_pipeline(
                 "source": "llm",
                 "shortlist": shortlist_result["shortlist"],
                 "pinned_extra": shortlist_result.get("pinned_extra"),
+                "rest_summary": shortlist_result.get("rest_summary", []),
+                "regime_by_coin": regime_by_coin,
                 "analyst_results": [_agent_result_to_log_dict(r) for r in analyst_results],
                 "redteam_result": _agent_result_to_log_dict(redteam_result),
                 "judge_output": judge_result.output.model_dump() if judge_result.output else None,
@@ -395,6 +455,8 @@ def run_daily_pipeline(
                 "degrade_level": degrade_level,
             },
         )
+
+        log_llm_costs(journal_dir, today_date, now_ts, analyst_results + [redteam_result], judge_result)
 
         if judge_result.abstained or judge_result.output is None:
             return _finish(
