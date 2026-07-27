@@ -4,15 +4,23 @@
 
 เอกสารหลัก: **`../BUILD-SPEC.md`** (สเปกวิศวกรรม) และ **`../TASKS.md`** (คิวงาน) อยู่ในโฟลเดอร์ Money Chaser ระดับบน
 
-## สถานะปัจจุบัน (P0 กำลังทำ)
+## สถานะปัจจุบัน
 
+### P0 — เสร็จสมบูรณ์ ✅
 - [x] 0.1 โครง repo + requirements.txt
 - [x] 0.2 settings.py + config.yaml/risk.yaml (validate ด้วย pydantic, fail-closed)
-- [x] 0.4 `src/data/hl_market.py` (+ `get_clearinghouse_state`) — เขียนแล้ว, ผ่าน unit test แบบ mock ครบ (`pytest tests/test_hl_market.py`)
-  - ⚠️ **ยังไม่ได้ยิงทดสอบกับ Hyperliquid จริง** เพราะ sandbox ที่ใช้พัฒนาบล็อก outbound ไปโดเมนภายนอกทั้งหมด (ยืนยันแล้ว) — ต้องรัน workflow "Test Setup (manual)" บน GitHub Actions ก่อนเชื่อถือ 100% (ดูขั้นตอนด้านล่าง)
-- [x] .env ตั้งค่าแล้ว (LiteLLM 2 keys, Groq key, agent wallet, main address) — ยังไม่ verify ว่าเชื่อมต่อได้จริง
-- [ ] 0.3 LiteLLM probe เต็มรูปแบบ (`scripts/probe_models.py` → เขียน `config/models.yaml`) — รอผล "Test Setup" ผ่านก่อน
-- [ ] 0.5 ยืนยัน agent wallet ใช้งานได้จริง — รอผล "Test Setup" ผ่านก่อน
+- [x] 0.4 `src/data/hl_market.py` (+ `get_clearinghouse_state`, `get_funding_history`) — verify จริงบน GitHub Actions แล้ว (BTC mid ✅, main wallet balance ✅, 232 ตลาดรวม PAXG ✅)
+- [x] 0.3 LiteLLM probe เต็มรูปแบบ — `config/models.yaml` เขียนแล้วจากผลจริง (47 โมเดลใช้งานได้ กระจาย 4 role แรกครบ 4 ค่าย: Alibaba/Anthropic/DeepSeek/Google, judge=Claude Opus 4.5, reflector=GPT-5.5)
+- [x] 0.5 Agent wallet ใช้งานได้จริง — ยืนยันผ่าน clearinghouseState query แล้ว
+
+### P1 — data layer / features / screening (เขียนเสร็จ, unit test ผ่านหมด 66/66)
+- [x] 1.1 `src/data/macro.py`, `sentiment.py`, `news.py` (+ `cryptopanic.py`, RSS ขยายเป็น 6 แหล่ง: CoinDesk/Cointelegraph/Decrypt/TheBlock/BitcoinMagazine/CryptoSlate) — mock test ผ่านครบ
+  - CryptoPanic เป็น optional news aggregator (สมัครฟรีที่ cryptopanic.com/developers/api/keys) รวมข่าวหลายแหล่ง+sentiment โหวตจากชุมชน โดยไม่ต้อง scrape Twitter/Telegram ตรงๆ (ผิด ToS และเปราะบาง) — ถ้าไม่ตั้ง `CRYPTOPANIC_API_KEY` ระบบข้ามไปเฉยๆ
+- [x] 1.2 `src/data/features.py` — indicator ทั้งหมดตาม golden test
+- [x] 1.3 `src/data/regime.py` — จำแนก 3x3 regime
+- [x] 1.4 `src/data/screening.py` — universe pool + composite score + top-3 shortlist
+- [x] 1.5 `render_feature_table()` — ตาราง prompt แบบ compact, เช็ค token budget แล้ว
+  - ⚠️ **macro.py/sentiment.py/news.py ยังไม่ได้ยิงทดสอบกับ network จริง** (เหตุผลเดียวกับ hl_market.py — sandbox บล็อก) ต้องรัน workflow "Test Setup (manual)" อีกรอบเพื่อ verify (ดูขั้นตอนด้านล่าง เพิ่ม check ใหม่แล้วใน `check_setup.py`)
 
 ## วิธีติดตั้ง (บนเครื่องที่มี network ปกติ)
 

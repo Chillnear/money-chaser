@@ -99,8 +99,80 @@ def check_groq() -> bool:
         return False
 
 
+def check_macro() -> bool:
+    print("\n=== 4. Macro data (stooq.com) ===")
+    from src.data.macro import MacroClient
+
+    client = MacroClient()
+    snapshot = client.get_macro_snapshot()
+    ok_count = sum(1 for k, v in snapshot.items() if isinstance(v, dict) and v.get("ok"))
+    total = len([k for k in snapshot if k not in ("missing", "data_missing")])
+    if snapshot.get("missing"):
+        print(f"  ⚠️  ดึงได้ {ok_count}/{total} — ขาด: {snapshot['missing']} (ไม่ critical แต่ควรดู symbol ให้ถูก)")
+    else:
+        print(f"  ✅ ดึงได้ครบ {ok_count}/{total}")
+    return ok_count > 0  # ผ่านถ้าดึงได้อย่างน้อย 1 ตัว (ไม่ critical เท่า Hyperliquid/LiteLLM)
+
+
+def check_sentiment() -> bool:
+    print("\n=== 5. Fear & Greed Index (alternative.me) ===")
+    from src.data.sentiment import SentimentClient
+
+    client = SentimentClient()
+    result = client.get_fear_greed()
+    if result["ok"]:
+        print(f"  ✅ ดึงได้ (value={result['value']}, {result['classification']})")
+        return True
+    print(f"  ❌ ดึงไม่ได้: {result.get('error')}")
+    return False
+
+
+def check_news() -> bool:
+    print("\n=== 6. News RSS (หลายแหล่ง) ===")
+    from src.data.news import NewsClient, merge_with_cryptopanic
+
+    feeds = [
+        "https://www.coindesk.com/arc/outboundfeeds/rss/",
+        "https://cointelegraph.com/rss",
+        "https://decrypt.co/feed",
+        "https://www.theblock.co/rss.xml",
+        "https://bitcoinmagazine.com/feed",
+        "https://cryptoslate.com/feed/",
+    ]
+    client = NewsClient(feed_urls=feeds)
+    snapshot = client.get_recent_headlines()
+    if snapshot.sources_failed:
+        print(f"  ⚠️  บาง feed ล่ม ({len(snapshot.sources_failed)}/{len(feeds)}): {snapshot.sources_failed}")
+    print(f"  {'✅' if snapshot.count > 0 else '⚠️ '} RSS เจอ {snapshot.count} หัวข้อข่าวใน 24 ชม.ล่าสุด")
+
+    print("\n=== 7. CryptoPanic (optional) ===")
+    cryptopanic_key = os.environ.get("CRYPTOPANIC_API_KEY", "")
+    if not cryptopanic_key:
+        print("  ⚠️  ไม่พบ CRYPTOPANIC_API_KEY — ข้าม (ไม่บังคับ, สมัครได้ที่ cryptopanic.com/developers/api/keys)")
+    else:
+        from src.data.cryptopanic import CryptoPanicClient
+
+        cp_client = CryptoPanicClient(auth_token=cryptopanic_key)
+        cp_snapshot = cp_client.get_recent_posts()
+        if cp_snapshot.ok:
+            print(f"  ✅ เข้าถึงได้ พบ {cp_snapshot.count} ข่าว")
+            merged = merge_with_cryptopanic(snapshot, cp_snapshot.posts)
+            print(f"  รวมกับ RSS แล้วได้ {merged.count} หัวข้อไม่ซ้ำ")
+        else:
+            print(f"  ❌ เชื่อมต่อไม่สำเร็จ: {cp_snapshot.error}")
+
+    return snapshot.count > 0 or len(snapshot.sources_failed) < len(feeds)
+
+
 if __name__ == "__main__":
-    results = [check_hyperliquid(), check_litellm(), check_groq()]
+    results = [
+        check_hyperliquid(),
+        check_litellm(),
+        check_groq(),
+        check_macro(),
+        check_sentiment(),
+        check_news(),
+    ]
     print("\n=== สรุป ===")
     if all(results):
         print("✅ ทุกจุดเชื่อมต่อได้ พร้อมไปขั้นต่อไป (P0.3 probe_models.py แบบเต็ม)")

@@ -145,6 +145,15 @@ class HyperliquidClient:
         }
         return self._post_with_cache_fallback(body, f"candles_{coin}_{interval}")
 
+    def get_funding_history(self, coin: str, lookback_days: int = 14) -> list[dict]:
+        """ประวัติ funding rate ย้อนหลัง (ใช้คำนวณ funding average 7d + percentile ในข้อ 3 ของ BUILD-SPEC.md)
+        คืน list of {coinFundingTime หรือ time, fundingRate} ตามที่ Hyperliquid ส่งมา
+        """
+        end_ms = int(time.time() * 1000)
+        start_ms = end_ms - lookback_days * 24 * 60 * 60 * 1000
+        body = {"type": "fundingHistory", "coin": coin, "startTime": start_ms, "endTime": end_ms}
+        return self._post_with_cache_fallback(body, f"funding_history_{coin}")
+
     def get_clearinghouse_state(self, address: str) -> dict:
         """สถานะบัญชี (equity, position ที่เปิดอยู่, margin) ของ address ใดๆ — เป็น public info
         ไม่ต้องมี private key เลย (ต่างจากการเทรดที่ต้อง sign ด้วย agent wallet)

@@ -122,6 +122,7 @@ class Secrets(BaseModel):
     line_channel_access_token: str = ""
     line_user_id: str = ""
     live_ack: str = ""
+    cryptopanic_api_key: str = ""  # optional — ข่าวข้ามแหล่งนี้ได้ถ้าไม่ตั้งค่า
 
     @field_validator("litellm_base_url")
     @classmethod
@@ -165,6 +166,7 @@ def load_settings() -> Settings:
         line_channel_access_token=os.getenv("LINE_CHANNEL_ACCESS_TOKEN", ""),
         line_user_id=os.getenv("LINE_USER_ID", ""),
         live_ack=os.getenv("LIVE_ACK", ""),
+        cryptopanic_api_key=os.getenv("CRYPTOPANIC_API_KEY", ""),
     )
 
     return Settings(

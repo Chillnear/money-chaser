@@ -14,9 +14,19 @@ data:
 
 macro_sources:
   fear_greed_url: "https://api.alternative.me/fng/"
+  # ยิ่งหลากหลายแหล่งยิ่งลดอคติของสำนักข่าวเดียว — ทุก feed เป็น best-effort ล่มได้โดยไม่ทำให้ pipeline ตาย
+  # ⚠️ URL ด้านล่างยังไม่ได้ verify กับ network จริง (sandbox บล็อก) ต้องเช็คผ่าน check_setup.py บน GH Actions
   news_rss:
     - "https://www.coindesk.com/arc/outboundfeeds/rss/"
     - "https://cointelegraph.com/rss"
+    - "https://decrypt.co/feed"
+    - "https://www.theblock.co/rss.xml"
+    - "https://bitcoinmagazine.com/feed"
+    - "https://cryptoslate.com/feed/"
+  # CryptoPanic (optional): news aggregator ที่รวมหลายแหล่ง + sentiment โหวตจากชุมชน ไม่ต้อง scrape โซเชียลเอง
+  # สมัครฟรีที่ https://cryptopanic.com/developers/api/keys แล้วใส่ CRYPTOPANIC_API_KEY ใน .env/secrets
+  # ถ้าไม่ตั้งค่า ระบบข้ามแหล่งนี้ไปเฉยๆ
+  cryptopanic_currencies: "BTC,ETH,SOL"
 
 features:
   ema_periods: [9, 21, 50, 200]
