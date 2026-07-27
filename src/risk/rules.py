@@ -114,8 +114,14 @@ def evaluate_all_gates(
     universe_whitelist: set[str],
     current_funding_rate: float | None,
     gates_cfg: dict,
+    require_analyst_agreement: bool = True,
 ) -> GateResult:
-    """รันทุก gate ตามลำดับ — เจอ veto ตัวแรกก็หยุดทันที (fail fast) คืนเหตุผลของตัวที่ veto"""
+    """รันทุก gate ตามลำดับ — เจอ veto ตัวแรกก็หยุดทันที (fail fast) คืนเหตุผลของตัวที่ veto
+
+    require_analyst_agreement=False ใช้เฉพาะกับ decision ที่ไม่มี analyst มา debate จริง (เช่น
+    src/baseline.py ตอน cost governor ตัด LLM ออกทั้งหมด) — gate อื่นทั้งหมดยังบังคับใช้เหมือนเดิม
+    เพราะเป็น hard rule ของความเสี่ยง ไม่ใช่ของกระบวนการ debate
+    """
     if judge_action == "flat":
         return GateResult(passed=True, reason="judge ตัดสินใจ FLAT — ไม่ต้องเช็ค gate อื่น")
 
@@ -123,9 +129,10 @@ def evaluate_all_gates(
         check_confidence_gate(judge_confidence, gates_cfg["min_judge_confidence"]),
         check_universe_whitelist_gate(judge_asset, universe_whitelist),
         check_shortlist_membership_gate(judge_asset, shortlist_coins),
-        check_analyst_agreement_gate(judge_action, analyst_directions, gates_cfg["min_analyst_agreement"]),
-        check_funding_gate(judge_action, current_funding_rate, gates_cfg["max_funding_pct_annual"]),
     ]
+    if require_analyst_agreement:
+        checks.append(check_analyst_agreement_gate(judge_action, analyst_directions, gates_cfg["min_analyst_agreement"]))
+    checks.append(check_funding_gate(judge_action, current_funding_rate, gates_cfg["max_funding_pct_annual"]))
 
     for result in checks:
         if not result.passed:

@@ -1,0 +1,61 @@
+name: Daily Trading Run
+
+# รอบเทรดรายวัน ตาม BUILD-SPEC.md §2 — cron 00:20 UTC (07:20 น. ไทย) หลังปิดแท่งเทียน daily 00:00 UTC
+# เผื่อ GitHub Actions delay 5-30 นาที รันผ่าน src/main.py แล้ว commit state/ กลับเข้า repo ทุกครั้ง
+# (ต้อง commit แม้ไม่มีอะไรเปลี่ยนจริง เพื่อกัน GitHub ปิด cron อัตโนมัติที่ inactivity 60 วัน)
+#
+# workflow_dispatch ไว้ให้กดรันมือได้เพื่อทดสอบ/แก้ไขนอกเวลา cron ปกติ
+
+on:
+  schedule:
+    - cron: "20 0 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-trading-run
+  cancel-in-progress: false  # ห้ามยกเลิกรอบที่กำลังเทรดจริงอยู่ แม้มีรอบใหม่ถูก trigger ซ้อน
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pytest (ต้องผ่านทั้งหมดก่อนเทรดจริง — BUILD-SPEC.md §6 live safety gate ข้อ 1)
+        run: MODE=paper python -m pytest -q
+
+      - name: Run daily pipeline
+        env:
+          MODE: ${{ vars.MODE || 'paper' }}
+          LITELLM_BASE_URL: ${{ secrets.LITELLM_BASE_URL }}
+          LITELLM_KEY_1: ${{ secrets.LITELLM_KEY_1 }}
+          LITELLM_KEY_2: ${{ secrets.LITELLM_KEY_2 }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          HL_AGENT_PRIVATE_KEY: ${{ secrets.HL_AGENT_PRIVATE_KEY }}
+          HL_MAIN_ADDRESS: ${{ secrets.HL_MAIN_ADDRESS }}
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
+          LIVE_ACK: ${{ secrets.LIVE_ACK }}
+          CRYPTOPANIC_API_KEY: ${{ secrets.CRYPTOPANIC_API_KEY }}
+        run: python -m src.main
+
+      - name: Build dashboard (docs/index.html สำหรับ GitHub Pages)
+        run: python -m src.report.dashboard
+
+      - name: Commit state/ + docs/ กลับ repo (กัน cron ถูกปิดที่ inactivity 60 วัน + เก็บ audit trail ทุกวัน)
+        run: |
+          git config user.name "money-chaser-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add state/ docs/
+          git diff --cached --quiet && echo "ไม่มีอะไรเปลี่ยน ข้าม commit" || git commit -m "chore: daily run state $(date -u +%Y-%m-%d)"
+          git push

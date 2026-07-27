@@ -270,3 +270,83 @@ class LLMClient:
             error=f"parse/validate ไม่ผ่านหลัง retry {self.max_validation_retries} ครั้ง: {last_error}",
             abstained=True,
         )
+
+    def call_freeform(
+        self,
+        model: str,
+        system_prompt: str,
+        user_prompt: str,
+        is_groq: bool = False,
+    ) -> LLMCallResult:
+        """เหมือน call_structured แต่ไม่มี schema ให้ validate — ใช้กับ role ที่ตอบเป็นข้อความอิสระ
+        (เช่น reflector ที่ต้องส่งเนื้อหา state/lessons.md ทั้งไฟล์เป็น markdown ไม่ใช่ JSON ตาม schema)
+        ไม่มี retry เพราะไม่มีอะไรให้ validate ผิด — abstain ได้แค่กรณีเดียวคือทุก key เรียกไม่ผ่าน หรือ
+        prompt เกิน token cap (เหมือน call_structured)
+        """
+        input_tokens_est = estimate_tokens(system_prompt) + estimate_tokens(user_prompt)
+        if input_tokens_est > self.input_token_cap:
+            return LLMCallResult(
+                parsed=None,
+                raw_text=None,
+                cost_usd=0.0,
+                latency_ms=0.0,
+                tokens_in=input_tokens_est,
+                tokens_out=0,
+                attempts=0,
+                error=f"prompt เกิน token cap ({input_tokens_est} > {self.input_token_cap}) — ไม่ยิงเรียก",
+                abstained=True,
+            )
+
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ]
+        candidate_keys = self.rotator.all_keys_in_rotation_order()
+        last_error: str | None = None
+
+        for key in candidate_keys:
+            try:
+                start = time.time()
+                kwargs = {
+                    "model": model,
+                    "messages": messages,
+                    "timeout": self.timeout_sec,
+                    "max_tokens": self.output_token_cap,
+                    "api_key": key,
+                }
+                if not is_groq:
+                    kwargs["api_base"] = self.base_url
+                response = self._get_completion_fn()(**kwargs)
+                latency_ms = (time.time() - start) * 1000
+            except Exception as exc:  # noqa: BLE001 - ลอง key ถัดไปถ้าเจอ rate limit/error อื่น
+                last_error = str(exc)
+                continue
+
+            try:
+                cost = self._get_cost_fn()(completion_response=response)
+            except Exception:  # noqa: BLE001 - cost tracking เป็น best-effort ไม่ critical
+                cost = 0.0
+
+            raw_text = response.choices[0].message.content
+            tokens_out = estimate_tokens(raw_text)
+            return LLMCallResult(
+                parsed=None,
+                raw_text=raw_text,
+                cost_usd=cost or 0.0,
+                latency_ms=latency_ms,
+                tokens_in=input_tokens_est,
+                tokens_out=tokens_out,
+                attempts=1,
+            )
+
+        return LLMCallResult(
+            parsed=None,
+            raw_text=None,
+            cost_usd=0.0,
+            latency_ms=0.0,
+            tokens_in=input_tokens_est,
+            tokens_out=0,
+            attempts=1,
+            error=f"เรียกไม่ผ่านทุก key: {last_error}",
+            abstained=True,
+        )

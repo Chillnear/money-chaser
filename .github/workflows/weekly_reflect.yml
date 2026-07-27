@@ -1,0 +1,54 @@
+name: Weekly Reflect
+
+# รันทุกวันจันทร์ — ให้ reflector อ่าน journal 7 วันล่าสุดแล้วเขียน state/lessons.md ฉบับใหม่
+# **ไม่ push ตรง** — เปิดเป็น Pull Request ให้มนุษย์ review ก่อน merge เสมอ (BUILD-SPEC.md §7.2:
+# "8 สัปดาห์แรก: มนุษย์ต้อง review diff ของ lessons.md ก่อน merge (เปิด PR ไม่ใช่ push ตรง)")
+# reflector มีสิทธิ์แก้ได้แค่ไฟล์เดียวคือ state/lessons.md (บังคับด้วยโค้ดใน src/agents/reflector.py
+# และ scripts/weekly_reflect.py ที่ไม่รับ path อื่นเป็น parameter เลย)
+
+on:
+  schedule:
+    - cron: "30 0 * * 1"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  reflect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run weekly reflector (แก้ได้แค่ state/lessons.md เท่านั้น)
+        env:
+          MODE: paper
+          LITELLM_BASE_URL: ${{ secrets.LITELLM_BASE_URL }}
+          LITELLM_KEY_1: ${{ secrets.LITELLM_KEY_1 }}
+          LITELLM_KEY_2: ${{ secrets.LITELLM_KEY_2 }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python scripts/weekly_reflect.py
+
+      - name: เปิด Pull Request แก้ lessons.md ให้มนุษย์รีวิว
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "chore(lessons): weekly reflector update $(date -u +%Y-%m-%d)"
+          title: "Weekly reflector — อัปเดต lessons.md"
+          body: |
+            เปิดโดย weekly_reflect.yml อัตโนมัติ — reflector อ่าน journal 7 วันล่าสุดแล้วสรุปบทเรียนใหม่
+
+            **โปรดรีวิวก่อน merge** (ตาม BUILD-SPEC.md §7.2 บังคับ human review 8 สัปดาห์แรก):
+            - lesson ใหม่ต้องอยู่ที่ status `hypothesis` เท่านั้น (ห้าม `validated` ตั้งแต่แรก)
+            - เลื่อนเป็น `validated` ได้เมื่อ evidence_count >= 5 เท่านั้น
+            - ไม่เกิน 25 lessons — ถ้าเต็มต้อง retire ตัวที่แย่สุดพร้อมเหตุผล
+          branch: weekly-reflect/lessons-update
+          add-paths: state/lessons.md
+          delete-branch: true

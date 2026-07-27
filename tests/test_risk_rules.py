@@ -19,6 +19,39 @@ def test_confidence_gate_pass_and_fail():
     assert result.failed_gate == "confidence"
 
 
+def test_evaluate_all_gates_skips_agreement_check_when_require_analyst_agreement_false():
+    # ไม่มี analyst มา debate เลย (list ว่าง) — ถ้าเช็ค agreement ตามปกติจะ veto แน่ๆ แต่ baseline.py
+    # ไม่มี analyst จริง จึงต้องข้าม gate นี้ได้เมื่อสั่ง require_analyst_agreement=False
+    result = evaluate_all_gates(
+        judge_action="long",
+        judge_asset="BTC",
+        judge_confidence=70,
+        analyst_directions=[],
+        shortlist_coins={"BTC"},
+        universe_whitelist={"BTC"},
+        current_funding_rate=0.0001,
+        gates_cfg=GATES_CFG,
+        require_analyst_agreement=False,
+    )
+    assert result.passed is True
+
+
+def test_evaluate_all_gates_still_vetoes_on_agreement_when_required_true_default():
+    # ค่า default require_analyst_agreement=True ต้องยัง veto เหมือนเดิม (ไม่กระทบ behavior เก่า)
+    result = evaluate_all_gates(
+        judge_action="long",
+        judge_asset="BTC",
+        judge_confidence=70,
+        analyst_directions=[],
+        shortlist_coins={"BTC"},
+        universe_whitelist={"BTC"},
+        current_funding_rate=0.0001,
+        gates_cfg=GATES_CFG,
+    )
+    assert result.passed is False
+    assert result.failed_gate == "analyst_agreement"
+
+
 def test_shortlist_membership_gate():
     assert check_shortlist_membership_gate("BTC", {"BTC", "ETH"}).passed is True
     result = check_shortlist_membership_gate("DOGE", {"BTC", "ETH"})

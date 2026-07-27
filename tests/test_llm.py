@@ -223,6 +223,58 @@ def test_call_structured_skips_call_when_prompt_exceeds_token_cap():
     completion_fn.assert_not_called()
 
 
+def test_call_freeform_success_returns_raw_text_without_parsing():
+    completion_fn = MagicMock(return_value=_fake_response("# lessons.md\n- lesson 1"))
+    cost_fn = MagicMock(return_value=0.003)
+    client = LLMClient(
+        base_url="https://fake-proxy.example.com", api_keys=["key1"], completion_fn=completion_fn, cost_fn=cost_fn
+    )
+
+    result = client.call_freeform("fake-model", "system", "user")
+
+    assert result.abstained is False
+    assert result.parsed is None
+    assert result.raw_text == "# lessons.md\n- lesson 1"
+    assert result.cost_usd == pytest.approx(0.003)
+
+
+def test_call_freeform_falls_back_to_second_key_on_failure():
+    completion_fn = MagicMock(side_effect=[Exception("rate limited"), _fake_response("ok text")])
+    client = LLMClient(
+        base_url="https://fake-proxy.example.com", api_keys=["key1", "key2"], completion_fn=completion_fn,
+        cost_fn=MagicMock(return_value=0.001),
+    )
+
+    result = client.call_freeform("fake-model", "system", "user")
+
+    assert result.abstained is False
+    assert result.raw_text == "ok text"
+
+
+def test_call_freeform_abstains_when_all_keys_fail():
+    completion_fn = MagicMock(side_effect=Exception("down"))
+    client = LLMClient(base_url="https://fake-proxy.example.com", api_keys=["key1"], completion_fn=completion_fn)
+
+    result = client.call_freeform("fake-model", "system", "user")
+
+    assert result.abstained is True
+    assert result.raw_text is None
+    assert "เรียกไม่ผ่านทุก key" in result.error
+
+
+def test_call_freeform_skips_call_when_prompt_exceeds_token_cap():
+    completion_fn = MagicMock()
+    client = LLMClient(
+        base_url="https://fake-proxy.example.com", api_keys=["key1"], input_token_cap=10, completion_fn=completion_fn
+    )
+
+    result = client.call_freeform("fake-model", "a" * 1000, "user")
+
+    assert result.abstained is True
+    assert "token cap" in result.error
+    completion_fn.assert_not_called()
+
+
 def test_call_structured_cost_accumulates_across_retries():
     bad_response = _fake_response("bad")
     good_response = _fake_response('{"action": "flat", "value": 0}')
