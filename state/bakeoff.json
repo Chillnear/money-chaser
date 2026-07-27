@@ -1,0 +1,336 @@
+{
+  "ran_at": 1785158072.4023426,
+  "runs_per_model": 2,
+  "results": {
+    "redteam": [
+      {
+        "model": "Gemini 3.1 pro",
+        "schema_success_rate": 0.0,
+        "avg_cost_usd": 0.0,
+        "avg_latency_ms": 45414,
+        "runs": [
+          {
+            "valid_json": false,
+            "cost_usd": 0.0,
+            "latency_ms": 47840,
+            "attempts_needed": 3,
+            "error": "parse/validate ไม่ผ่านหลัง retry 2 ครั้ง: Expecting value: line 1 column 1 (char 0)"
+          },
+          {
+            "valid_json": false,
+            "cost_usd": 0.0,
+            "latency_ms": 42989,
+            "attempts_needed": 3,
+            "error": "parse/validate ไม่ผ่านหลัง retry 2 ครั้ง: Expecting value: line 1 column 1 (char 0)"
+          }
+        ]
+      },
+      {
+        "model": "gemini-3.5-flash",
+        "schema_success_rate": 0.0,
+        "avg_cost_usd": 0.0,
+        "avg_latency_ms": 22337,
+        "runs": [
+          {
+            "valid_json": false,
+            "cost_usd": 0.0,
+            "latency_ms": 22050,
+            "attempts_needed": 3,
+            "error": "parse/validate ไม่ผ่านหลัง retry 2 ครั้ง: Expecting value: line 1 column 1 (char 0)"
+          },
+          {
+            "valid_json": false,
+            "cost_usd": 0.0,
+            "latency_ms": 22624,
+            "attempts_needed": 3,
+            "error": "parse/validate ไม่ผ่านหลัง retry 2 ครั้ง: Expecting value: line 1 column 1 (char 0)"
+          }
+        ]
+      },
+      {
+        "model": "Gemini 3.0 pro",
+        "schema_success_rate": 0.0,
+        "avg_cost_usd": 0.0,
+        "avg_latency_ms": 49554,
+        "runs": [
+          {
+            "valid_json": false,
+            "cost_usd": 0.0,
+            "latency_ms": 46774,
+            "attempts_needed": 3,
+            "error": "parse/validate ไม่ผ่านหลัง retry 2 ครั้ง: โมเดลตอบเนื้อหาว่างเปล่า (content เป็น None) — อาจโดน content filter หรือปฏิเสธตอบ"
+          },
+          {
+            "valid_json": false,
+            "cost_usd": 0.0,
+            "latency_ms": 52335,
+            "attempts_needed": 3,
+            "error": "parse/validate ไม่ผ่านหลัง retry 2 ครั้ง: โมเดลตอบเนื้อหาว่างเปล่า (content เป็น None) — อาจโดน content filter หรือปฏิเสธตอบ"
+          }
+        ]
+      },
+      {
+        "model": "Grok 4.1 Fast Reasoning",
+        "schema_success_rate": 1.0,
+        "avg_cost_usd": 0.0,
+        "avg_latency_ms": 19697,
+        "runs": [
+          {
+            "valid_json": true,
+            "cost_usd": 0.0,
+            "latency_ms": 20217,
+            "attempts_needed": 1,
+            "error": null,
+            "score": {
+              "coverage": 1.0,
+              "caught_funding_trap": true,
+              "invalidation_rate": 1.0,
+              "avg_thesis_chars": 190,
+              "btc_call": "short@75"
+            },
+            "raw_preview": "```json\n{\"candidates\":[\n   {\"asset\":\"BTC\",\"direction\":\"short\",\"confidence\":75,\n    \"thesis\":\"ค้าน analyst_trend (ADX strong long) และ analyst_macro (DXY weak long) เพราะ analyst_positioning ชี้ถูก: RSI 78 overbought, funding ~20% ann แพง, OI +14% crowded long trap ใน extreme greed 78 (+22 w/w) -> bull trap ชัด\",\"key_evidence\":[\"RSI:78.30\",\"funding ann:~19.7%\",\"OI change:+14.2%\",\"Fear&Greed:78\"],\n "
+          },
+          {
+            "valid_json": true,
+            "cost_usd": 0.0,
+            "latency_ms": 19177,
+            "attempts_needed": 1,
+            "error": null,
+            "score": {
+              "coverage": 1.0,
+              "caught_funding_trap": true,
+              "invalidation_rate": 1.0,
+              "avg_thesis_chars": 167,
+              "btc_call": "short@72"
+            },
+            "raw_preview": "```json\n{\"candidates\":[\n   {\"asset\":\"BTC\",\"direction\":\"short\",\"confidence\":72,\n    \"thesis\":\"ค้าน trend/macro long (analyst_trend/macro): RSI78 overbought, funding 0.018% ann~20% สูงมาก longs จ่ายแพง, Extreme Greed78+OI+14% = crowded long trap/reversal. positioning flat ถูกแต่ขาด short opp.\",\"key_evidence\":[\"RSI:78.30\",\"funding:0.0180%\",\"Fear & Greed:78\",\"Open interest:+14.2%\"],\n    \"invalidation\""
+          }
+        ]
+      },
+      {
+        "model": "glm-5.2",
+        "schema_success_rate": 0.0,
+        "avg_cost_usd": 0.0,
+        "avg_latency_ms": 101094,
+        "runs": [
+          {
+            "valid_json": false,
+            "cost_usd": 0.0,
+            "latency_ms": 119348,
+            "attempts_needed": 3,
+            "error": "parse/validate ไม่ผ่านหลัง retry 2 ครั้ง: Expecting value: line 1 column 1 (char 0)"
+          },
+          {
+            "valid_json": false,
+            "cost_usd": 0.0,
+            "latency_ms": 82841,
+            "attempts_needed": 3,
+            "error": "parse/validate ไม่ผ่านหลัง retry 2 ครั้ง: Expecting value: line 1 column 1 (char 0)"
+          }
+        ]
+      }
+    ],
+    "judge": [
+      {
+        "model": "claude-opus-4-7",
+        "schema_success_rate": 1.0,
+        "avg_cost_usd": 0.0,
+        "avg_latency_ms": 16542,
+        "runs": [
+          {
+            "valid_json": true,
+            "cost_usd": 0.0,
+            "latency_ms": 16342,
+            "attempts_needed": 1,
+            "error": null,
+            "score": {
+              "action": "long",
+              "asset": "PAXG",
+              "asset_in_allowed_list": true,
+              "confidence": 66.0,
+              "answered_redteam": true,
+              "explained_why_this_over_others": true,
+              "reasoning_chars": 452
+            },
+            "raw_preview": "{\"action\":\"long\",\"asset\":\"PAXG\",\"confidence\":66,\"stop_pct\":1.5,\"take_profit_pct\":4.0,\"reasoning\":\"เลือก PAXG เพราะเป็น setup ที่มี risk/reward สมดุลที่สุด: เทรนด์ขึ้นแบบ vol ต่ำ (ATR 0.9%), positioning สะอาด (funding ~0%), macro หนุน (DXY -0.35%, XAU +0.8%). BTC แม้ score สูงสุดแต่สัญญาณ overextended ชัด: RSI 78, funding annualized ~20%, OI +14% ใน 24 ชม., F&G 78 extreme greed — classic late-cycle"
+          },
+          {
+            "valid_json": true,
+            "cost_usd": 0.0,
+            "latency_ms": 16741,
+            "attempts_needed": 1,
+            "error": null,
+            "score": {
+              "action": "long",
+              "asset": "PAXG",
+              "asset_in_allowed_list": true,
+              "confidence": 66.0,
+              "answered_redteam": true,
+              "explained_why_this_over_others": true,
+              "reasoning_chars": 523
+            },
+            "raw_preview": "{\"action\":\"long\",\"asset\":\"PAXG\",\"confidence\":66,\"stop_pct\":1.5,\"take_profit_pct\":4.0,\"reasoning\":\"เลือก PAXG เพราะ macro tailwind ชัด (DXY -0.35%, XAUUSD +0.80%) positioning สะอาด (funding ~0%) และเทรนด์ขึ้นแบบ vol ต่ำ ทำให้ risk/reward ดีกว่า BTC ที่ overbought สุดขั้ว (RSI 78, funding annualized ~20%, OI +14% ใน 24 ชม., F&G 78 Extreme Greed) — สัญญาณคลาสสิกของ late-stage long squeeze risk ตามที่"
+          }
+        ]
+      },
+      {
+        "model": "Claude Opus 4.5",
+        "schema_success_rate": 1.0,
+        "avg_cost_usd": 0.0,
+        "avg_latency_ms": 11618,
+        "runs": [
+          {
+            "valid_json": true,
+            "cost_usd": 0.0,
+            "latency_ms": 11794,
+            "attempts_needed": 1,
+            "error": null,
+            "score": {
+              "action": "long",
+              "asset": "BTC",
+              "asset_in_allowed_list": true,
+              "confidence": 68.0,
+              "answered_redteam": true,
+              "explained_why_this_over_others": true,
+              "reasoning_chars": 346
+            },
+            "raw_preview": "```json\n{\n  \"action\": \"long\",\n  \"asset\": \"BTC\",\n  \"confidence\": 68,\n  \"stop_pct\": 5.5,\n  \"take_profit_pct\": 12.0,\n  \"reasoning\": \"BTC มี composite score สูงสุด (0.812) ADX 38.5 ยืนยันเทรนด์แข็งแรง ราคาเหนือ EMA ทุกเส้น มหภาคเอื้อ (DXY อ่อน ทองขึ้น) Fear & Greed สูงแต่ยังไม่ถึง extreme top ข้อค้าน funding แพง (19.7% annualized) และ OI +14% มีเหตุผล จึงลด confidence และตั้ง stop กว้างขึ้น (>1 ATR%) "
+          },
+          {
+            "valid_json": true,
+            "cost_usd": 0.0,
+            "latency_ms": 11443,
+            "attempts_needed": 1,
+            "error": null,
+            "score": {
+              "action": "long",
+              "asset": "BTC",
+              "asset_in_allowed_list": true,
+              "confidence": 68.0,
+              "answered_redteam": true,
+              "explained_why_this_over_others": true,
+              "reasoning_chars": 309
+            },
+            "raw_preview": "```json\n{\n  \"action\": \"long\",\n  \"asset\": \"BTC\",\n  \"confidence\": 68,\n  \"stop_pct\": 4.5,\n  \"take_profit_pct\": 8.0,\n  \"reasoning\": \"BTC มี composite score สูงสุด 0.812 เทรนด์ชัด ADX 38.5 ราคาเหนือ EMA ทุกเส้น macro สนับสนุน DXY อ่อน ทองขึ้น ข้อกังวลคือ funding แพง 19.7% annualized และ RSI 78 overbought แต่ในช่วง trend_up_vol_high มักเห็น overbought ต่อเนื่องก่อน pullback จริง ตั้ง stop กว้างกว่า ATR%"
+          }
+        ]
+      },
+      {
+        "model": "gpt-5.5",
+        "schema_success_rate": 1.0,
+        "avg_cost_usd": 0.02892,
+        "avg_latency_ms": 11300,
+        "runs": [
+          {
+            "valid_json": true,
+            "cost_usd": 0.031515,
+            "latency_ms": 12942,
+            "attempts_needed": 1,
+            "error": null,
+            "score": {
+              "action": "long",
+              "asset": "PAXG",
+              "asset_in_allowed_list": true,
+              "confidence": 62.0,
+              "answered_redteam": true,
+              "explained_why_this_over_others": true,
+              "reasoning_chars": 247
+            },
+            "raw_preview": "{\"action\":\"long\",\"asset\":\"PAXG\",\"confidence\":62,\"stop_pct\":1.2,\"take_profit_pct\":2.5,\"reasoning\":\"เลือก PAXG long แบบระมัดระวัง: macro หนุนชัดจาก DXY อ่อนและทองสปอตขึ้น ขณะที่ PAXG อยู่ใน regime trend_up_vol_low, RSI ไม่ร้อนเกิน และ funding แทบเป็นศูนย์ จึงมีความเสี่ยง crowded trade ต่ำกว่า BTC แม้ ADX เพียง 21 ทำให้ไม่ควรให้ confidence สูงมาก\",\"why_this_over_others\":\"BTC โมเมนตัมแรงกว่าแต่ overbo"
+          },
+          {
+            "valid_json": true,
+            "cost_usd": 0.026325,
+            "latency_ms": 9658,
+            "attempts_needed": 1,
+            "error": null,
+            "score": {
+              "action": "long",
+              "asset": "PAXG",
+              "asset_in_allowed_list": true,
+              "confidence": 62.0,
+              "answered_redteam": true,
+              "explained_why_this_over_others": true,
+              "reasoning_chars": 248
+            },
+            "raw_preview": "{\"action\":\"long\",\"asset\":\"PAXG\",\"confidence\":62,\"stop_pct\":1.3,\"take_profit_pct\":2.6,\"reasoning\":\"เลือก PAXG long แบบระมัดระวัง เพราะ macro หนุนชัดจาก DXY อ่อนและทองสปอตบวก ขณะที่ funding แทบเป็นศูนย์และ OI เพิ่มเล็กน้อย สะท้อน positioning สะอาดกว่า BTC แม้เทรนด์ไม่แรงมาก ADX 21 และ RSI 58 ยังไม่ร้อนเกินไป จึงเหมาะกว่าไล่ BTC ที่ขึ้นแรงและแออัด\",\"why_this_over_others\":\"BTC มี trend แข็งสุดแต่ RSI "
+          }
+        ]
+      },
+      {
+        "model": "GPT 5.4",
+        "schema_success_rate": 1.0,
+        "avg_cost_usd": 0.0,
+        "avg_latency_ms": 5748,
+        "runs": [
+          {
+            "valid_json": true,
+            "cost_usd": 0.0,
+            "latency_ms": 5716,
+            "attempts_needed": 1,
+            "error": null,
+            "score": {
+              "action": "flat",
+              "asset": null,
+              "asset_in_allowed_list": true,
+              "confidence": 58.0,
+              "answered_redteam": true,
+              "explained_why_this_over_others": true,
+              "reasoning_chars": 385
+            },
+            "raw_preview": "{\"action\":\"flat\",\"asset\":null,\"confidence\":58,\"stop_pct\":0.0,\"take_profit_pct\":0.0,\"reasoning\":\"BTC มีเทรนด์ขึ้นแรงและ ADX สูง แต่ RSI 78.3, funding ~19.7% annualized และ OI +14.2% ทำให้ฝั่ง long แออัดใกล้จุดสูงสุด 30 วันมากเกินไป ความเสี่ยง squeeze สูงขึ้น ขณะที่ PAXG แม้ macro หนุนจาก DXY อ่อนและทองขึ้น แต่ composite score ต่ำกว่าและ conviction จาก analysts ยังไม่มากพอ ETH อยู่ใน regime chop ชัด"
+          },
+          {
+            "valid_json": true,
+            "cost_usd": 0.0,
+            "latency_ms": 5781,
+            "attempts_needed": 1,
+            "error": null,
+            "score": {
+              "action": "flat",
+              "asset": null,
+              "asset_in_allowed_list": true,
+              "confidence": 58.0,
+              "answered_redteam": true,
+              "explained_why_this_over_others": true,
+              "reasoning_chars": 365
+            },
+            "raw_preview": "{\"action\":\"flat\",\"asset\":null,\"confidence\":58,\"stop_pct\":0.0,\"take_profit_pct\":0.0,\"reasoning\":\"BTC มีเทรนด์ขึ้นชัดตาม trend และ macro แต่ถูกหักล้างด้วย RSI 78.3, funding สูง และ OI +14.2% ซึ่งเพิ่มความเสี่ยง squeeze ใกล้จุดสูงสุด 30 วันมากแล้ว ขณะที่ PAXG แม้ macro หนุนและ positioning สะอาด แต่ composite ต่ำกว่าและแรงเทรนด์อ่อนกว่า ส่วน ETH อยู่ใน regime chop ชัดเจน จึงยังไม่มีตัวเลือกที่ได้ rewa"
+          }
+        ]
+      },
+      {
+        "model": "Gemini 3.1 pro",
+        "schema_success_rate": 0.5,
+        "avg_cost_usd": 0.0,
+        "avg_latency_ms": 36366,
+        "runs": [
+          {
+            "valid_json": false,
+            "cost_usd": 0.0,
+            "latency_ms": 44897,
+            "attempts_needed": 3,
+            "error": "parse/validate ไม่ผ่านหลัง retry 2 ครั้ง: Unterminated string starting at: line 7 column 3 (char 106)"
+          },
+          {
+            "valid_json": true,
+            "cost_usd": 0.0,
+            "latency_ms": 27836,
+            "attempts_needed": 2,
+            "error": null,
+            "score": {
+              "action": "flat",
+              "asset": null,
+              "asset_in_allowed_list": true,
+              "confidence": 75.0,
+              "answered_redteam": true,
+              "explained_why_this_over_others": true,
+              "reasoning_chars": 378
+            },
+            "raw_preview": "{\n  \"action\": \"flat\",\n  \"asset\": null,\n  \"confidence\": 75,\n  \"stop_pct\": 0.0,\n  \"take_profit_pct\": 0.0,\n  \"reasoning\": \"BTC is severely overbought with RSI at 78.3 and Fear & Greed at 78 (Extreme Greed). The 14.2% 24h OI spike and ~20% annualized funding indicate excessive leverage and euphoria, creating a high probability of a long squeeze or deleveraging event. Going long here is too risky. PAXG"
+          }
+        ]
+      }
+    ]
+  }
+}
