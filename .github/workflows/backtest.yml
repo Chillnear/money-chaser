@@ -1,0 +1,68 @@
+name: Backtest (manual)
+
+# ทดสอบกลยุทธ์ย้อนอดีตแบบเข้มข้น (เรียก AI จริงทุกวันที่จำลอง) เพื่อได้ผลลัพธ์เยอะพอเร็วขึ้น โดยไม่ต้อง
+# รอ cron รายวันจริงหลายเดือน — ดูรายละเอียด/ข้อจำกัดที่ scripts/backtest.py (P5.7)
+#
+# มีค่าใช้จ่าย LLM ตามจำนวนวันที่จำลอง (ยิ่งจำลองหลายวัน ยิ่งเสียเยอะ) จึงตั้งเป็น manual เท่านั้น
+# และมี max_ai_cost_usd เป็นเพดานกันเผลอเสียเกินตั้งใจ (สคริปต์จะหยุดเองถ้าใช้เกิน)
+
+on:
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "จำลองกี่วันย้อนหลังจากเมื่อวาน"
+        required: false
+        default: "60"
+      coins:
+        description: "เหรียญที่จะจำลอง (คั่นด้วย comma)"
+        required: false
+        default: "BTC,PAXG"
+      max_ai_cost_usd:
+        description: "เพดานค่าใช้จ่าย AI สูงสุดที่ยอมเสีย (USD) — หยุดอัตโนมัติถ้าใช้เกิน"
+        required: false
+        default: "3.0"
+      starting_equity_usd:
+        description: "ทุนตั้งต้นสมมติสำหรับ backtest นี้"
+        required: false
+        default: "28.0"
+
+permissions:
+  contents: write
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pytest (ต้องผ่านทั้งหมดก่อน backtest จริง — เหมือน safety gate ของ daily.yml)
+        run: MODE=paper python -m pytest -q
+
+      - name: Run backtest
+        env:
+          MODE: paper
+          LITELLM_BASE_URL: ${{ secrets.LITELLM_BASE_URL }}
+          LITELLM_KEY_1: ${{ secrets.LITELLM_KEY_1 }}
+          LITELLM_KEY_2: ${{ secrets.LITELLM_KEY_2 }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          python scripts/backtest.py \
+            --days "${{ inputs.days }}" \
+            --coins "${{ inputs.coins }}" \
+            --max-ai-cost-usd "${{ inputs.max_ai_cost_usd }}" \
+            --starting-equity-usd "${{ inputs.starting_equity_usd }}"
+
+      - name: Commit backtest results
+        run: |
+          git config user.name "money-chaser-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add state/backtest/
+          git diff --cached --quiet && echo "ไม่มีอะไรเปลี่ยน ข้าม commit" || git commit -m "chore: backtest results $(date -u +%Y-%m-%d)"
+          git push

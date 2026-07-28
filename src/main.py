@@ -205,6 +205,7 @@ def manage_existing_position(
     last_run_path: Path,
     today_date: str,
     now_ts: float,
+    kill_path: Path = KILL_PATH,
 ) -> DailyRunResult:
     """ขั้น 3 (manage_existing) ของ BUILD-SPEC.md §2 — มีไม้เปิดอยู่ ให้เช็ค exit เท่านั้น ไม่เปิดไม้ใหม่
 
@@ -255,8 +256,11 @@ def manage_existing_position(
     append_jsonl(journal_dir / "trades.jsonl", asdict(closed_trade))
 
     if should_trigger_kill(journal_state.peak_equity_usd, journal_state.equity_usd, settings.risk.breakers.max_drawdown_pct):
+        # บั๊กจริงที่เจอ: เดิมเขียนไปที่ KILL_PATH (ค่าคงที่ระดับโมดูล ชี้ state/KILL จริงเสมอ) แทนที่จะใช้
+        # kill_path ที่ caller ส่งมา — ถ้ามีใครรัน pipeline นี้กับ journal_dir อื่น (เช่น backtest) แล้ว breaker
+        # นี้ทริกเกอร์ จะดันไปเขียน state/KILL ของจริงโดยไม่ตั้งใจ ทำให้ระบบเทรดจริงหยุดทำงานผิดที่
         write_kill_file(
-            KILL_PATH,
+            kill_path,
             f"drawdown {settings.risk.breakers.max_drawdown_pct}% จาก peak equity {journal_state.peak_equity_usd:.2f} "
             f"ถูกชน (equity ปัจจุบัน {journal_state.equity_usd:.2f})",
         )
@@ -330,7 +334,7 @@ def run_daily_pipeline(
     # 3. manage_existing — มีไม้เปิดอยู่ = ข้ามขั้น 4-10 ทั้งหมด (max 1 position/วัน)
     if journal_state.open_position is not None:
         return manage_existing_position(
-            settings, hl_client, broker, journal_state, journal_dir, last_run_path, today_date, now_ts
+            settings, hl_client, broker, journal_state, journal_dir, last_run_path, today_date, now_ts, kill_path
         )
 
     # 4-5. collect_data + build_features (ต่อทุกตลาดใน universe pool)

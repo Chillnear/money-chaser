@@ -7,9 +7,12 @@ from unittest.mock import MagicMock
 
 import pytest
 
+from dataclasses import asdict
+
+from src.execution.broker_base import Position
 from src.execution.broker_paper import PaperBroker
 from src.execution.reconcile import mark_run_complete
-from src.main import DailyRunResult, load_journal_state, run_daily_pipeline, save_journal_state, JournalState
+from src.main import DailyRunResult, load_journal_state, manage_existing_position, run_daily_pipeline, save_journal_state, JournalState
 from src.risk.breaker import BreakerState, write_kill_file
 from src.settings import AppConfig, RiskConfig, Secrets, Settings
 
@@ -187,6 +190,43 @@ def test_run_daily_pipeline_records_oi_snapshot_for_tomorrow(tmp_path, settings,
     lines = (journal_dir / "oi_history.jsonl").read_text(encoding="utf-8").splitlines()
     records = [json.loads(line) for line in lines]
     assert {"BTC", "PAXG"} == {r["coin"] for r in records if r["date"] == "2026-07-27"}
+
+
+def test_manage_existing_position_writes_kill_file_to_injected_path_not_global_default(tmp_path, settings):
+    # บั๊กจริงที่เจอ: เดิม manage_existing_position ไม่รับ kill_path เป็น parameter เลย แล้ว hardcode
+    # เขียนไปที่ KILL_PATH (ค่าคงที่ชี้ state/KILL จริงเสมอ) — ถ้ามีอะไรอื่น (เช่น backtest ในอนาคต) เรียก
+    # ฟังก์ชันนี้ด้วย journal_dir ที่ไม่ใช่ของจริง แล้ว breaker ทริกเกอร์ ก็จะไปเขียนไฟล์ KILL ของจริงโดยไม่ตั้งใจ
+    custom_kill_path = tmp_path / "custom_kill_marker"
+    journal_dir = tmp_path / "journal"
+
+    broker = PaperBroker(starting_equity_usd=100.0, taker_fee_pct=0.0, slippage_pct=0.0)
+    position = Position(
+        asset="BTC", side="long", notional_usd=100.0, entry_price=100.0,
+        stop_price=50.0, take_profit_price=200.0, opened_at_ts=time.time() - 100,
+    )
+    journal_state = JournalState(
+        equity_usd=100.0, peak_equity_usd=100.0, open_position=asdict(position), breaker=BreakerState()
+    )
+
+    class _StubHLClient:
+        def get_candles(self, coin, interval="1d", lookback_days=2):
+            # low ต่ำกว่า stop_price มาก -> stop_loss_hit -> equity หลุด 25% drawdown -> ควร trigger kill
+            return [{"h": 55.0, "l": 10.0, "c": 45.0}]
+
+    result = manage_existing_position(
+        settings=settings,
+        hl_client=_StubHLClient(),
+        broker=broker,
+        journal_state=journal_state,
+        journal_dir=journal_dir,
+        last_run_path=tmp_path / "last_run.json",
+        today_date="2026-07-27",
+        now_ts=time.time(),
+        kill_path=custom_kill_path,
+    )
+
+    assert result.action_taken == "closed_position"
+    assert custom_kill_path.exists()  # ต้องเขียนที่ path ที่ inject มา ไม่ใช่ path จริงของระบบ
 
 
 def test_run_daily_pipeline_flat_when_judge_abstains(tmp_path, settings, hl_client):
