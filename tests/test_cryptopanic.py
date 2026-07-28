@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import time
 from unittest.mock import MagicMock
 
 from src.data.cryptopanic import CryptoPanicClient
@@ -22,6 +23,9 @@ def test_get_recent_posts_no_token_skips_gracefully():
 
 
 def test_get_recent_posts_success():
+    # ใช้เวลาสัมพัทธ์กับ "ตอนนี้" ไม่ใช่วันที่ตายตัว — ของเดิม hardcode วันที่ไว้ทำให้เทสหมดอายุ
+    # (ผ่านไปวันเดียวก็เกิน lookback_hours=24 คืนค่าว่างเปล่าแม้โค้ดไม่มีบั๊กเลย)
+    recent_ts = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(time.time() - 3600))
     client = CryptoPanicClient(auth_token="fake-token")
     client.session = MagicMock()
     client.session.get.return_value = _mock_json_response(
@@ -30,7 +34,7 @@ def test_get_recent_posts_success():
                 {
                     "title": "BTC breaks $70k",
                     "url": "https://example.com/1",
-                    "published_at": "2026-07-27T00:00:00Z",
+                    "published_at": recent_ts,
                     "source": {"title": "Decrypt"},
                     "votes": {"positive": 10, "negative": 1, "important": 3},
                 }

@@ -73,6 +73,16 @@ class LlmBudgetConfig(BaseModel):
     degrade_thresholds_pct: list[int]
 
 
+class MacroVetoConfig(BaseModel):
+    """ห้ามเทรดวันมีข่าวมหภาคสำคัญ (P5.2) — ดูรายละเอียดใน src/data/econ_calendar.py"""
+
+    enabled: bool
+    impact_levels: list[str]
+    countries: list[str]
+    lookahead_hours: float
+    lookback_hours: float
+
+
 class ModeDefaults(BaseModel):
     max_open_positions: int
     max_trades_per_day: int
@@ -94,6 +104,7 @@ class RiskConfig(BaseModel):
     breakers: BreakersConfig
     costs: CostsConfig
     llm_budget: LlmBudgetConfig
+    macro_veto: MacroVetoConfig
 
     @classmethod
     def load(cls) -> "RiskConfig":

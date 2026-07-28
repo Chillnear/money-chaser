@@ -271,6 +271,7 @@ def run_daily_pipeline(
     last_run_path: Path = LAST_RUN_PATH,
     starting_equity_usd: float = 28.0,
     macro_snapshot: dict | None = None,
+    macro_veto_status: dict | None = None,
     sentiment: dict | None = None,
     news_headline_titles: list[str] | None = None,
     llm_cost_records: list[dict] | None = None,
@@ -295,6 +296,16 @@ def run_daily_pipeline(
         return _finish(
             journal_dir, last_run_path, journal_state, today_date, "skipped_paused",
             journal_state.breaker.pause_reason or "อยู่ในช่วงพัก breaker",
+        )
+
+    # 1b. macro event veto — ห้ามเทรดวันมีข่าวมหภาคสำคัญ (P5.2, ตามที่ผู้ใช้เลือกรับจาก playbook)
+    # เช็คก่อนเริ่มเก็บข้อมูล/เรียก LLM เลย เพราะกฎคือ "ห้ามเทรดทั้งวัน" ไม่ใช่แค่ veto ไม้สุดท้าย —
+    # ประหยัดค่า LLM ด้วยในวันที่รู้อยู่แล้วว่าจะไม่เทรด
+    # fail-safe: macro_veto_status เป็น None หรือ vetoed=False (รวมถึงกรณีดึงข้อมูลไม่ได้) = ไม่บล็อก
+    if macro_veto_status and macro_veto_status.get("vetoed"):
+        return _finish(
+            journal_dir, last_run_path, journal_state, today_date, "skipped_macro_event",
+            macro_veto_status.get("reason", "วันนี้มีข่าวมหภาคสำคัญ — ข้ามการเทรดเพื่อความปลอดภัย"),
         )
 
     # 2. reconcile — ในโหมด paper journal คือ source of truth เดียวกับ broker (ไม่มี state อิสระให้เทียบ)
@@ -563,6 +574,7 @@ def _cli_main() -> None:  # pragma: no cover - เรียกจริงบน
     import datetime
 
     from src.agents.registry import load_model_registry
+    from src.data.econ_calendar import EconCalendarClient
     from src.data.macro import MacroClient
     from src.data.news import NewsClient, merge_with_cryptopanic
     from src.data.sentiment import SentimentClient
@@ -601,6 +613,24 @@ def _cli_main() -> None:  # pragma: no cover - เรียกจริงบน
     except Exception as exc:  # noqa: BLE001
         print(f"[main] fear&greed ดึงไม่ได้ (ไม่ critical): {exc}")
 
+    macro_veto_status = None
+    try:
+        mv_cfg = settings.risk.macro_veto
+        if mv_cfg.enabled:
+            macro_veto_status = EconCalendarClient().get_veto_status(
+                now_ts=time.time(),
+                impact_levels=mv_cfg.impact_levels,
+                countries=mv_cfg.countries,
+                lookahead_hours=mv_cfg.lookahead_hours,
+                lookback_hours=mv_cfg.lookback_hours,
+            )
+            if macro_veto_status.get("data_missing"):
+                print(f"[main] {macro_veto_status['reason']}")
+            elif macro_veto_status.get("vetoed"):
+                print(f"[main] MACRO VETO: {macro_veto_status['reason']}")
+    except Exception as exc:  # noqa: BLE001 - fail-safe เหมือนแหล่งข้อมูลเสริมอื่นๆ ไม่บล็อกการเทรด
+        print(f"[main] เช็คปฏิทินข่าวมหภาคไม่ได้ (ไม่ critical, ไม่บล็อกการเทรด): {exc}")
+
     news_headline_titles: list[str] = []
     try:
         news_cfg = settings.app["macro_sources"]
@@ -635,6 +665,7 @@ def _cli_main() -> None:  # pragma: no cover - เรียกจริงบน
         llm_cost_records=llm_cost_records,
         lessons_text=lessons_text,
         macro_snapshot=macro_snapshot,
+        macro_veto_status=macro_veto_status,
         sentiment=sentiment,
         news_headline_titles=news_headline_titles,
     )

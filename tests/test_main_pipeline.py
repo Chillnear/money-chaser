@@ -262,6 +262,53 @@ def test_run_daily_pipeline_skips_when_breaker_paused(tmp_path, settings, hl_cli
     assert "ทดสอบพัก breaker" in result.reason
 
 
+def test_run_daily_pipeline_skips_on_macro_event_veto(tmp_path, settings, hl_client):
+    # P5.2: ห้ามเทรดวันมีข่าวมหภาคสำคัญ — ต้องข้ามทั้งวัน (ก่อนเรียก LLM เลย) ไม่ใช่แค่ veto ไม้สุดท้าย
+    llm_client = _make_llm_client([])
+    broker = PaperBroker(starting_equity_usd=28.0, taker_fee_pct=0.045, slippage_pct=0.05)
+
+    result = run_daily_pipeline(
+        settings=settings,
+        hl_client=hl_client,
+        llm_client=llm_client,
+        broker=broker,
+        model_registry=REGISTRY,
+        today_date="2026-07-29",
+        journal_dir=tmp_path / "journal",
+        kill_path=tmp_path / "KILL",
+        last_run_path=tmp_path / "last_run.json",
+        starting_equity_usd=28.0,
+        macro_veto_status={"vetoed": True, "reason": "วันนี้มีข่าวมหภาคสำคัญใกล้เวลา: FOMC Statement — ห้ามเทรดวันนี้"},
+    )
+
+    assert result.action_taken == "skipped_macro_event"
+    assert "FOMC Statement" in result.reason
+    # ต้องไม่มีการเรียก LLM เลยตอนถูก veto (ประหยัดค่าใช้จ่าย)
+    assert llm_client._completion_fn.call_count == 0
+
+
+def test_run_daily_pipeline_does_not_skip_when_macro_veto_status_missing_or_not_vetoed(tmp_path, settings, hl_client):
+    # fail-safe: macro_veto_status=None (ดึงข้อมูลไม่ได้) หรือ vetoed=False ต้องไม่บล็อกการเทรด
+    llm_client = _make_llm_client([])
+    broker = PaperBroker(starting_equity_usd=28.0, taker_fee_pct=0.045, slippage_pct=0.05)
+
+    result = run_daily_pipeline(
+        settings=settings,
+        hl_client=hl_client,
+        llm_client=llm_client,
+        broker=broker,
+        model_registry=REGISTRY,
+        today_date="2026-07-27",
+        journal_dir=tmp_path / "journal",
+        kill_path=tmp_path / "KILL",
+        last_run_path=tmp_path / "last_run.json",
+        starting_equity_usd=28.0,
+        macro_veto_status=None,
+    )
+
+    assert result.action_taken != "skipped_macro_event"
+
+
 def test_run_daily_pipeline_skips_on_equity_reconcile_mismatch(tmp_path, settings, hl_client):
     journal_dir = tmp_path / "journal"
     mismatched_state = JournalState(equity_usd=1000.0, peak_equity_usd=1000.0, open_position=None, breaker=BreakerState())

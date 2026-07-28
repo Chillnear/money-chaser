@@ -4,16 +4,28 @@
 <meta charset="utf-8">
 <title>Money Chaser Dashboard</title>
 <style>
-  body { font-family: -apple-system, sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; color: #1f2937; }
+  body { font-family: -apple-system, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; color: #1f2937; }
   h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.1rem; margin-top: 0; }
   .card { border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; }
   table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
   th, td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid #f1f5f9; }
   .footer { color: #9ca3af; font-size: 0.8rem; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; font-size: 0.95rem; }
+  .stat-label { color: #6b7280; font-size: 0.8rem; }
+  .bar-track { background: #f1f5f9; border-radius: 4px; height: 8px; margin: 0.25rem 0 0.75rem; overflow: hidden; }
+  .bar-fill { height: 100%; }
+  .hint { color: #6b7280; font-size: 0.85rem; }
+  .candidate-list { margin: 0.25rem 0 0.75rem; padding-left: 1.25rem; font-size: 0.9rem; }
+  .decision-entry { border: 1px solid #f1f5f9; border-radius: 6px; padding: 0.5rem 0.75rem; margin-bottom: 0.5rem; }
+  .decision-entry summary { cursor: pointer; font-weight: 600; }
+  .decision-body { margin-top: 0.5rem; }
+  .decision-body hr { border: none; border-top: 1px dashed #e5e7eb; margin: 0.75rem 0; }
+  .lessons { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; background: #f8fafc; padding: 0.75rem; border-radius: 6px; }
 </style>
 </head>
 <body>
-  <h1>Money Chaser — Dashboard</h1>
+  <h1>Money Chaser — Dashboard (ส่วนตัว)</h1>
   
     <div class="card">
       <h2>Equity</h2>
@@ -23,16 +35,116 @@
       
     </div>
     
-  <p>ยังไม่มีไม้ที่ปิดเลย</p>
+  <p>ยังไม่มีข้อมูล equity history พอวาดกราฟ (ต้องรันสะสมหลายวัน)</p>
+  <p>ยังไม่มีไม้ที่ปิดเลย พอคำนวณสถิติ</p>
+  <p>ยังไม่มีข้อมูลต้นทุน LLM บันทึกไว้</p>
   
     <div class="card">
-      <h2>Decision ล่าสุด (2 รายการทั้งหมด)</h2>
+      <h2>ภาพรวม Analyst (เห็นตรงกับ judge บ่อยแค่ไหน)</h2>
+      <p class="hint">* วัดจาก 1 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
       <table>
-        <thead><tr><th>วันที่</th><th>ที่มา</th><th>Action</th><th>Asset</th><th>Degrade level</th></tr></thead>
-        <tbody><tr><td>2026-07-27</td><td>llm</td><td>long</td><td>PAXG</td><td>0</td></tr><tr><td>2026-07-27</td><td>llm</td><td>-</td><td>-</td><td>0</td></tr></tbody>
+        <thead><tr><th>Role</th><th>จำนวนที่เทียบได้</th><th>% เห็นตรงกับ judge</th></tr></thead>
+        <tbody><tr><td>analyst_trend</td><td>1</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>1</td><td>100%</td></tr><tr><td>analyst_macro</td><td>1</td><td>100%</td></tr><tr><td>redteam</td><td>0</td><td>0%</td></tr></tbody>
       </table>
     </div>
     
-  <p class="footer">อัปเดตล่าสุด: 2026-07-27T12:36:31.345087+00:00 UTC — สร้างโดย src/report/dashboard.py</p>
+  
+    <div class="card">
+      <h2>Log การตัดสินใจแบบเต็ม (ล่าสุด 2 วัน — คลิกเพื่อกาง)</h2>
+      
+            <details class="decision-entry">
+              <summary>2026-07-27 — llm — long PAXG
+                 (degrade level 0)</summary>
+              <div class="decision-body">
+            <p><strong>Shortlist วันนั้น:</strong></p>
+            <ul><li>PUMP — composite 0.87</li><li>ZEC — composite 0.69</li><li>PAXG — composite 0.68</li></ul>
+            
+            <hr>
+            
+    <p><strong>analyst_trend (dashscope/qwen3.7-plus):</strong>
+       cost=0.0000 USD, latency=62818ms</p>
+    <ul class='candidate-list'><li><strong>PUMP long</strong> (confidence 85.0) — PUMP exhibits a powerful uptrend, breaking out to new 30-day highs with a perfect Donchian position of 1.0. Bullish EMA stacking and an ADX of 25.92 confirm strong trend continuation. Momentum is intact for further upside. <em>[invalidation: Close below 21 EMA or ADX drops below 20]</em></li><li><strong>ZEC flat</strong> (confidence 70.0) — ZEC lacks a clear trend, trapped in a low-volatility chop regime. ADX at 15.82 indicates weak directional momentum, while price oscillates around short-term EMAs. No breakout or continuous trend signal is present. <em>[invalidation: ADX rises above 25 with a decisive breakout from current range]</em></li><li><strong>PAXG flat</strong> (confidence 65.0) — PAXG shows conflicting trend signals. Despite an elevated ADX and a downtrend regime, short-term EMAs are positive while long-term EMAs are negative. Neutral RSI and flat returns indicate a lack of continuous directional momentum. <em>[invalidation: Price breaks below 50 EMA with expanding ADX confirming downtrend]</em></li></ul>
+    
+    <p><strong>analyst_positioning (Claude Sonnet 4.5):</strong>
+       cost=0.0000 USD, latency=25443ms</p>
+    <ul class='candidate-list'><li><strong>PUMP short</strong> (confidence 72.0) — PUMP วิ่งขึ้น 57.93% ใน 30 วัน อยู่จุดสูงสุด Donchian (1.000) และห่างจากจุดต่ำสุดถึง 58.28% แสดงว่าขึ้นสุดโต่ง RSI 68.59 เข้าขั้ว overbought ADX 25.92 แต่ momentum เริ่มชะลอ (return 7d ต่ำกว่า 1d) เสี่ยง mean-reversion สูงมาก ขาดข้อมูล funding แต่ positioning น่าจะหนาแน่นฝั่ง long <em>[invalidation: ถ้าราคาทะลุ high 30 วันไปต่อเนื่อง หรือ funding กลับเป็นลบชัดเจน แสดง short interest เข้ามาแล้วอาจ squeeze ต่อ]</em></li><li><strong>ZEC flat</strong> (confidence 45.0) — ZEC ในสถานะ chop_vol_low ADX ต่ำ 15.82 EMA กระจายไม่มีทิศชัด (9d=-1.12%, 21d=-0.46%) Donchian 0.714 ไม่สุดโต่ง Vol percentile แค่ 0.113 แสดงความผันผวนต่ำผิดปกติ ไม่มีสัญญาณ squeeze หรือ extreme positioning ชัดเจน รอจังหวะดีกว่า <em>[invalidation: ถ้า vol พุ่งขึ้นเกิน percentile 0.5 หรือ ADX กลับมาเกิน 25 แสดงเทรนด์ใหม่เริ่ม]</em></li><li><strong>PAXG long</strong> (confidence 65.0) — PAXG ในโหมด trend_down_vol_low แต่ขาลง exhausted: Donchian 0.857 ใกล้บน RSI กลาง 51.05 ATR% แค่ 1.47 แสดงความผันผวนต่ำผิดปกติ เหมาะ mean-revert กลับขึ้น ข่าวมหภาคบอก investor หันไป gold/BTC หลบ dollar devaluation สนับสนุน PAXG (gold tokenized) <em>[invalidation: ถ้าทอง spot ทะลุต่ำกว่า $2600 หรือ DXY กลับแข็งแรงเกิน 102.5 จะกดดัน PAXG]</em></li></ul>
+    
+    <p><strong>analyst_macro (dashscope/deepseek-v4-pro):</strong>
+       cost=0.0000 USD, latency=19478ms</p>
+    <ul class='candidate-list'><li><strong>PUMP flat</strong> (confidence 55.0) — Fear &amp; Greed 30 และ ETF ไหลออก $465M กดดัน sentiment crypto โดยรวม แม้ DXY อ่อนและ US10Y ลดลงจะหนุน risk assets แต่ STORJ ล้มละลายเพิ่มความเสี่ยง contagion ต่อ small-cap tokens ปัจจัยบวก-ลบหักล้างกัน ไม่ชัดเจนพอ <em>[invalidation: Fear &amp; Greed กลับขึ้นเหนือ 50 หรือ ETF flows กลับเป็นบวกต่อเนื่อง]</em></li><li><strong>ZEC flat</strong> (confidence 60.0) — ZEC อยู่ใน chop regime ปริมาณซื้อขายต่ำมาก (vol percentile 0.113) ไม่มีปัจจัยมหภาคหรือข่าวเฉพาะที่กระทบ privacy coins โดยตรง Fear &amp; Greed 30 กดดัน crypto วงกว้าง แต่ DXY อ่อนช่วยพยุง ภาพรวมกลาง ๆ ไม่มี edge <em>[invalidation: ข่าว regulatory ที่กระทบ privacy coins โดยตรง หรือ BTC breakout ชัดเจน]</em></li><li><strong>PAXG long</strong> (confidence 70.0) — DXY -0.16% และ US10Y -0.51% หนุนทองคำโดยตรง ข่าว &#x27;Ballooning U.S. debt sends investors to gold&#x27; ยืนยัน sentiment เชิงบวกต่อทอง PAXG เป็น proxy ทองดิจิทัลที่ได้ประโยชน์เต็มที่จาก macro tailwinds นี้ <em>[invalidation: DXY ดีดกลับแรงเหนือ 102 หรือ US10Y พุ่งขึ้นเกิน 1%]</em></li></ul>
+    
+            <hr>
+            <p><strong>redteam (gemini-3.5-flash):</strong> abstain — parse/validate ไม่ผ่านหลัง retry 2 ครั้ง: Unterminated string starting at: line 7 column 17 (char 116)</p>
+            <hr>
+            
+                <p><strong>Judge:</strong> long PAXG
+                   confidence=68.0
+                   stop=2.50% tp=4.00%</p>
+                <p class="hint">เหตุผล: PAXG ได้รับ tailwinds มหภาคชัดเจน: DXY อ่อน (-0.16%), US10Y ลด (-0.51%), ข่าวระบุ investors หันไป gold หลบ dollar devaluation PAXG เป็น gold tokenized ที่ได้ประโยชน์โดยตรง ATR% ต่ำ 1.47 จำกัดความเสี่ยง Donchian 0.857 ใกล้ขอบบนแสดง momentum ยังดี RSI กลาง 51 ไม่ overbought PUMP แม้ trend แรงแต่ขึ้น 58% ใน 30 วัน overbought มาก เสี่ยง mean-reversion สูงเกิน ZEC ไม่มี directional edge ใน chop regime ปัจจัยมหภาคหนุน PAXG ชัดกว่าที่จะ short หรือเสี่ยงกับ small-cap</p>
+                <p class="hint">ทำไมเลือกตัวนี้แทนตัวอื่น: PUMP overbought สุดโต่ง (58% ใน 30 วัน, Donchian 1.0, RSI 68.59) เสี่ยง pullback; ZEC ไม่มี trend ชัดใน chop regime; PAXG มี macro tailwinds แข็งแกร่ง (DXY/yields ลด, ข่าวหนุน gold) และ vol ต่ำจำกัด downside</p>
+                <p class="hint">ตอบข้อค้านของ redteam: Red team parse error ไม่สามารถให้ข้อค้านได้ ใช้การวิเคราะห์ความขัดแย้งระหว่าง analysts แทน - PUMP มีความเห็นแตกมากเกินไป PAXG consensus ดีกว่า</p>
+                
+            </div>
+            </details>
+            
+            <details class="decision-entry">
+              <summary>2026-07-27 — llm — - -
+                 (degrade level 0)</summary>
+              <div class="decision-body">
+            <p><strong>Shortlist วันนั้น:</strong></p>
+            <ul><li>PUMP — composite 0.87</li><li>ZEC — composite 0.69</li><li>PAXG — composite 0.68</li></ul>
+            
+            <hr>
+            <p><strong>analyst_trend (dashscope/qwen3.7-plus):</strong> abstain — เรียกไม่ผ่านทุก key: litellm.APIError: APIError: DashscopeException - team not allowed to access model. This team can only access models=[&#x27;GPT 4.1-nano&#x27;, &#x27;GPT 5 Chat&#x27;, &#x27;GPT 5&#x27;, &#x27;GPT 5-mini&#x27;, &#x27;GPT 5.1 Chat&#x27;, &#x27;Cohere-rerank-v3-5&#x27;, &#x27;GPT 5.1&#x27;, &#x27;GPT 5.2&#x27;, &#x27;GPT 5.2 Chat&#x27;, &#x27;text-embedding-3-large&#x27;, &#x27;text-embedding-3-small&#x27;, &#x27;Claude 3.7 Sonnet&#x27;, &#x27;Claude Sonnet 4&#x27;, &#x27;Claude Sonnet 4.5&#x27;, &#x27;Claude Opus 4.5&#x27;, &#x27;Claude Haiku 4.5&#x27;, &#x27;Claude Opus 4.1&#x27;, &#x27;Nano Banana Pro&#x27;, &#x27;Nano Banana&#x27;, &#x27;Gemini 2.5 pro&#x27;, &#x27;Gemini 3.0 pro&#x27;, &#x27;Gemini 3.0 flash&#x27;, &#x27;Gemini 2.5 flash&#x27;, &#x27;Gemini 2.5 flash lite&#x27;, &#x27;Gemini Deep Research Pro&#x27;, &#x27;gpt-4o-mini-transcribe&#x27;, &#x27;gpt-4o-transcribe&#x27;, &#x27;Perplexity Deep Research&#x27;, &#x27;Perplexity Reasoning Pro&#x27;, &#x27;gpt-5.5&#x27;, &#x27;gemini-3.1-flash-tts-preview&#x27;, &#x27;gemini-3.5-flash&#x27;, &#x27;Claude Sonnet 4.6&#x27;, &#x27;dashscope/qwen3.7-max&#x27;, &#x27;claude-sonnet-5&#x27;]. Tried to access qwen3.7-plus</p><p><strong>analyst_positioning (Claude Sonnet 4.5):</strong> abstain — เรียกไม่ผ่านทุก key: litellm.BadRequestError: LLM Provider NOT provided. Pass in the LLM provider you are trying to call. You passed model=Claude Sonnet 4.5
+ Pass model as E.g. For &#x27;Huggingface&#x27; inference endpoints pass in `completion(model=&#x27;huggingface/starcoder&#x27;,..)` Learn more: https://docs.litellm.ai/docs/providers</p>
+    <p><strong>analyst_macro (dashscope/deepseek-v4-pro):</strong>
+       cost=0.0000 USD, latency=8641ms</p>
+    <ul class='candidate-list'><li><strong>PUMP flat</strong> (confidence 45.0) — แม้เทรนด์ขาขึ้นจะแข็งแกร่ง แต่ดัชนี Fear &amp; Greed ที่ระดับ 30 (Fear) และข่าวล้มละลายของ STORJ สร้างแรงกดดันต่อสินทรัพย์เสี่ยงขนาดเล็ก ปัจจัยมหภาค DXY และ US10Y ที่ลดลงช่วยพยุงไว้บ้างแต่ไม่เพียงพอที่จะหักล้างความกังวลในกลุ่ม Altcoins ได้ในระยะสั้น <em>[invalidation: หาก Fear &amp; Greed พลิกกลับเป็น Neutral หรือ Greed อย่างรวดเร็วพร้อมปริมาณการซื้อขายที่เพิ่มขึ้น]</em></li><li><strong>ZEC flat</strong> (confidence 35.0) — อยู่ในสภาวะ Chop และ Volatility ต่ำมาก ขาดปัจจัยกระตุ้นมหภาคเฉพาะตัว แม้ดอลลาร์จะอ่อนค่าลงแต่เม็ดเงินไหลออกจาก BTC ETFs และความกลัวในตลาดบดบังปัจจัยบวกจากตัวเลขเศรษฐกิจสหรัฐฯ ทำให้ขาดทิศทางที่ชัดเจน <em>[invalidation: การเพิ่มขึ้นอย่างรวดเร็วของความต้องการสินทรัพย์ Privacy ในสภาวะที่กังวลเรื่องการควบคุมจากภาครัฐ]</em></li><li><strong>PAXG long</strong> (confidence 85.0) — ปัจจัยมหภาคเกื้อหนุนสูงสุด DXY (-0.14%) และ US10Y (-0.51%) ปรับตัวลดลงพร้อมกัน ข่าวระบุชัดเจนว่านักลงทุนหันเข้าหาทองคำและ Bitcoin เพื่อป้องกันความเสี่ยงจากหนี้สหรัฐฯ และการเสื่อมค่าของเงินดอลลาร์ ในขณะที่ตลาดอยู่ในสภาวะ Fear สินทรัพย์ Safe Haven จึงมีความได้เปรียบ <em>[invalidation: การพุ่งขึ้นอย่างฉับพลันของ US10Y หรือความตึงเครียดทางภูมิรัฐศาสตร์คลี่คลายเกินคาด]</em></li></ul>
+    
+            <hr>
+            <p><strong>redteam (gemini-3.5-flash):</strong> abstain — เรียกไม่ผ่านทุก key: litellm.APIConnectionError: Google Cloud SDK not found. Install it with: pip install &#x27;litellm[google]&#x27; or pip install google-cloud-aiplatform
+Traceback (most recent call last):
+  File &quot;/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/litellm/llms/vertex_ai/vertex_llm_base.py&quot;, line 252, in _credentials_from_default_auth
+    import google.auth as google_auth
+ModuleNotFoundError: No module named &#x27;google&#x27;
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/litellm/main.py&quot;, line 5585, in completion
+    response = _complete_vertex_ai(_dispatch_ctx)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/litellm/main.py&quot;, line 3472, in _complete_vertex_ai
+    model_response = vertex_chat_completion.completion(  # type: ignore
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/litellm/llms/vertex_ai/gemini/vertex_and_google_ai_studio_gemini.py&quot;, line 2961, in completion
+    _auth_header, vertex_project = self._ensure_access_token(
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/litellm/llms/vertex_ai/vertex_llm_base.py&quot;, line 588, in _ensure_access_token
+    return self.get_access_token(
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/litellm/llms/vertex_ai/vertex_llm_base.py&quot;, line 904, in get_access_token
+    raise e
+  File &quot;/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/litellm/llms/vertex_ai/vertex_llm_base.py&quot;, line 899, in get_access_token
+    _credentials, credential_project_id = self.load_auth(credentials=credentials, project_id=project_id)
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/litellm/llms/vertex_ai/vertex_llm_base.py&quot;, line 184, in load_auth
+    creds, creds_project_id = self._credentials_from_default_auth(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/litellm/llms/vertex_ai/vertex_llm_base.py&quot;, line 254, in _credentials_from_default_auth
+    raise ImportError(GOOGLE_IMPORT_ERROR_MESSAGE)
+ImportError: Google Cloud SDK not found. Install it with: pip install &#x27;litellm[google]&#x27; or pip install google-cloud-aiplatform
+</p>
+            <hr>
+            <p><strong>Judge:</strong> abstain — เรียกไม่ผ่านทุก key: litellm.BadRequestError: LLM Provider NOT provided. Pass in the LLM provider you are trying to call. You passed model=Claude Opus 4.5
+ Pass model as E.g. For &#x27;Huggingface&#x27; inference endpoints pass in `completion(model=&#x27;huggingface/starcoder&#x27;,..)` Learn more: https://docs.litellm.ai/docs/providers</p>
+            </div>
+            </details>
+            
+    </div>
+    
+  <p>ยังไม่มีไม้ที่ปิดเลย</p>
+  <p>ยังไม่มี lessons.md (reflector ยังไม่เคยรัน หรือยังไม่พบบทเรียนใหม่)</p>
+  <p class="footer">อัปเดตล่าสุด: 2026-07-28T06:59:20.842435+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
 </body>
 </html>

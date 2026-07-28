@@ -45,3 +45,12 @@ llm_budget:
   hard_stop_usd: 15.0
   daily_soft_cap_usd: 0.50
   degrade_thresholds_pct: [70, 90]
+
+# ห้ามเทรดวันมีข่าวมหภาคสำคัญ (FOMC/CPI/NFP ฯลฯ) — ตามที่ผู้ใช้เลือกรับมาจาก playbook Earthh Evans
+# ข้อมูลจาก ForexFactory feed (ฟรี ไม่ต้อง API key) — ถ้าดึงไม่ได้ระบบจะไม่บล็อกการเทรด (fail-safe)
+macro_veto:
+  enabled: true
+  impact_levels: [High]
+  countries: [USD]
+  lookahead_hours: 6
+  lookback_hours: 2
