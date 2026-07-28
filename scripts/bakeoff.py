@@ -27,20 +27,24 @@ from src.agents.schemas import AnalystOutput, JudgeOutput  # noqa: E402
 from src.settings import STATE_DIR, load_settings  # noqa: E402
 
 # ผู้เข้าชิงแต่ละตำแหน่ง — แก้รายชื่อตรงนี้เวลาอยากเทียบตัวใหม่
+#
+# หมายเหตุ 2026-07-28: "Grok 4.1 Fast Reasoning" ผ่านบาก-ออฟรอบก่อน 100% แต่พอเอาไปใช้จริงตอน backtest
+# กลับเจอ error "team not allowed to access model" — แปลว่าผ่านบาก-ออฟไม่ได้แปลว่าใช้งานได้จริงเสมอไป ถ้า
+# สิทธิ์บัญชี LiteLLM เปลี่ยน ตัดออกจากลิสต์แล้ว แทนด้วยตัวที่ยืนยันจาก error message ว่าทีมนี้เข้าถึงได้จริง
 CANDIDATES = {
     "redteam": [
-        "Gemini 3.1 pro",
-        "gemini-3.5-flash",
+        "GPT 5.2",
+        "Claude Sonnet 4.6",
+        "Claude Haiku 4.5",
         "Gemini 3.0 pro",
-        "Grok 4.1 Fast Reasoning",
         "glm-5.2",
     ],
     "judge": [
         "claude-opus-4-7",
         "Claude Opus 4.5",
         "gpt-5.5",
-        "GPT 5.4",
-        "Gemini 3.1 pro",
+        "GPT 5.2",
+        "Claude Sonnet 4.6",
     ],
 }
 
