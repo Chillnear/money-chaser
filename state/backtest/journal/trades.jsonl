@@ -1,1 +1,0 @@
-{"asset": "PAXG", "side": "short", "notional_usd": 21.421363045752248, "entry_price": 4076.06095, "exit_price": 4007.0024999999996, "opened_at_ts": 1783904400.0, "closed_at_ts": 1784336400.0, "pnl_usd": 0.34381441776993144, "fee_usd": 0.01911590809453801, "exit_reason": "max_holding_days_exceeded"}
