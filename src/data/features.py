@@ -142,6 +142,21 @@ def distance_from_extreme(df: pd.DataFrame, window: int = 30) -> dict:
     }
 
 
+def volume_spike_ratio(df: pd.DataFrame, window: int = 20) -> float:
+    """ปริมาณเทรดของแท่งล่าสุด เทียบค่าเฉลี่ย window แท่งก่อนหน้า (ไม่รวมแท่งล่าสุดเอง) — ยิ่งสูงกว่า 1
+    มาก ยิ่งแสดงว่าวันนี้มีการซื้อขายผิดปกติ ใช้เป็น 1 ใน 3 สัญญาณของ liquidation cascade proxy
+    (P5.3 — ดู src/data/combo_signals.py) คืน NaN ถ้าข้อมูลไม่พอคำนวณ (fail-safe ไม่ใช่ 0 หรือ 1)
+    """
+    if len(df) < 2:
+        return float("nan")
+    recent_window = df["volume"].iloc[-(window + 1) : -1]
+    avg_volume = recent_window.mean() if len(recent_window) > 0 else float("nan")
+    last_volume = df["volume"].iloc[-1]
+    if not avg_volume or pd.isna(avg_volume) or avg_volume == 0:
+        return float("nan")
+    return float(last_volume / avg_volume)
+
+
 def zscore(series: pd.Series, window: int = 20) -> float:
     recent = series.tail(window)
     std = recent.std()
@@ -220,6 +235,7 @@ def build_price_features(candles: list[dict], config: dict) -> dict:
         "vol_percentile_1y": vol_percentile(
             close, config.get("vol_lookback_days", 30), config.get("vol_percentile_lookback_days", 365)
         ),
+        "volume_spike_ratio": volume_spike_ratio(df, config.get("volume_spike_window", 20)),
     }
     return result
 
@@ -311,6 +327,11 @@ def render_feature_table(
             f"- Sub-scores: trend={_fmt(item.get('trend_score'), 3)}, momentum={_fmt(item.get('momentum_score'), 3)}, "
             f"funding={_fmt(item.get('funding_score'), 3)}, vol_fit={_fmt(item.get('vol_fit_score'), 3)}"
         )
+        lines.append(
+            f"- OI change 24h/7d: {_fmt(pf.get('oi_change_24h_pct'))}% / {_fmt(pf.get('oi_change_7d_pct'))}%, "
+            f"Volume spike ratio: {_fmt(pf.get('volume_spike_ratio'))}"
+        )
+        lines.append(f"- **Combination read:** {pf.get('combination_pattern_label', 'ไม่มีข้อมูล')}")
 
     rest_summary = shortlist_result.get("rest_summary", [])
     if rest_summary:

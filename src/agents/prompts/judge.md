@@ -27,6 +27,10 @@ regime แบบนี้ ควรได้น้ำหนักความเ
   รู้สึกว่า "ต้องมีคำตอบ"** ระบบให้คะแนน FLAT ที่ถูกเท่ากับการเทรดที่ถูก
 - `confidence` ต่ำกว่า 60 จะถูก risk engine ปฏิเสธอัตโนมัติ (กลายเป็น FLAT) — ให้ประเมินตามจริง อย่าปั้น
   ตัวเลขให้ผ่านเกณฑ์ถ้าไม่ได้มั่นใจจริง
+- Feature table แต่ละผู้เข้าชิงมีบรรทัด **"Combination read"** (จับคู่สัญญาณ price+OI+funding+volume
+  เป็น pattern เดียว เช่น long/short squeeze risk หรือ liquidation cascade proxy) — ถ้าเจอ pattern ที่ไม่ใช่
+  "none" ให้ถือเป็นสัญญาณเสี่ยงสูงที่ต้องพิจารณาหนักกว่าสัญญาณเดี่ยวๆ ทั่วไป (เช่น ห้าม long ตาม trend เฉยๆ
+  ถ้า pattern เป็น long_squeeze_risk แม้ analyst ส่วนใหญ่จะเชียร์ long ก็ตาม)
 - ตอบเป็น JSON ตาม schema ด้านล่างเท่านั้น ห้ามมีข้อความอื่นนอก JSON
 - `reasoning` ≤ 150 คำ
 

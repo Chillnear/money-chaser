@@ -163,6 +163,32 @@ def test_run_daily_pipeline_opens_long_position_on_bullish_consensus(tmp_path, s
     assert saved_state["open_position"]["side"] == "long"
 
 
+def test_run_daily_pipeline_records_oi_snapshot_for_tomorrow(tmp_path, settings, hl_client):
+    # P5.3: ทุกรอบต้องบันทึก OI วันนี้ไว้เป็นประวัติ ไม่ว่าผลจะเป็นอะไร (ให้พรุ่งนี้เทียบ 24h change ได้)
+    responses = [_fake_llm_response(_analyst_json())] * 4 + [_fake_llm_response(_judge_json())]
+    llm_client = _make_llm_client(responses)
+    broker = PaperBroker(starting_equity_usd=28.0, taker_fee_pct=0.045, slippage_pct=0.05)
+    journal_dir = tmp_path / "journal"
+
+    run_daily_pipeline(
+        settings=settings,
+        hl_client=hl_client,
+        llm_client=llm_client,
+        broker=broker,
+        model_registry=REGISTRY,
+        today_date="2026-07-27",
+        now_ts=time.time(),
+        journal_dir=journal_dir,
+        kill_path=tmp_path / "KILL",
+        last_run_path=tmp_path / "last_run.json",
+        starting_equity_usd=28.0,
+    )
+
+    lines = (journal_dir / "oi_history.jsonl").read_text(encoding="utf-8").splitlines()
+    records = [json.loads(line) for line in lines]
+    assert {"BTC", "PAXG"} == {r["coin"] for r in records if r["date"] == "2026-07-27"}
+
+
 def test_run_daily_pipeline_flat_when_judge_abstains(tmp_path, settings, hl_client):
     # analyst/redteam ตอบปกติ แต่ judge ตอบ garbage ทุกครั้ง -> abstain -> FLAT
     responses = [_fake_llm_response(_analyst_json())] * 4 + [_fake_llm_response("ไม่ใช่ json เลย")] * 3

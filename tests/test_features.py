@@ -168,6 +168,43 @@ def test_build_price_features_ok_with_enough_candles():
     assert 0.0 <= result["donchian_position"] <= 1.0
 
 
+def test_build_price_features_includes_volume_spike_ratio():
+    candles = _make_candles([100 + i * 0.5 for i in range(60)], spread=1.5)
+    config = {"return_windows_days": [1, 7, 30]}
+    result = F.build_price_features(candles, config)
+    assert result["ok"] is True
+    assert "volume_spike_ratio" in result
+    # ทุกแท่งมี volume คงที่ (1000.0) -> spike ratio ต้อง = 1.0 (ไม่มีความผิดปกติ)
+    assert result["volume_spike_ratio"] == pytest.approx(1.0)
+
+
+def _make_candles_with_volume(closes: list[float], volumes: list[float], spread: float = 2.0) -> list[dict]:
+    candles = []
+    for i, (c, v) in enumerate(zip(closes, volumes)):
+        o = closes[i - 1] if i > 0 else c
+        candles.append(
+            {
+                "t": 1_600_000_000_000 + i * 86_400_000,
+                "T": 1_600_000_000_000 + (i + 1) * 86_400_000,
+                "o": o, "h": c + spread / 2, "l": c - spread / 2, "c": c, "v": v,
+            }
+        )
+    return candles
+
+
+def test_volume_spike_ratio_detects_last_candle_spike():
+    closes = [100.0] * 21
+    volumes = [1000.0] * 20 + [5000.0]  # แท่งล่าสุดวอลุ่มพุ่ง 5x เทียบเฉลี่ยก่อนหน้า
+    df = F.to_ohlcv_df(_make_candles_with_volume(closes, volumes))
+    ratio = F.volume_spike_ratio(df, window=20)
+    assert ratio == pytest.approx(5.0)
+
+
+def test_volume_spike_ratio_nan_when_not_enough_candles():
+    df = F.to_ohlcv_df(_make_candles_with_volume([100.0], [1000.0]))
+    assert pd.isna(F.volume_spike_ratio(df))
+
+
 def test_build_price_features_fails_gracefully_with_too_few_candles():
     candles = _make_candles([100, 101, 102])
     config = {}

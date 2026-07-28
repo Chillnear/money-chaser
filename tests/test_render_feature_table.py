@@ -54,6 +54,35 @@ def test_render_feature_table_includes_macro_and_sentiment():
     assert "BTC breaks resistance" in md
 
 
+def test_render_feature_table_includes_oi_change_and_combination_read():
+    pf = _pf()
+    pf["oi_change_24h_pct"] = 12.5
+    pf["oi_change_7d_pct"] = 3.0
+    pf["volume_spike_ratio"] = 1.8
+    pf["combination_pattern_label"] = "long_squeeze_risk — ราคาขึ้น+OI พุ่ง+funding แพงฝั่ง long พร้อมกัน"
+
+    result = render_feature_table(
+        _shortlist_result(),
+        price_features_by_coin={"BTC": pf, "ETH": _pf(), "SOL": _pf(), "PAXG": _pf()},
+        regime_by_coin={},
+    )
+    md = result["markdown"]
+    assert "OI change 24h/7d" in md
+    assert "12.50" in md
+    assert "Combination read" in md
+    assert "long_squeeze_risk" in md
+
+
+def test_render_feature_table_handles_missing_combination_read_gracefully():
+    result = render_feature_table(
+        _shortlist_result(),
+        price_features_by_coin={"BTC": _pf(), "ETH": _pf(), "SOL": _pf(), "PAXG": _pf()},
+        regime_by_coin={},
+    )
+    md = result["markdown"]
+    assert "ไม่มีข้อมูล" in md  # pf ไม่มี combination_pattern_label -> ต้อง fallback ไม่ crash
+
+
 def test_render_feature_table_rest_summary_is_compact_one_liner():
     result = render_feature_table(
         _shortlist_result(n_rest=15),

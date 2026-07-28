@@ -27,8 +27,10 @@ from src.agents.redteam import run_redteam
 from src.agents.registry import assert_provider_diversity
 from src.baseline import BASELINE_RISK_MULTIPLIER
 from src.baseline import decide as baseline_decide
+from src.data.combo_signals import classify_combination_pattern
 from src.data.features import build_price_features, render_feature_table
 from src.data.hl_market import HyperliquidClient
+from src.data.oi_tracker import OI_HISTORY_FILENAME, compute_oi_change_pct, load_oi_history, record_oi_snapshot
 from src.data.regime import classify_regime
 from src.data.screening import build_shortlist
 from src.execution.broker_base import BrokerBase, Position
@@ -42,7 +44,7 @@ from src.risk.breaker import (
     size_multiplier,
     write_kill_file,
 )
-from src.risk.rules import evaluate_all_gates
+from src.risk.rules import FUNDING_PERIODS_PER_YEAR, evaluate_all_gates
 from src.risk.sizing import compute_position_size
 from src.settings import STATE_DIR, Settings
 from src.util.io import append_jsonl, load_json, load_jsonl, save_json
@@ -329,6 +331,14 @@ def run_daily_pipeline(
     features_cfg = settings.app["features"]
     candle_lookback = settings.app["data"]["candle_lookback"]
 
+    # P5.3: โหลดประวัติ OI ที่เก็บสะสมไว้เอง (Hyperliquid ไม่มี endpoint ประวัติ OI ให้) เพื่อคำนวณ
+    # % เปลี่ยนแปลง 24h/7d แล้วจับคู่กับ price/funding/volume เป็น "combination read" — ดู
+    # src/data/oi_tracker.py กับ src/data/combo_signals.py สำหรับรายละเอียด
+    oi_history_path = journal_dir / OI_HISTORY_FILENAME
+    oi_history = load_oi_history(oi_history_path)
+    funding_by_coin = {entry["coin"]: entry.get("funding", 0.0) for entry in universe_snapshot}
+    oi_usd_by_coin = {entry["coin"]: entry.get("open_interest_usd") for entry in universe_snapshot}
+
     price_features_by_coin: dict[str, dict] = {}
     regime_by_coin: dict[str, dict] = {}
     for entry in universe_snapshot:
@@ -338,9 +348,30 @@ def run_daily_pipeline(
             pf = build_price_features(candles, features_cfg)
         except Exception as exc:  # noqa: BLE001 - ข้อมูลขาดของตลาดใดตลาดหนึ่งไม่ควรทำ pipeline ทั้งหมดล้ม
             pf = {"ok": False, "error": str(exc)}
+
+        if pf.get("ok"):
+            current_oi_usd = oi_usd_by_coin.get(coin)
+            oi_change_24h_pct = compute_oi_change_pct(oi_history, coin, current_oi_usd, today_date, lookback_days=1)
+            oi_change_7d_pct = compute_oi_change_pct(oi_history, coin, current_oi_usd, today_date, lookback_days=7)
+            funding_annualized_signed_pct = funding_by_coin.get(coin, 0.0) * FUNDING_PERIODS_PER_YEAR * 100
+            combo = classify_combination_pattern(
+                price_return_24h_pct=pf.get("returns_pct", {}).get(1),
+                oi_change_24h_pct=oi_change_24h_pct,
+                funding_annualized_signed_pct=funding_annualized_signed_pct,
+                volume_spike_ratio=pf.get("volume_spike_ratio"),
+            )
+            pf["oi_change_24h_pct"] = oi_change_24h_pct
+            pf["oi_change_7d_pct"] = oi_change_7d_pct
+            pf["combination_pattern"] = combo.pattern
+            pf["combination_pattern_label"] = combo.label
+
         price_features_by_coin[coin] = pf
         if pf.get("ok"):
             regime_by_coin[coin] = classify_regime(pf)
+
+    # เก็บ OI ของวันนี้ไว้เป็น "ประวัติ" ให้รอบพรุ่งนี้เทียบ — ทำหลังคำนวณ combo ของวันนี้เสร็จแล้วเท่านั้น
+    # กันไม่ให้ snapshot ของวันนี้ถูกเอาไปเทียบกับตัวเองเป็น oi_change_24h_pct=0% ผิดๆ
+    record_oi_snapshot(oi_history_path, today_date, universe_snapshot)
 
     # 5b. screen — คัดจากพูลทั้งหมดเหลือ top N (โค้ดล้วน ไม่มี LLM)
     shortlist_result = build_shortlist(universe_snapshot, price_features_by_coin, settings.risk.mode_defaults.model_dump())
