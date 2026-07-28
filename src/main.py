@@ -101,6 +101,7 @@ class DailyRunResult:
     action_taken: str
     reason: str
     equity_usd: float
+    open_position: dict | None = None  # P5.6: ให้ LINE morning report บอก "ตอนนี้ถือไม้อะไรอยู่" ได้ด้วย
 
 
 def _agent_result_to_log_dict(r: AgentRunResult) -> dict:
@@ -186,7 +187,13 @@ def _finish(
         },
     )
     mark_run_complete(last_run_path, today_date, {"action": action})
-    return DailyRunResult(date=today_date, action_taken=action, reason=reason, equity_usd=journal_state.equity_usd)
+    return DailyRunResult(
+        date=today_date,
+        action_taken=action,
+        reason=reason,
+        equity_usd=journal_state.equity_usd,
+        open_position=journal_state.open_position,
+    )
 
 
 def manage_existing_position(

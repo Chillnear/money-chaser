@@ -31,11 +31,19 @@ def _mock_response(status_code: int, text: str = "ok"):
 
 
 class FakeRunResult:
-    def __init__(self, date="2026-07-27", action_taken="opened_long", reason="เทรนด์ชัด", equity_usd=29.5):
+    def __init__(
+        self,
+        date="2026-07-27",
+        action_taken="opened_long",
+        reason="เทรนด์ชัด",
+        equity_usd=29.5,
+        open_position=None,
+    ):
         self.date = date
         self.action_taken = action_taken
         self.reason = reason
         self.equity_usd = equity_usd
+        self.open_position = open_position
 
 
 # ---- LineNotifier.is_configured ----
@@ -146,6 +154,22 @@ def test_format_daily_summary_includes_key_fields():
     assert "opened_long" in text
     assert "เทรนด์ชัด" in text
     assert "29.50" in text
+
+
+def test_format_daily_summary_shows_no_open_position_when_flat():
+    text = format_daily_summary(FakeRunResult(action_taken="flat", open_position=None))
+    assert "ไม่มี (FLAT)" in text
+
+
+def test_format_daily_summary_shows_open_position_details():
+    position = {
+        "asset": "BTC", "side": "long", "notional_usd": 15.0,
+        "entry_price": 100.0, "stop_price": 97.0, "take_profit_price": 106.0,
+    }
+    text = format_daily_summary(FakeRunResult(action_taken="skipped_already_ran", open_position=position))
+    assert "BTC" in text
+    assert "long" in text
+    assert "15.00" in text
 
 
 def test_format_budget_alert_includes_percentage_and_amounts():

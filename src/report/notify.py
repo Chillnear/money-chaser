@@ -82,13 +82,28 @@ class LineNotifier:
 
 def format_daily_summary(run_result) -> str:
     """สร้างข้อความสรุปผลรอบเทรดรายวัน — รับ DailyRunResult จาก src/main.py แบบ duck-typed
-    (ต้องมี attribute: date, action_taken, reason, equity_usd) กัน circular import กับ main.py
+    (ต้องมี attribute: date, action_taken, reason, equity_usd, open_position) กัน circular import กับ main.py
+
+    ข้อความนี้ถูกส่งทุกเช้าอัตโนมัติผ่าน cron ของ daily.yml (07:20 น. ไทย) อยู่แล้ว — เพิ่มบรรทัดสถานะ
+    ไม้ที่ถืออยู่ตอนนี้ (ถ้ามี) เข้าไปด้วย ตอบคำถาม "ตอนนี้ระบบทำอะไรอยู่" ให้ครบในข้อความเดียว ไม่ต้องมี
+    scheduled task ใหม่แยกออกไปอีกอัน (จะซ้ำซ้อนกับที่ daily.yml ทำอยู่แล้ว)
     """
+    open_position = getattr(run_result, "open_position", None)
+    if open_position:
+        position_line = (
+            f"\nไม้ที่ถืออยู่ตอนนี้: {open_position.get('asset')} {open_position.get('side')} "
+            f"notional={open_position.get('notional_usd', 0):.2f} USD, entry={open_position.get('entry_price', 0):.2f}, "
+            f"SL={open_position.get('stop_price', 0):.2f}, TP={open_position.get('take_profit_price', 0):.2f}"
+        )
+    else:
+        position_line = "\nไม้ที่ถืออยู่ตอนนี้: ไม่มี (FLAT)"
+
     return (
         f"📊 Money Chaser — {run_result.date}\n"
         f"ผลลัพธ์: {run_result.action_taken}\n"
         f"เหตุผล: {run_result.reason}\n"
         f"Equity: {run_result.equity_usd:.2f} USD"
+        f"{position_line}"
     )
 
 
