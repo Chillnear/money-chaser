@@ -15,9 +15,9 @@ roles:
     provider: deepseek
     source: litellm
   redteam:
-    model: Gemini 3.1 pro
+    model: Grok 4.1 Fast Reasoning
     tier: frontier
-    provider: google
+    provider: xai
     source: litellm
   judge:
     model: claude-opus-4-7
