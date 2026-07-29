@@ -25,7 +25,7 @@ from src.agents.llm import (
 )
 from src.agents.redteam import run_redteam
 from src.agents.registry import assert_provider_diversity
-from src.baseline import BASELINE_CONFIDENCE, BASELINE_RISK_MULTIPLIER
+from src.baseline import BASELINE_RISK_MULTIPLIER
 from src.baseline import decide as baseline_decide
 from src.data.combo_signals import classify_combination_pattern
 from src.data.features import build_price_features, render_feature_table
@@ -47,7 +47,6 @@ from src.risk.breaker import (
 from src.risk.rules import FUNDING_PERIODS_PER_YEAR, evaluate_all_gates
 from src.risk.sizing import compute_position_size
 from src.settings import STATE_DIR, Settings
-from src.shadow_strategies import decide_funding_carry
 from src.util.io import append_jsonl, load_json, load_jsonl, save_json
 
 JOURNAL_DIR = STATE_DIR / "journal"
@@ -55,12 +54,6 @@ KILL_PATH = STATE_DIR / "KILL"
 LAST_RUN_PATH = STATE_DIR / "last_run.json"
 
 ANALYST_ROLE_ORDER = ["analyst_trend", "analyst_positioning", "analyst_macro"]
-
-# P5.9b: funding_carry override ต้องมีพูล liquid ใหญ่พอก่อนจะเชื่อ percentile ของ funding_score ได้
-# (scripts/rule_backtest.py + src/shadow.py ยืนยันว่า funding_carry มี edge บวก แต่ต้องเทียบ percentile
-# ข้ามพูลที่มีจำนวนเหรียญพอสมควรก่อน — พูลเล็กเกินไป เช่น 2 เหรียญ จะทำให้เหรียญที่ funding ต่างกันแค่นิดเดียว
-# ดูเหมือน "สุดขั้ว" เสมอทั้งที่ไม่ได้ผิดปกติจริง เจอจากการรีวิวก่อน implement ฟีเจอร์นี้)
-MIN_POOL_SIZE_FOR_FUNDING_OVERRIDE = 5
 
 
 @dataclass
@@ -405,20 +398,11 @@ def _run_daily_pipeline_core(
             "ไม่มีผู้เข้าชิงผ่าน screening วันนี้ (universe pool บางผิดปกติ) — fail-closed เป็น FLAT",
         )
 
-    # P5.9b: เช็ค funding_carry override ก่อน (โค้ดล้วน ไม่มี LLM) — ถ้า funding ของเหรียญใน shortlist
-    # สุดขั้วจริง (percentile เทียบพูล liquid ทั้งหมดของวันนี้ ไม่ใช่แค่ 2-3 ตัวใน shortlist) ให้เทรดตาม
-    # funding_carry ทันที ไม่ต้องรอ AI คิด (ประหยัดค่า AI ด้วย) — ยืนยัน edge จาก scripts/rule_backtest.py
-    # (backtest ด้วย AI จริงยังไม่เคยทดสอบเงื่อนไขนี้เพราะเพิ่ง implement — ดู src/shadow.py ที่ยัง track
-    # แบบ shadow ควบคู่ไปด้วยเพื่อเทียบผลจริงกับ path นี้)
-    funding_carry_override = False
-    funding_carry_decision = None
-    if shortlist_result.get("pool_size", 0) >= MIN_POOL_SIZE_FOR_FUNDING_OVERRIDE:
-        funding_carry_decision = decide_funding_carry(
-            shortlist_result["shortlist"], regime_by_coin, price_features_by_coin, universe_snapshot
-        )
-        funding_carry_override = (
-            funding_carry_decision.action != "flat" and funding_carry_decision.asset in allowed_assets
-        )
+    # P5.9b (ยกเลิกแล้ว 2026-07-29): เคยลองให้ funding_carry แทรก AI จริงตอน funding สุดขั้ว แต่พอ
+    # rule_backtest.py รันด้วยพูลเหรียญจริงหลายตัว (--coins auto) ผลกลับตาลปัตรจากที่เจอตอนทดสอบด้วยแค่
+    # 2 เหรียญ (funding_carry 180 วันล่าสุดกลายเป็น -4.42 USD และกระจุกอยู่ที่ NEAR ตัวเดียว 87% ของไม้
+    # ทั้งหมด ไม่ได้กระจายความเสี่ยงข้ามเหรียญแบบที่ตั้งใจ) — ถอด override ออก เหลือแค่ shadow tracker
+    # (src/shadow.py) ที่ยัง track คู่ไปเฉยๆไม่กระทบการเทรดจริง จนกว่าจะมีข้อมูลที่นิ่งกว่านี้
 
     llm_cfg = settings.app.raw.get("llm", {})
     feature_table = render_feature_table(
@@ -441,28 +425,7 @@ def _run_daily_pipeline_core(
 
     require_analyst_agreement = True
 
-    if funding_carry_override:
-        # P5.9b: funding สุดขั้วชัดเจน — เทรดตาม funding_carry ตรงๆ ไม่เรียก analyst/redteam/judge เลย
-        # รอบนี้ (ประหยัดค่า AI + สอดคล้องกับที่ backtest ยืนยันว่ามี edge ตอนสุดขั้วจริง)
-        final_action = funding_carry_decision.action
-        final_asset = funding_carry_decision.asset
-        final_confidence = BASELINE_CONFIDENCE
-        analyst_directions = []
-        require_analyst_agreement = False
-
-        append_jsonl(
-            journal_dir / "decisions.jsonl",
-            {
-                "date": today_date,
-                "ts": now_ts,
-                "source": "funding_carry_override",
-                "shortlist": shortlist_result["shortlist"],
-                "pinned_extra": shortlist_result.get("pinned_extra"),
-                "pool_size": shortlist_result.get("pool_size"),
-                "funding_carry_decision": asdict(funding_carry_decision),
-            },
-        )
-    elif degrade_level >= DEGRADE_LLM_OFF:
+    if degrade_level >= DEGRADE_LLM_OFF:
         # ปิด LLM ทั้งหมดเพราะเกินงบเดือน (DEGRADE_LLM_OFF) -> ใช้ src/baseline.py แทน (P4.2) ระบบยัง
         # เทรดต่อได้ ไม่ fail-closed เป็น FLAT เปล่าๆ (ตาม BUILD-SPEC.md §4.2: "ปิด LLM ใช้ baseline.py
         # ล้วน ระบบยังเทรดต่อได้ ไม่หยุดตาย") — ไม่มี analyst มา debate จริง จึงข้าม agreement gate
