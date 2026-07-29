@@ -1,29 +1,29 @@
 {
   "trend_following": {
-    "start_date": "2024-08-08",
+    "start_date": "2024-04-30",
     "end_date": "2026-07-28",
-    "trades": 87,
-    "win_rate_pct": 51.7,
+    "trades": 184,
+    "win_rate_pct": 36.4,
     "starting_equity_usd": 28.0,
-    "final_equity_usd": 29.59,
-    "total_pnl_usd": 1.59
+    "final_equity_usd": 24.17,
+    "total_pnl_usd": -3.83
   },
   "mean_reversion": {
-    "start_date": "2024-08-08",
+    "start_date": "2024-04-30",
     "end_date": "2026-07-28",
-    "trades": 58,
-    "win_rate_pct": 34.5,
+    "trades": 97,
+    "win_rate_pct": 34.0,
     "starting_equity_usd": 28.0,
-    "final_equity_usd": 26.86,
-    "total_pnl_usd": -1.14
+    "final_equity_usd": 24.86,
+    "total_pnl_usd": -3.14
   },
   "funding_carry": {
-    "start_date": "2024-08-08",
+    "start_date": "2024-04-30",
     "end_date": "2026-07-28",
-    "trades": 139,
-    "win_rate_pct": 48.2,
+    "trades": 181,
+    "win_rate_pct": 38.7,
     "starting_equity_usd": 28.0,
-    "final_equity_usd": 29.53,
-    "total_pnl_usd": 1.53
+    "final_equity_usd": 28.91,
+    "total_pnl_usd": 0.91
   }
 }
