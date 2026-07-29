@@ -4,6 +4,7 @@ import datetime as dt
 import importlib.util
 import sys
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 
@@ -177,3 +178,24 @@ def test_run_rule_backtest_flat_strategy_never_trades(rb, bt):
 
     assert summary["trades"] == 0
     assert summary["final_equity_usd"] == 28.0
+
+
+# ---- get_current_liquid_universe_coins (โหมด --coins auto) ----
+
+
+def test_get_current_liquid_universe_coins_filters_by_volume_and_oi(rb):
+    fake_snapshot = [
+        {"coin": "BTC", "day_volume_usd": 5.0e8, "open_interest_usd": 1.0e8, "funding": 0.0, "mark_px": 1.0, "prev_day_px": 1.0},
+        {"coin": "DOGE_TOO_THIN", "day_volume_usd": 1.0e5, "open_interest_usd": 1.0e4, "funding": 0.0, "mark_px": 1.0, "prev_day_px": 1.0},
+        {"coin": "PAXG", "day_volume_usd": 1.0e3, "open_interest_usd": 1.0e2, "funding": 0.0, "mark_px": 1.0, "prev_day_px": 1.0},
+    ]
+
+    with patch("src.data.hl_market.HyperliquidClient") as MockClient:
+        MockClient.return_value.get_universe_snapshot.return_value = fake_snapshot
+        coins = rb.get_current_liquid_universe_coins(
+            min_24h_volume_usd=2.0e7, min_open_interest_usd=5.0e6, always_include=["PAXG"],
+        )
+
+    assert "BTC" in coins  # ผ่านเกณฑ์ volume/OI ปกติ
+    assert "DOGE_TOO_THIN" not in coins  # volume/OI ต่ำเกินไป ไม่ผ่านเกณฑ์
+    assert "PAXG" in coins  # ต่ำกว่าเกณฑ์ แต่ถูก pin ผ่าน always_include เสมอ

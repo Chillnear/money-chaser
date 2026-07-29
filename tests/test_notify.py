@@ -38,12 +38,14 @@ class FakeRunResult:
         reason="เทรนด์ชัด",
         equity_usd=29.5,
         open_position=None,
+        shadow_funding_carry=None,
     ):
         self.date = date
         self.action_taken = action_taken
         self.reason = reason
         self.equity_usd = equity_usd
         self.open_position = open_position
+        self.shadow_funding_carry = shadow_funding_carry
 
 
 # ---- LineNotifier.is_configured ----
@@ -170,6 +172,23 @@ def test_format_daily_summary_shows_open_position_details():
     assert "BTC" in text
     assert "long" in text
     assert "15.00" in text
+
+
+def test_format_daily_summary_includes_shadow_line_when_present():
+    text = format_daily_summary(FakeRunResult(shadow_funding_carry={"action": "opened_short", "equity_usd": 28.5}))
+    assert "[Shadow]" in text
+    assert "funding_carry" in text
+    assert "28.50" in text
+
+
+def test_format_daily_summary_omits_shadow_line_when_none():
+    text = format_daily_summary(FakeRunResult(shadow_funding_carry=None))
+    assert "[Shadow]" not in text
+
+
+def test_format_daily_summary_omits_shadow_line_on_shadow_error():
+    text = format_daily_summary(FakeRunResult(shadow_funding_carry={"action": "error", "error": "boom", "equity_usd": None}))
+    assert "[Shadow]" not in text
 
 
 def test_format_budget_alert_includes_percentage_and_amounts():

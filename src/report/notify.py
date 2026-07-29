@@ -98,12 +98,19 @@ def format_daily_summary(run_result) -> str:
     else:
         position_line = "\nไม้ที่ถืออยู่ตอนนี้: ไม่มี (FLAT)"
 
+    shadow = getattr(run_result, "shadow_funding_carry", None)
+    if shadow and shadow.get("action") != "error" and shadow.get("equity_usd") is not None:
+        shadow_line = f"\n[Shadow] funding_carry (ไม่ใช้ AI): {shadow['action']}, equity={shadow['equity_usd']:.2f} USD"
+    else:
+        shadow_line = ""
+
     return (
         f"📊 Money Chaser — {run_result.date}\n"
         f"ผลลัพธ์: {run_result.action_taken}\n"
         f"เหตุผล: {run_result.reason}\n"
         f"Equity: {run_result.equity_usd:.2f} USD"
         f"{position_line}"
+        f"{shadow_line}"
     )
 
 

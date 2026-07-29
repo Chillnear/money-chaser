@@ -25,7 +25,7 @@ from src.agents.llm import (
 )
 from src.agents.redteam import run_redteam
 from src.agents.registry import assert_provider_diversity
-from src.baseline import BASELINE_RISK_MULTIPLIER
+from src.baseline import BASELINE_CONFIDENCE, BASELINE_RISK_MULTIPLIER
 from src.baseline import decide as baseline_decide
 from src.data.combo_signals import classify_combination_pattern
 from src.data.features import build_price_features, render_feature_table
@@ -47,6 +47,7 @@ from src.risk.breaker import (
 from src.risk.rules import FUNDING_PERIODS_PER_YEAR, evaluate_all_gates
 from src.risk.sizing import compute_position_size
 from src.settings import STATE_DIR, Settings
+from src.shadow_strategies import decide_funding_carry
 from src.util.io import append_jsonl, load_json, load_jsonl, save_json
 
 JOURNAL_DIR = STATE_DIR / "journal"
@@ -54,6 +55,12 @@ KILL_PATH = STATE_DIR / "KILL"
 LAST_RUN_PATH = STATE_DIR / "last_run.json"
 
 ANALYST_ROLE_ORDER = ["analyst_trend", "analyst_positioning", "analyst_macro"]
+
+# P5.9b: funding_carry override ต้องมีพูล liquid ใหญ่พอก่อนจะเชื่อ percentile ของ funding_score ได้
+# (scripts/rule_backtest.py + src/shadow.py ยืนยันว่า funding_carry มี edge บวก แต่ต้องเทียบ percentile
+# ข้ามพูลที่มีจำนวนเหรียญพอสมควรก่อน — พูลเล็กเกินไป เช่น 2 เหรียญ จะทำให้เหรียญที่ funding ต่างกันแค่นิดเดียว
+# ดูเหมือน "สุดขั้ว" เสมอทั้งที่ไม่ได้ผิดปกติจริง เจอจากการรีวิวก่อน implement ฟีเจอร์นี้)
+MIN_POOL_SIZE_FOR_FUNDING_OVERRIDE = 5
 
 
 @dataclass
@@ -102,6 +109,7 @@ class DailyRunResult:
     reason: str
     equity_usd: float
     open_position: dict | None = None  # P5.6: ให้ LINE morning report บอก "ตอนนี้ถือไม้อะไรอยู่" ได้ด้วย
+    shadow_funding_carry: dict | None = None  # P5.9: ผล shadow tracker (ดู src/shadow.py) — ไม่ใช้ AI เลย
 
 
 def _agent_result_to_log_dict(r: AgentRunResult) -> dict:
@@ -271,7 +279,7 @@ def manage_existing_position(
     )
 
 
-def run_daily_pipeline(
+def _run_daily_pipeline_core(
     settings: Settings,
     hl_client: HyperliquidClient,
     llm_client: LLMClient,
@@ -397,6 +405,21 @@ def run_daily_pipeline(
             "ไม่มีผู้เข้าชิงผ่าน screening วันนี้ (universe pool บางผิดปกติ) — fail-closed เป็น FLAT",
         )
 
+    # P5.9b: เช็ค funding_carry override ก่อน (โค้ดล้วน ไม่มี LLM) — ถ้า funding ของเหรียญใน shortlist
+    # สุดขั้วจริง (percentile เทียบพูล liquid ทั้งหมดของวันนี้ ไม่ใช่แค่ 2-3 ตัวใน shortlist) ให้เทรดตาม
+    # funding_carry ทันที ไม่ต้องรอ AI คิด (ประหยัดค่า AI ด้วย) — ยืนยัน edge จาก scripts/rule_backtest.py
+    # (backtest ด้วย AI จริงยังไม่เคยทดสอบเงื่อนไขนี้เพราะเพิ่ง implement — ดู src/shadow.py ที่ยัง track
+    # แบบ shadow ควบคู่ไปด้วยเพื่อเทียบผลจริงกับ path นี้)
+    funding_carry_override = False
+    funding_carry_decision = None
+    if shortlist_result.get("pool_size", 0) >= MIN_POOL_SIZE_FOR_FUNDING_OVERRIDE:
+        funding_carry_decision = decide_funding_carry(
+            shortlist_result["shortlist"], regime_by_coin, price_features_by_coin, universe_snapshot
+        )
+        funding_carry_override = (
+            funding_carry_decision.action != "flat" and funding_carry_decision.asset in allowed_assets
+        )
+
     llm_cfg = settings.app.raw.get("llm", {})
     feature_table = render_feature_table(
         shortlist_result,
@@ -418,7 +441,28 @@ def run_daily_pipeline(
 
     require_analyst_agreement = True
 
-    if degrade_level >= DEGRADE_LLM_OFF:
+    if funding_carry_override:
+        # P5.9b: funding สุดขั้วชัดเจน — เทรดตาม funding_carry ตรงๆ ไม่เรียก analyst/redteam/judge เลย
+        # รอบนี้ (ประหยัดค่า AI + สอดคล้องกับที่ backtest ยืนยันว่ามี edge ตอนสุดขั้วจริง)
+        final_action = funding_carry_decision.action
+        final_asset = funding_carry_decision.asset
+        final_confidence = BASELINE_CONFIDENCE
+        analyst_directions = []
+        require_analyst_agreement = False
+
+        append_jsonl(
+            journal_dir / "decisions.jsonl",
+            {
+                "date": today_date,
+                "ts": now_ts,
+                "source": "funding_carry_override",
+                "shortlist": shortlist_result["shortlist"],
+                "pinned_extra": shortlist_result.get("pinned_extra"),
+                "pool_size": shortlist_result.get("pool_size"),
+                "funding_carry_decision": asdict(funding_carry_decision),
+            },
+        )
+    elif degrade_level >= DEGRADE_LLM_OFF:
         # ปิด LLM ทั้งหมดเพราะเกินงบเดือน (DEGRADE_LLM_OFF) -> ใช้ src/baseline.py แทน (P4.2) ระบบยัง
         # เทรดต่อได้ ไม่ fail-closed เป็น FLAT เปล่าๆ (ตาม BUILD-SPEC.md §4.2: "ปิด LLM ใช้ baseline.py
         # ล้วน ระบบยังเทรดต่อได้ ไม่หยุดตาย") — ไม่มี analyst มา debate จริง จึงข้าม agreement gate
@@ -603,6 +647,73 @@ def run_daily_pipeline(
         f"เปิดไม้ {final_asset} {final_action} notional={sizing_result.notional_usd:.2f} USD "
         f"stop={sizing_result.stop_pct:.2f}% tp={sizing_result.take_profit_pct:.2f}%",
     )
+
+
+def run_daily_pipeline(
+    settings: Settings,
+    hl_client: HyperliquidClient,
+    llm_client: LLMClient,
+    broker: BrokerBase,
+    model_registry: dict,
+    today_date: str,
+    now_ts: float | None = None,
+    journal_dir: Path = JOURNAL_DIR,
+    kill_path: Path = KILL_PATH,
+    last_run_path: Path = LAST_RUN_PATH,
+    starting_equity_usd: float = 28.0,
+    macro_snapshot: dict | None = None,
+    macro_veto_status: dict | None = None,
+    sentiment: dict | None = None,
+    news_headline_titles: list[str] | None = None,
+    llm_cost_records: list[dict] | None = None,
+    lessons_text: str = "",
+    hit_rate_by_role: dict | None = None,
+) -> DailyRunResult:
+    """Wrapper รอบ _run_daily_pipeline_core() (P5.9) — เพิ่ม shadow tracker (funding_carry, ดู
+    src/shadow.py) ที่รันคู่กับ AI จริงทุกวัน ไม่ใช้ AI เลย ไม่กระทบเงินจริง/งบ LLM เด็ดขาด แยกจาก core
+    ทั้งหมดโดยตั้งใจ (wrapper ไม่แก้ logic เดิมแม้แต่บรรทัดเดียว) เพื่อไม่ให้ความเสี่ยงของฟีเจอร์ใหม่
+    ไปกระทบ pipeline การเทรดจริงที่ทดสอบมาแล้วอย่างละเอียด — ครอบด้วย try/except สองชั้น (ในนี้ + ใน
+    src/shadow.py เอง) เพราะจุดนี้พังไม่ได้เด็ดขาด
+    """
+    result = _run_daily_pipeline_core(
+        settings=settings, hl_client=hl_client, llm_client=llm_client, broker=broker,
+        model_registry=model_registry, today_date=today_date, now_ts=now_ts, journal_dir=journal_dir,
+        kill_path=kill_path, last_run_path=last_run_path, starting_equity_usd=starting_equity_usd,
+        macro_snapshot=macro_snapshot, macro_veto_status=macro_veto_status, sentiment=sentiment,
+        news_headline_titles=news_headline_titles, llm_cost_records=llm_cost_records,
+        lessons_text=lessons_text, hit_rate_by_role=hit_rate_by_role,
+    )
+
+    if result.action_taken in ("skipped_killed", "skipped_already_ran"):
+        return result  # ตอน kill/idempotent skip ไม่ควรมีกิจกรรมอะไรเพิ่ม แม้จะเป็นแค่ observational ก็ตาม
+
+    try:
+        from src.data.screening import build_shortlist as _shadow_build_shortlist
+        from src.shadow import run_funding_carry_shadow_day
+
+        shadow_now_ts = now_ts if now_ts is not None else time.time()
+        shadow_universe_snapshot = hl_client.get_universe_snapshot()
+        shadow_price_features_by_coin: dict[str, dict] = {}
+        shadow_regime_by_coin: dict[str, dict] = {}
+        candle_lookback = settings.app["data"]["candle_lookback"]
+        for entry in shadow_universe_snapshot:
+            coin = entry["coin"]
+            pf = build_price_features(hl_client.get_candles(coin, interval="1d", lookback_days=candle_lookback), settings.app["features"])
+            shadow_price_features_by_coin[coin] = pf
+            if pf.get("ok"):
+                shadow_regime_by_coin[coin] = classify_regime(pf)
+        shadow_shortlist = _shadow_build_shortlist(
+            shadow_universe_snapshot, shadow_price_features_by_coin, settings.risk.mode_defaults.model_dump()
+        )["shortlist"]
+
+        result.shadow_funding_carry = run_funding_carry_shadow_day(
+            settings, hl_client, shadow_shortlist, shadow_regime_by_coin,
+            shadow_price_features_by_coin, shadow_universe_snapshot, shadow_now_ts, journal_dir,
+        )
+    except Exception as exc:  # noqa: BLE001 - shadow ต้องไม่พังการเทรดจริงเด็ดขาด (ผลจริงคำนวณเสร็จไปแล้วด้านบน)
+        result.shadow_funding_carry = {"action": "error", "error": str(exc)}
+
+    return result
 
 
 def _cli_main() -> None:  # pragma: no cover - เรียกจริงบน GitHub Actions เท่านั้น (ต้องมี network จริง)

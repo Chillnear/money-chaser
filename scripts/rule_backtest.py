@@ -23,7 +23,7 @@ baseline fallback จริงใช้ เพราะไม่มี agent deb
 from __future__ import annotations
 
 import sys
-from dataclasses import asdict, dataclass
+from dataclasses import asdict
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -39,6 +39,7 @@ from src.data.screening import build_shortlist  # noqa: E402
 from src.execution.broker_paper import PaperBroker  # noqa: E402
 from src.risk.sizing import compute_position_size  # noqa: E402
 from src.settings import load_settings  # noqa: E402
+from src.shadow_strategies import Decision, decide_funding_carry, decide_mean_reversion  # noqa: E402
 from src.util.io import save_json  # noqa: E402
 
 from backtest import (  # noqa: E402
@@ -52,62 +53,30 @@ from backtest import (  # noqa: E402
 WARMUP_DAYS = 400  # ให้ vol_percentile_1y (มองย้อน 365 วัน) มีข้อมูลพอตั้งแต่วันแรกที่จำลอง
 
 
-@dataclass
-class Decision:
-    action: str  # "long" | "short" | "flat"
-    asset: str | None
-    reasoning: str
+def get_current_liquid_universe_coins(min_24h_volume_usd: float, min_open_interest_usd: float, always_include: list[str]) -> list[str]:
+    """ดึงรายชื่อเหรียญที่ liquid พอ ณ ตอนนี้จริงจาก Hyperliquid (กรองด้วยเกณฑ์เดียวกับที่ production ใช้จริง
+    ทุกวัน — src.data.screening.filter_universe) แทนการจำกัดแค่ ["BTC","PAXG"] ที่เป็นเพียงความง่ายของ
+    สคริปต์ทดสอบ — production จริงสแกนทั้งพูล (~15-30+ เหรียญที่ liquid) ไม่ได้จำกัดแค่ 2 ตัวนี้เลย
+
+    หมายเหตุ: การกรองนี้เป็นภาพ ณ ปัจจุบัน ไม่ใช่ย้อนอดีต (Hyperliquid ไม่มี historical universe list ให้)
+    แต่พูล coin ที่ liquid พอบน Hyperliquid ไม่เปลี่ยนบ่อยมาก จึงเพียงพอสำหรับทดสอบไอเดียกลยุทธ์ย้อนหลัง
+    """
+    from src.data.hl_market import HyperliquidClient
+    from src.data.screening import filter_universe
+
+    live_client = HyperliquidClient()
+    snapshot = live_client.get_universe_snapshot()
+    filtered = filter_universe(snapshot, min_24h_volume_usd, min_open_interest_usd, always_include)
+    return [s["coin"] for s in filtered]
+
+# decide_mean_reversion / decide_funding_carry ย้ายไป src/shadow_strategies.py (P5.9) เพื่อให้
+# src/shadow.py (รัน funding_carry คู่ AI จริงทุกวันแบบ shadow) เรียกกฎเดียวกันเป๊ะๆ ไม่ต้องเขียนซ้ำสองที่
 
 
 def decide_trend_following(shortlist, regime_by_coin, price_features_by_coin, universe_snapshot) -> Decision:
     """เหมือน src.baseline.decide() เป๊ะ — ตามเทรนด์ตรงๆ ไม่มีการตีความเพิ่ม"""
     bd = baseline_decide(shortlist, regime_by_coin, default_stop_pct=0.0, default_take_profit_pct=0.0)
     return Decision(action=bd.action, asset=bd.asset, reasoning=bd.reasoning)
-
-
-def decide_mean_reversion(shortlist, regime_by_coin, price_features_by_coin, universe_snapshot) -> Decision:
-    """สมมติฐานตรงข้ามกับ trend_following: ราคาชนขอบ Donchian สุดขั้ว + RSI สุดขั้ว มักจะเด้งกลับ
-    มากกว่าจะวิ่งต่อ (fade breakout/breakdown แทนการไล่ตาม)
-    """
-    if not shortlist:
-        return Decision("flat", None, "ไม่มีผู้เข้าชิงใน shortlist")
-
-    top = max(shortlist, key=lambda item: item.get("composite", 0.0))
-    coin = top["coin"]
-    pf = price_features_by_coin.get(coin, {})
-    donchian = pf.get("donchian_position")
-    rsi = pf.get("rsi")
-
-    if donchian is None or rsi is None or donchian != donchian or rsi != rsi:  # NaN check
-        return Decision("flat", None, f"{coin} ข้อมูล Donchian/RSI ไม่พอคำนวณ")
-
-    if donchian >= 0.9 and rsi >= 60:
-        return Decision("short", coin, f"{coin} ชนขอบบน Donchian ({donchian:.2f}) + RSI {rsi:.1f} overbought -> fade ลง")
-    if donchian <= 0.1 and rsi <= 40:
-        return Decision("long", coin, f"{coin} ชนขอบล่าง Donchian ({donchian:.2f}) + RSI {rsi:.1f} oversold -> fade ขึ้น")
-    return Decision("flat", None, f"{coin} ยังไม่สุดขั้วพอ (donchian={donchian:.2f}, rsi={rsi:.1f})")
-
-
-def decide_funding_carry(shortlist, regime_by_coin, price_features_by_coin, universe_snapshot) -> Decision:
-    """เก็บ funding แทนการเดาทิศทางราคา: เข้าฝั่งตรงข้ามกับ funding ที่สุดขั้วที่สุดในชอร์ตลิสต์
-    (funding เป็นบวกมาก = long จ่าย short มาก -> เข้า short เก็บ funding, และกลับกัน)
-    """
-    if not shortlist:
-        return Decision("flat", None, "ไม่มีผู้เข้าชิงใน shortlist")
-
-    top = max(shortlist, key=lambda item: abs(item.get("funding_score", 0.5) - 0.5))
-    coin = top["coin"]
-    funding_score = top.get("funding_score", 0.5)
-
-    if abs(funding_score - 0.5) < 0.4:  # ต้องสุดขั้วจริงๆ (percentile ใกล้ 0 หรือ 1 ในพูล) ไม่ใช่กลางๆ
-        return Decision("flat", None, f"{coin} funding percentile {funding_score:.2f} ยังไม่สุดขั้วพอ")
-
-    current_funding = next((e.get("funding", 0.0) for e in universe_snapshot if e["coin"] == coin), 0.0)
-    if current_funding > 0:
-        return Decision("short", coin, f"{coin} funding={current_funding:.6f} บวกสุดขั้ว (percentile {funding_score:.2f}) -> short เก็บ funding")
-    if current_funding < 0:
-        return Decision("long", coin, f"{coin} funding={current_funding:.6f} ลบสุดขั้ว (percentile {funding_score:.2f}) -> long เก็บ funding")
-    return Decision("flat", None, f"{coin} funding=0 ไม่มีอะไรให้เก็บ")
 
 
 STRATEGIES = {
@@ -231,20 +200,35 @@ def main() -> int:
     import argparse
 
     parser = argparse.ArgumentParser(description="ทดสอบไอเดียกลยุทธ์แบบไม่ใช้ AI กับข้อมูลราคาย้อนหลังหลายปี (ฟรี เร็ว)")
-    parser.add_argument("--coins", default=",".join(DEFAULT_COINS))
+    parser.add_argument(
+        "--coins", default=",".join(DEFAULT_COINS),
+        help='รายชื่อเหรียญคั่นด้วย comma หรือใส่ "auto" เพื่อดึงพูล liquid ทั้งหมดจาก Hyperliquid ตอนนี้จริง (เหมือน production)',
+    )
     parser.add_argument("--days", type=int, default=720, help="จำลองกี่วันย้อนหลังจากเมื่อวาน (ค่าเริ่มต้น ~2 ปี เพราะฟรี)")
     parser.add_argument("--starting-equity-usd", type=float, default=28.0)
     parser.add_argument("--strategies", default=",".join(STRATEGIES.keys()))
     args = parser.parse_args()
 
-    coins = [c.strip() for c in args.coins.split(",") if c.strip()]
+    settings = load_settings()
+
+    if args.coins.strip().lower() == "auto":
+        # ดึงพูล liquid จริงตามเกณฑ์เดียวกับ production (min_24h_volume_usd/min_open_interest_usd จาก
+        # risk.yaml) — ต่างจากค่า default ["BTC","PAXG"] ที่เป็นเพียงความง่ายของสคริปต์ทดสอบเท่านั้น
+        coins = get_current_liquid_universe_coins(
+            settings.risk.mode_defaults.min_24h_volume_usd,
+            settings.risk.mode_defaults.min_open_interest_usd,
+            settings.risk.mode_defaults.always_include,
+        )
+        print(f"โหมด auto: พบเหรียญ liquid พอ {len(coins)} ตัวจาก Hyperliquid ตอนนี้: {coins}")
+    else:
+        coins = [c.strip() for c in args.coins.split(",") if c.strip()]
+
     strategy_names = [s.strip() for s in args.strategies.split(",") if s.strip()]
     unknown = [s for s in strategy_names if s not in STRATEGIES]
     if unknown:
         print(f"ไม่รู้จักกลยุทธ์: {unknown} — เลือกได้จาก {list(STRATEGIES.keys())}")
         return 1
 
-    settings = load_settings()
     mode_defaults = settings.risk.mode_defaults.model_copy(update={"min_24h_volume_usd": 0.0, "min_open_interest_usd": 0.0})
     risk_for_backtest = settings.risk.model_copy(update={"mode_defaults": mode_defaults})
     settings = settings.model_copy(update={"risk": risk_for_backtest})

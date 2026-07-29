@@ -15,9 +15,9 @@ on:
         required: false
         default: "720"
       coins:
-        description: "เหรียญที่จะจำลอง (คั่นด้วย comma)"
+        description: 'เหรียญที่จะจำลอง (คั่นด้วย comma) หรือใส่ "auto" เพื่อดึงพูล liquid ทั้งหมดจาก Hyperliquid ตอนนี้จริง (เหมือนที่ production สแกนทุกวัน ~15-30+ เหรียญ)'
         required: false
-        default: "BTC,PAXG"
+        default: "auto"
       strategies:
         description: "กลยุทธ์ที่จะเทียบ (คั่นด้วย comma): trend_following, mean_reversion, funding_carry"
         required: false
