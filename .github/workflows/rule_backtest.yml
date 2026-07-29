@@ -1,0 +1,65 @@
+name: Rule Backtest (manual, free)
+
+# ทดสอบ "แก่น" ของไอเดียกลยุทธ์ (trend_following / mean_reversion / funding_carry) แบบไม่ใช้ AI เลย
+# กับข้อมูลราคา/funding ย้อนหลังหลายปี — ฟรี 100% ไม่มีต้นทุน AI แม้แต่บาทเดียว เร็วกว่า Backtest/Backtest
+# Compare มาก เพราะไม่ต้องรอ LLM คิด ดูรายละเอียด/เหตุผลที่ scripts/rule_backtest.py (P5.9)
+#
+# ใช้เพื่อคัดไอเดียกลยุทธ์ก่อนเอาไปทดสอบกับ AI จริงต่อใน backtest.yml/backtest_compare.yml — ไม่ใช่ผลลัพธ์
+# ที่จะเอาไปใช้เทรดจริงตรงๆ (baseline/mean-reversion/funding-carry ในนี้เป็นกฎง่ายๆ ไม่มี agent debate)
+
+on:
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "จำลองกี่วันย้อนหลังจากเมื่อวาน (ฟรี ใส่มากได้ เช่น 720 = ~2 ปี)"
+        required: false
+        default: "720"
+      coins:
+        description: "เหรียญที่จะจำลอง (คั่นด้วย comma)"
+        required: false
+        default: "BTC,PAXG"
+      strategies:
+        description: "กลยุทธ์ที่จะเทียบ (คั่นด้วย comma): trend_following, mean_reversion, funding_carry"
+        required: false
+        default: "trend_following,mean_reversion,funding_carry"
+      starting_equity_usd:
+        description: "ทุนตั้งต้นสมมติสำหรับทุกกลยุทธ์"
+        required: false
+        default: "28.0"
+
+permissions:
+  contents: write
+
+jobs:
+  rule_backtest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pytest (ต้องผ่านทั้งหมดก่อนรันจริง — เหมือน safety gate ของ workflow อื่นๆ)
+        run: MODE=paper python -m pytest -q
+
+      - name: Run rule-based backtest (ไม่มี AI, ไม่มีค่าใช้จ่าย)
+        env:
+          MODE: paper
+        run: |
+          python scripts/rule_backtest.py \
+            --days "${{ inputs.days }}" \
+            --coins "${{ inputs.coins }}" \
+            --strategies "${{ inputs.strategies }}" \
+            --starting-equity-usd "${{ inputs.starting_equity_usd }}"
+
+      - name: Commit rule backtest results
+        run: |
+          git config user.name "money-chaser-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add state/rule_backtest/
+          git diff --cached --quiet && echo "ไม่มีอะไรเปลี่ยน ข้าม commit" || git commit -m "chore: rule backtest results $(date -u +%Y-%m-%d)"
+          git push
