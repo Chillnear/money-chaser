@@ -1,12 +1,12 @@
 {
-  "start_date": "2026-07-13",
+  "start_date": "2026-01-29",
   "end_date": "2026-07-27",
-  "days_simulated": 15,
-  "trades": 1,
-  "win_rate_pct": 100.0,
+  "days_simulated": 180,
+  "trades": 12,
+  "win_rate_pct": 33.3,
   "starting_equity_usd": 28.0,
-  "final_equity_usd": 28.34,
-  "total_pnl_usd": 0.34,
+  "final_equity_usd": 26.23,
+  "total_pnl_usd": -1.77,
   "total_ai_cost_usd": 0.0,
   "stopped_early_reason": null
 }

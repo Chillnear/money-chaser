@@ -1,20 +1,12 @@
 {
-  "equity_usd": 28.34381441776993,
-  "peak_equity_usd": 28.34381441776993,
-  "open_position": {
-    "asset": "PAXG",
-    "side": "short",
-    "notional_usd": 21.92857966166128,
-    "entry_price": 4041.47825,
-    "stop_price": 4145.954610310493,
-    "take_profit_price": 3832.525529379014,
-    "opened_at_ts": 1784854800.0
-  },
+  "equity_usd": 26.229977357607563,
+  "peak_equity_usd": 28.09837768057633,
+  "open_position": null,
   "breaker": {
     "consecutive_losses": 0,
-    "halving_remaining": 0,
-    "paused_until_ts": null,
-    "pause_reason": null,
+    "halving_remaining": 3,
+    "paused_until_ts": 1784854800.0,
+    "pause_reason": "ขาดทุนติดกัน 3 ไม้ — หยุดเทรด 24 ชม. และลดขนาดไม้ครึ่งหนึ่งอีก 3 ไม้ถัดไป",
     "weekly_pause_needs_ack": false
   }
 }
