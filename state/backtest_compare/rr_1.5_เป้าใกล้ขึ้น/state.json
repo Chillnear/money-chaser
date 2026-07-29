@@ -1,0 +1,12 @@
+{
+  "equity_usd": 27.099887846529487,
+  "peak_equity_usd": 28.0,
+  "open_position": null,
+  "breaker": {
+    "consecutive_losses": 1,
+    "halving_remaining": 0,
+    "paused_until_ts": null,
+    "pause_reason": null,
+    "weekly_pause_needs_ack": false
+  }
+}
