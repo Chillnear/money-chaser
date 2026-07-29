@@ -1,0 +1,69 @@
+name: Backtest Compare (manual)
+
+# เทียบพารามิเตอร์ risk/exit หลายแบบ (reward:risk ratio, max_holding_days, atr_multiple/stop_cap) กับ
+# ช่วงเวลาย้อนอดีตเดียวกันเป๊ะๆ — ตอบคำถามจาก backtest 180 วันแรก (P5.7) ที่พบว่าไม่มีไม้ไหนโดน
+# take-profit เลย ดูรายละเอียด/เหตุผลที่ประหยัดเงินได้ (LLM response cache) ที่ scripts/backtest_compare.py
+#
+# variant แรกเสียเงิน AI จริงตามจำนวนวันที่จำลอง ส่วน variant ถัดไปแทบไม่เสียเพิ่มเลย (cache hit)
+# แต่ยังตั้งเพดาน max_ai_cost_usd ไว้กันเผลอเสียเกินตั้งใจ เหมือน backtest.yml
+
+on:
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "จำลองกี่วันย้อนหลังจากเมื่อวาน (ใช้ช่วงเดียวกันทุก variant)"
+        required: false
+        default: "60"
+      coins:
+        description: "เหรียญที่จะจำลอง (คั่นด้วย comma)"
+        required: false
+        default: "BTC,PAXG"
+      max_ai_cost_usd:
+        description: "เพดานค่าใช้จ่าย AI สูงสุดที่ยอมเสีย (USD) — เพดานนี้ใช้ตรวจแค่ variant แรกเป็นหลัก"
+        required: false
+        default: "5.0"
+      starting_equity_usd:
+        description: "ทุนตั้งต้นสมมติสำหรับทุก variant"
+        required: false
+        default: "28.0"
+
+permissions:
+  contents: write
+
+jobs:
+  backtest_compare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pytest (ต้องผ่านทั้งหมดก่อนเทียบ variant จริง — เหมือน safety gate ของ daily.yml/backtest.yml)
+        run: MODE=paper python -m pytest -q
+
+      - name: Run backtest compare
+        env:
+          MODE: paper
+          LITELLM_BASE_URL: ${{ secrets.LITELLM_BASE_URL }}
+          LITELLM_KEY_1: ${{ secrets.LITELLM_KEY_1 }}
+          LITELLM_KEY_2: ${{ secrets.LITELLM_KEY_2 }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          python scripts/backtest_compare.py \
+            --days "${{ inputs.days }}" \
+            --coins "${{ inputs.coins }}" \
+            --max-ai-cost-usd "${{ inputs.max_ai_cost_usd }}" \
+            --starting-equity-usd "${{ inputs.starting_equity_usd }}"
+
+      - name: Commit comparison results
+        run: |
+          git config user.name "money-chaser-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add state/backtest_compare/
+          git diff --cached --quiet && echo "ไม่มีอะไรเปลี่ยน ข้าม commit" || git commit -m "chore: backtest compare results $(date -u +%Y-%m-%d)"
+          git push
