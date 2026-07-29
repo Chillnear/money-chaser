@@ -1,0 +1,76 @@
+{
+  "baseline_ปกติ": {
+    "start_date": "2026-05-30",
+    "end_date": "2026-07-28",
+    "days_simulated": 60,
+    "trades": 3,
+    "win_rate_pct": 33.3,
+    "starting_equity_usd": 28.0,
+    "final_equity_usd": 27.1,
+    "total_pnl_usd": -0.9,
+    "total_ai_cost_usd": 0.0,
+    "stopped_early_reason": null,
+    "stops_override": {}
+  },
+  "rr_1.5_เป้าใกล้ขึ้น": {
+    "start_date": "2026-05-30",
+    "end_date": "2026-07-28",
+    "days_simulated": 60,
+    "trades": 3,
+    "win_rate_pct": 33.3,
+    "starting_equity_usd": 28.0,
+    "final_equity_usd": 27.1,
+    "total_pnl_usd": -0.9,
+    "total_ai_cost_usd": 0.0,
+    "stopped_early_reason": null,
+    "stops_override": {
+      "reward_risk_ratio": 1.5
+    }
+  },
+  "rr_1.0_เป้าเท่า_stop": {
+    "start_date": "2026-05-30",
+    "end_date": "2026-07-28",
+    "days_simulated": 60,
+    "trades": 3,
+    "win_rate_pct": 33.3,
+    "starting_equity_usd": 28.0,
+    "final_equity_usd": 27.1,
+    "total_pnl_usd": -0.9,
+    "total_ai_cost_usd": 0.0,
+    "stopped_early_reason": null,
+    "stops_override": {
+      "reward_risk_ratio": 1.0
+    }
+  },
+  "ถือยาวขึ้น_8วัน": {
+    "start_date": "2026-05-30",
+    "end_date": "2026-07-28",
+    "days_simulated": 60,
+    "trades": 2,
+    "win_rate_pct": 0.0,
+    "starting_equity_usd": 28.0,
+    "final_equity_usd": 27.42,
+    "total_pnl_usd": -0.58,
+    "total_ai_cost_usd": 0.0,
+    "stopped_early_reason": null,
+    "stops_override": {
+      "max_holding_days": 8
+    }
+  },
+  "stop_แน่นขึ้น_atr1.0_cap4pct": {
+    "start_date": "2026-05-30",
+    "end_date": "2026-07-28",
+    "days_simulated": 60,
+    "trades": 3,
+    "win_rate_pct": 0.0,
+    "starting_equity_usd": 28.0,
+    "final_equity_usd": 26.29,
+    "total_pnl_usd": -1.71,
+    "total_ai_cost_usd": 0.0,
+    "stopped_early_reason": null,
+    "stops_override": {
+      "atr_multiple": 1.0,
+      "stop_cap_pct": 4.0
+    }
+  }
+}

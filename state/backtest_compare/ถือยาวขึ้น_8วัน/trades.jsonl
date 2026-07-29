@@ -1,0 +1,2 @@
+{"asset": "BTC", "side": "short", "notional_usd": 10.0, "entry_price": 63589.1895, "exit_price": 63543.755999999994, "opened_at_ts": 1781226000.0, "closed_at_ts": 1781917200.0, "pnl_usd": -0.001851938288188677, "fee_usd": 0.008996784819061108, "exit_reason": "max_holding_days_exceeded"}
+{"asset": "BTC", "side": "short", "notional_usd": 10.0, "entry_price": 59519.2255, "exit_price": 62922.49764639561, "opened_at_ts": 1782694800.0, "closed_at_ts": 1783126800.0, "pnl_usd": -0.5810510625363379, "fee_usd": 0.009257307189905894, "exit_reason": "stop_loss_hit"}
