@@ -29,26 +29,37 @@
   
     <div class="card">
       <h2>Equity</h2>
-      <p><strong>ปัจจุบัน:</strong> 28.00 USD &nbsp; <strong>Peak:</strong> 28.00 USD
-         &nbsp; <strong>Drawdown:</strong> 0.00%</p>
-      <p><strong>ไม้เปิดอยู่:</strong> PAXG long notional=25.34 USD, entry=4090.44, SL=4000.05, TP=4271.24</p>
+      <p><strong>ปัจจุบัน:</strong> 27.76 USD &nbsp; <strong>Peak:</strong> 28.00 USD
+         &nbsp; <strong>Drawdown:</strong> 0.85%</p>
+      <p>ไม่มีไม้เปิดอยู่</p>
       
     </div>
     
   
     <div class="card">
-      <h2>กราฟ Equity (4 จุด)</h2>
+      <h2>กราฟ Equity (5 จุด)</h2>
       <svg viewBox="0 0 760 180" width="100%" height="180" role="img" aria-label="กราฟ equity">
-        <polyline points="20.0,160.0 260.0,160.0 500.0,160.0 740.0,160.0" fill="none" stroke="#15803d" stroke-width="2" />
-        <circle cx="740.0" cy="160.0" r="3.5" fill="#15803d" />
+        <polyline points="20.0,20.0 200.0,20.0 380.0,20.0 560.0,20.0 740.0,160.0" fill="none" stroke="#b91c1c" stroke-width="2" />
+        <circle cx="740.0" cy="160.0" r="3.5" fill="#b91c1c" />
         <text x="20" y="176" font-size="11" fill="#6b7280">2026-07-29</text>
-        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-08-01</text>
+        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-08-02</text>
         <text x="20" y="14" font-size="11" fill="#6b7280">28.00</text>
-        <text x="20" y="164" font-size="11" fill="#6b7280">28.00</text>
+        <text x="20" y="164" font-size="11" fill="#6b7280">27.76</text>
       </svg>
     </div>
     
-  <p>ยังไม่มีไม้ที่ปิดเลย พอคำนวณสถิติ</p>
+  
+    <div class="card">
+      <h2>สถิติผลงาน (1 ไม้ที่ปิดแล้ว)</h2>
+      <div class="stat-grid">
+        <div><span class="stat-label">Win rate</span><br>0.0%</div>
+        <div><span class="stat-label">PnL รวม</span><br>-0.24 USD</div>
+        <div><span class="stat-label">กำไรเฉลี่ย/ไม้ชนะ</span><br>0.00 USD</div>
+        <div><span class="stat-label">ขาดทุนเฉลี่ย/ไม้แพ้</span><br>-0.24 USD</div>
+        <div><span class="stat-label">Profit factor</span><br>0.00</div>
+      </div>
+    </div>
+    
   <p>ยังไม่มีข้อมูลต้นทุน LLM บันทึกไว้</p>
   
     <div class="card">
@@ -155,8 +166,16 @@ ImportError: Google Cloud SDK not found. Install it with: pip install &#x27;lite
             
     </div>
     
-  <p>ยังไม่มีไม้ที่ปิดเลย</p>
+  
+    <div class="card">
+      <h2>ไม้ที่ปิดล่าสุด (1 รายการทั้งหมด)</h2>
+      <table>
+        <thead><tr><th>Asset</th><th>Side</th><th>Notional (USD)</th><th>PnL (USD)</th><th>เหตุผลปิด</th></tr></thead>
+        <tbody><tr><td>PAXG</td><td>long</td><td>25.34</td><td style='color:#b91c1c'>-0.24</td><td>max_holding_days_exceeded</td></tr></tbody>
+      </table>
+    </div>
+    
   <p>ยังไม่มี lessons.md (reflector ยังไม่เคยรัน หรือยังไม่พบบทเรียนใหม่)</p>
-  <p class="footer">อัปเดตล่าสุด: 2026-08-01T03:52:51.986384+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
+  <p class="footer">อัปเดตล่าสุด: 2026-08-02T03:56:11.040049+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
 </body>
 </html>
