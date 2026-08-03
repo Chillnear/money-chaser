@@ -1,11 +1,12 @@
 name: Paper Trading Daily
 
 on:
-  schedule:
-    # รันทุกวันเวลา 15:00 UTC (22:00 ไทย)
-    - cron: '0 15 * * *'
-  # Allow manual trigger
-  workflow_dispatch:
+  # ปิด schedule ไว้ก่อน (2026-08-03) — พบว่า workflow นี้เรียก src/main.py ตัวเดียวกับ daily.yml ซึ่งเป็น
+  # ระบบเทรดจริง ถ้าปล่อยให้รันคู่กันวันละ 2 รอบ (07:20 + 22:00) จะเป็นการตัดสินใจเทรดจริงซ้อนกันโดยไม่ได้
+  # ตั้งใจ นอกจากนี้ path/import ในไฟล์นี้ยังผิดอยู่ (cd money-chaser ที่ไม่มีจริง, python src/main.py ควร
+  # เป็น python -m src.main) และทุก error ถูกซ่อนด้วย || true ทำให้ดูเหมือนผ่านตลอดถึงจะพังจริง — ต้องแก้
+  # ให้ตรงจุดประสงค์เดิม (เทส grid_trader/funding_farmer แยกจาก src/main.py) ก่อนเปิด schedule กลับมาใหม่
+  workflow_dispatch: {}  # กดรันมือได้เพื่อทดสอบ แต่ cron อัตโนมัติปิดไว้จนกว่าจะแก้ script ให้ถูกต้อง
 
 jobs:
   paper_trading:
