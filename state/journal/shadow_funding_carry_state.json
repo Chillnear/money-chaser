@@ -1,12 +1,4 @@
 {
-  "equity_usd": 28.0,
-  "open_position": {
-    "asset": "LIT",
-    "side": "short",
-    "notional_usd": 10.0,
-    "entry_price": 2.2360814,
-    "stop_price": 2.3702462840000003,
-    "take_profit_price": 1.9677516320000001,
-    "opened_at_ts": 1785382218.217383
-  }
+  "equity_usd": 29.18713802,
+  "open_position": null
 }

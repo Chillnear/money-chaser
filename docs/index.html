@@ -37,12 +37,12 @@
     
   
     <div class="card">
-      <h2>กราฟ Equity (5 จุด)</h2>
+      <h2>กราฟ Equity (6 จุด)</h2>
       <svg viewBox="0 0 760 180" width="100%" height="180" role="img" aria-label="กราฟ equity">
-        <polyline points="20.0,20.0 200.0,20.0 380.0,20.0 560.0,20.0 740.0,160.0" fill="none" stroke="#b91c1c" stroke-width="2" />
+        <polyline points="20.0,20.0 164.0,20.0 308.0,20.0 452.0,20.0 596.0,160.0 740.0,160.0" fill="none" stroke="#b91c1c" stroke-width="2" />
         <circle cx="740.0" cy="160.0" r="3.5" fill="#b91c1c" />
         <text x="20" y="176" font-size="11" fill="#6b7280">2026-07-29</text>
-        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-08-02</text>
+        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-08-03</text>
         <text x="20" y="14" font-size="11" fill="#6b7280">28.00</text>
         <text x="20" y="164" font-size="11" fill="#6b7280">27.76</text>
       </svg>
@@ -60,11 +60,27 @@
       </div>
     </div>
     
-  <p>ยังไม่มีข้อมูลต้นทุน LLM บันทึกไว้</p>
+  
+    <div class="card">
+      <h2>งบ LLM</h2>
+      
+        <p><strong>ใช้ไปวันนี้ / soft cap รายวัน:</strong> 0.0000 / 0.50 USD (0%)</p>
+        <div class="bar-track"><div class="bar-fill" style="width:0.0%;background:#15803d"></div></div>
+        
+      
+        <p><strong>ใช้ไปเดือนนี้ / hard stop รายเดือน:</strong> 0.0000 / 15.00 USD (0%)</p>
+        <div class="bar-track"><div class="bar-fill" style="width:0.0%;background:#15803d"></div></div>
+        
+      <table>
+        <thead><tr><th>Role</th><th>เรียกกี่ครั้ง</th><th>ต้นทุนรวม (USD)</th><th>latency เฉลี่ย (ms)</th><th>อัตรา abstain</th></tr></thead>
+        <tbody><tr><td>analyst_trend</td><td>1</td><td>0.0000</td><td>30753</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>1</td><td>0.0000</td><td>12565</td><td>0%</td></tr><tr><td>analyst_macro</td><td>1</td><td>0.0000</td><td>0</td><td>100%</td></tr><tr><td>redteam</td><td>1</td><td>0.0000</td><td>14301</td><td>0%</td></tr><tr><td>judge</td><td>1</td><td>0.0000</td><td>14240</td><td>0%</td></tr></tbody>
+      </table>
+    </div>
+    
   
     <div class="card">
       <h2>ภาพรวม Analyst (เห็นตรงกับ judge บ่อยแค่ไหน)</h2>
-      <p class="hint">* วัดจาก 1 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
+      <p class="hint">* วัดจาก 2 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
       <table>
         <thead><tr><th>Role</th><th>จำนวนที่เทียบได้</th><th>% เห็นตรงกับ judge</th></tr></thead>
         <tbody><tr><td>analyst_trend</td><td>1</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>1</td><td>100%</td></tr><tr><td>analyst_macro</td><td>1</td><td>100%</td></tr><tr><td>redteam</td><td>0</td><td>0%</td></tr></tbody>
@@ -73,8 +89,43 @@
     
   
     <div class="card">
-      <h2>Log การตัดสินใจแบบเต็ม (ล่าสุด 2 วัน — คลิกเพื่อกาง)</h2>
+      <h2>Log การตัดสินใจแบบเต็ม (ล่าสุด 3 วัน — คลิกเพื่อกาง)</h2>
       
+            <details class="decision-entry">
+              <summary>2026-08-03 — llm — flat N/A
+                 (degrade level 0)</summary>
+              <div class="decision-body">
+            <p><strong>Shortlist วันนั้น:</strong></p>
+            <ul><li>KAITO — composite 0.80</li><li>HYPE — composite 0.65</li><li>PAXG — composite 0.53</li></ul>
+            <p class='hint'>ตัวอื่นในพูล: BTC (0.47), ETH (0.47), ZEC (0.28), SOL (0.27)</p>
+            <hr>
+            
+    <p><strong>analyst_trend (dashscope/qwen3.7-max):</strong>
+       cost=0.0000 USD, latency=30753ms</p>
+    <ul class='candidate-list'><li><strong>KAITO long</strong> (confidence 68.0) — ADX 54.51 บ่งชี้เทรนด์ขาขึ้นยังแข็งแรงมาก แม้ pullback -21% ใน 7 วัน แต่ราคายังอยู่ขอบบน Donchian (1.00) และห่าง EMA50/200 สูง เป็น buy-the-dip ใน uptrend <em>[invalidation: ราคาหลุด EMA50 หรือ ADX ลดต่ำกว่า 40 พร้อม breakdown จาก range ปัจจุบัน]</em></li><li><strong>HYPE flat</strong> (confidence 55.0) — ADX 22.87 ต่ำ บวก regime chop_vol_low ไม่มีเทรนด์ชัดเจน ราคาอยู่ใต้ EMA สั้นทุกเส้นแต่ Donchian ยัง 0.86 สัญญาณขัดแย้งกัน เทรนด์ไม่แข็งแรงพอเข้าเทรด <em>[invalidation: ADX ขึ้นเหนือ 30 พร้อม breakout เหนือ EMA21 หรือ breakdown ต่ำกว่า Donchian low]</em></li><li><strong>PAXG flat</strong> (confidence 52.0) — ADX 20.81 ต่ำมาก ATR% 1.46 บ่งชี้การเคลื่อนไหวน้อย ไม่มี breakout จาก range EMA ทุกเส้นเกาะกลุ่มใกล้ราคา regime chop_vol_low ไม่มี momentum เทรนด์ <em>[invalidation: breakout เหนือ/ใต้ range 3% พร้อม ADX ขึ้นเหนือ 25 และ volume spike]</em></li></ul>
+    
+    <p><strong>analyst_positioning (claude-sonnet-5):</strong>
+       cost=0.0000 USD, latency=12565ms</p>
+    <ul class='candidate-list'><li><strong>KAITO short</strong> (confidence 68.0) — Donchian=1.0, vol percentile 0.997, funding sub-score maxed ที่ 1.0 บ่งชี้ positioning ฝั่ง long แน่นมาก ราคาห่างจากจุดต่ำสุด 30วัน +73% และร่วง -20.9% ใน 7วัน สะท้อน squeeze ฝั่ง long เริ่มเกิด mean-revert หลังพุ่งสุดโต่ง <em>[invalidation: หาก reclaim EMA9 พร้อม RSI&gt;65 และ funding เริ่มปรับสมดุล แสดงว่า trend ยังไปต่อไม่ mean-revert]</em></li><li><strong>HYPE long</strong> (confidence 40.0) — ราคาใกล้จุดต่ำสุด 30วัน (+2.38%) RSI=34.5 โซน oversold ADX อ่อน(22.9)ไม่ใช่ trend แรง volume spike ต่ำมาก(0.08) แรงขายเริ่มหมด แต่ funding ไม่สุดโต่ง(0.643) จึงเป็นเพียง mean-revert เบาๆ ไม่ใช่ squeeze ชัดเจน <em>[invalidation: หากราคาหลุด low 30 วันใหม่พร้อม volume spike เพิ่ม แสดงว่าแรงขายยังไม่หมดและ mean-revert ผิด]</em></li><li><strong>PAXG flat</strong> (confidence 25.0) — Positioning ไม่สุดโต่ง ADX อ่อน(20.8) RSI กลาง(48.8) vol percentile ต่ำ(0.286) funding ปานกลาง(0.643) ไม่มี OI ยืนยัน squeeze risk ราคาอยู่กลาง range ไม่มี edge ชัดเจนให้เทรด positioning-based <em>[invalidation: หาก funding หรือ OI เปลี่ยนแปลงสุดโต่งไปทางใดทางหนึ่งพร้อม vol percentile พุ่งขึ้น จะเปิดโอกาส positioning trade ชัดเจนขึ้น]</em></li></ul>
+    <p><strong>analyst_macro (dashscope/deepseek-v4-pro):</strong> abstain — parse/validate ไม่ผ่านหลัง retry 2 ครั้ง: Expecting value: line 1 column 1 (char 0)</p>
+            <hr>
+            
+    <p><strong>redteam (GPT 5.2):</strong>
+       cost=0.0000 USD, latency=14301ms</p>
+    <ul class='candidate-list'><li><strong>KAITO flat</strong> (confidence 61.0) — ค้านทั้ง trend(long) และ positioning(short): สัญญาณ trend แข็ง (ADX 54.51, Donchian 1.00) แต่ vol_fit แทบศูนย์ (0.005) + vol percentile 0.997 บอกสภาวะพุ่งผิดปกติ เสี่ยง whipsaw/false breakout หลัง -20.89%/7d และยังอยู่ใต้ EMA9 (-5.98). Edge ไม่ชัดพอเลือกข้าง <em>[invalidation: หากราคายืนเหนือ EMA9/EMA21 ต่อเนื่องพร้อม RSI&gt;65 และความผันผวนคลาย (vol percentile ลดลง) จะกลับมาเอนเอียง long; หรือหากหลุด EMA50/Donchian mid พร้อมโมเมนตัมลงชัด จะเอนเอียง short]</em></li><li><strong>HYPE flat</strong> (confidence 58.0) — ค้าน positioning(long): RSI 34.54 ใกล้ oversold แต่ไม่มีสัญญาณ capitulation/จบขาย เพราะ volume spike ratio ต่ำมาก (0.08) และ regime chop_vol_low + ADX 22.87 ทำให้ mean-revert มักเด้งสั้น/หลอกได้ แถมอยู่ใต้ EMA9/21/50 มาก (-3.67/-8.94/-12.44) ยังเป็น down-bias <em>[invalidation: หากเกิด breakout ยืนเหนือ EMA21 พร้อม ADX &gt;30 และ volume spike เพิ่มขึ้นชัด จะทำให้มุมมอง flat ผิดและเอนเอียง long]</em></li><li><strong>PAXG flat</strong> (confidence 67.0) — หาเหตุผลค้านแรงๆต่อ consensus(flat) แทบไม่ได้: ADX 20.81 + ATR% 1.46 + EMA gap ใกล้ศูนย์บ่งชี้ไร้โมเมนตัมจริง และ positioning ไม่สุดโต่ง (funding 0.643, vol percentile 0.286, volume spike 0.10) จึงไม่มี edge ชัดเจน <em>[invalidation: หากหลุด/ทะลุกรอบ 30D (ห่าง high/low เพียง ~3%) พร้อม ADX &gt;25 และ volume spike เพิ่ม จะทำให้ flat ผิดและมีทิศทางตาม breakout]</em></li></ul>
+    
+            <hr>
+            
+                <p><strong>Judge:</strong> flat N/A
+                   confidence=60.0
+                   stop=0.00% tp=0.00%</p>
+                <p class="hint">เหตุผล: ผู้เข้าชิงทั้ง 3 ตัวไม่มี edge ชัดเจนพอ: KAITO มีเทรนด์แรง (ADX 54.5) แต่ vol percentile 0.997 + vol_fit 0.005 + ร่วง -20.89%/7d บ่งชี้สภาวะพุ่งผิดปกติ เสี่ยง whipsaw ทั้งสองทาง — trend เชียร์ long, positioning เชียร์ short สวนกัน; HYPE regime chop_vol_low, ADX 22.87 ต่ำ, volume spike 0.08 ไม่มี capitulation ชัด mean-revert หลอกได้ง่าย; PAXG ไร้โมเมนตัม (ATR% 1.46, EMA เกาะกลุ่ม) ไม่มี edge. Macro analyst abstain ทำให้ข้อมูลไม่ครบ. Red team ให้ flat ทั้ง 3 ตัวด้วย confidence สูง. FLAT ปลอดภัยกว่าฝืนเทรด.</p>
+                <p class="hint">ทำไมเลือกตัวนี้แทนตัวอื่น: ไม่เลือกตัวใดเพราะ KAITO มีสัญญาณขัดแย้งระหว่าง trend/positioning และอยู่ในสภาวะ vol สุดโต่ง; HYPE/PAXG อยู่ใน chop regime ไร้ momentum</p>
+                <p class="hint">ตอบข้อค้านของ redteam: เห็นด้วยกับ redteam ทั้งหมด — KAITO vol สุดโต่ง+สัญญาณสวน, HYPE ไม่มี capitulation, PAXG ไร้ edge</p>
+                
+            </div>
+            </details>
+            
             <details class="decision-entry">
               <summary>2026-07-27 — llm — long PAXG
                  (degrade level 0)</summary>
@@ -176,6 +227,6 @@ ImportError: Google Cloud SDK not found. Install it with: pip install &#x27;lite
     </div>
     
   <p>ยังไม่มี lessons.md (reflector ยังไม่เคยรัน หรือยังไม่พบบทเรียนใหม่)</p>
-  <p class="footer">อัปเดตล่าสุด: 2026-08-02T03:56:11.040049+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
+  <p class="footer">อัปเดตล่าสุด: 2026-08-03T04:02:33.143158+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
 </body>
 </html>
