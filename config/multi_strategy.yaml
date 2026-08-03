@@ -1,0 +1,47 @@
+# Multi-Strategy Configuration for $100 Portfolio
+# Directional AI + Funding Farming + Grid Trading
+
+strategies:
+  directional:
+    enabled: true
+    allocation_pct: 40  # $40 of $100
+    max_leverage: 1.0
+    daily_loss_limit_pct: 1.0  # If lose 1%, pause
+    description: "AI-based directional trading"
+
+  farming:
+    enabled: true
+    allocation_pct: 30  # $30 of $100
+    min_funding_annual_pct: 10.0  # At least 10% annual funding rate
+    max_basis_spread_pct: 1.0  # Max 1% divergence perp vs spot
+    harvest_target_profit_pct: 30.0  # Close if made 30% profit
+    low_funding_threshold_pct: 0.005  # Close if funding < 0.005% per 8h
+    description: "Delta-neutral farming (long spot + short perp)"
+
+  grid:
+    enabled: true
+    allocation_pct: 30  # $30 of $100
+    min_volatility_open_pct: 1.5  # Open if 24h vol > 1.5%
+    max_volatility_close_pct: 0.5  # Close if vol < 0.5% for 2+ days
+    grid_width_pct: 5.0  # Grid spans ±5% from center price
+    num_levels: 5  # 5 buy levels + 5 sell levels
+    harvest_target_profit_pct: 30.0  # Close if made 30% profit
+    description: "Grid trading to capture volatility"
+
+portfolio:
+  total_capital_usd: 100.0
+  min_cash_buffer_usd: 5.0  # Keep $5 for gas/rebalance
+  max_daily_loss_pct: 2.0  # Kill all strategies if lose 2% in 1 day
+  max_monthly_loss_pct: 10.0  # Pause all if lose 10% in a month
+  rebalance_frequency: "daily"  # Check allocation every day
+
+reporting:
+  journal_dir: "state/journal"
+  enabled: true
+  log_every_decision: true
+  summary_format: "json"  # state/daily_summary.json
+
+risk:
+  allow_concurrent_positions: true  # All 3 strategies can trade simultaneously
+  max_correlation_check: true  # Don't open directional + grid same day if both in same asset
+  cross_strategy_margin: false  # Each strategy uses its own capital, not margin

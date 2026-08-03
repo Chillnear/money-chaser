@@ -79,10 +79,32 @@ def decide_trend_following(shortlist, regime_by_coin, price_features_by_coin, un
     return Decision(action=bd.action, asset=bd.asset, reasoning=bd.reasoning)
 
 
+def decide_regime_switch(shortlist, regime_by_coin, price_features_by_coin, universe_snapshot) -> Decision:
+    """ผู้ใช้ถามว่า "ถ้ากลยุทธ์นึงดีกับตลาดแบบนึง อีกอันดีกับอีกแบบ จะสลับใช้ตามสถานการณ์ได้ไหม" — นี่คือ
+    ไอเดียนั้น (regime switching): ถ้ามีเหรียญใน shortlist ที่ trend ชัด (trend_up/trend_down ตาม
+    src.data.regime — decide_trend_following จะไม่ flat) ให้ตามเทรนด์ไปเลย; ถ้าไม่มีเทรนด์ชัดสักตัว (ตลาด
+    เป็น chop ทั้งพูล) ค่อยลอง funding_carry แทน (เก็บ funding ระหว่างรอเทรนด์ชัดกลับมา)
+
+    หลักการนี้มีเหตุผลรองรับ (ต่างจาก override ที่เคยลองแล้วถอดออก P5.9b เพราะ percentile หลอกตาในพูลเล็ก)
+    แต่ก็ยังต้องพิสูจน์กับ backtest พูลเหรียญจริงก่อนเชื่อ — เทสต์นี้ยังเป็นแค่ rule_backtest ไม่ใช่การ
+    ตัดสินใจจริงใน src/main.py
+    """
+    trend_decision = decide_trend_following(shortlist, regime_by_coin, price_features_by_coin, universe_snapshot)
+    if trend_decision.action != "flat":
+        return Decision(trend_decision.action, trend_decision.asset, f"[regime=trend] {trend_decision.reasoning}")
+
+    funding_decision = decide_funding_carry(shortlist, regime_by_coin, price_features_by_coin, universe_snapshot)
+    if funding_decision.action != "flat":
+        return Decision(funding_decision.action, funding_decision.asset, f"[regime=chop->funding] {funding_decision.reasoning}")
+
+    return Decision("flat", None, "ไม่มีเทรนด์ชัดและ funding ก็ไม่สุดขั้ว — ไม่มีกลยุทธ์ไหนอยากเข้า")
+
+
 STRATEGIES = {
     "trend_following": decide_trend_following,
     "mean_reversion": decide_mean_reversion,
     "funding_carry": decide_funding_carry,
+    "regime_switch": decide_regime_switch,
 }
 
 

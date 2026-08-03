@@ -1,0 +1,65 @@
+name: Paper Trading Daily
+
+on:
+  schedule:
+    # รันทุกวันเวลา 15:00 UTC (22:00 ไทย)
+    - cron: '0 15 * * *'
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  paper_trading:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pydantic numpy pandas PyYAML requests -q
+
+      - name: Create state directory
+        run: |
+          mkdir -p state/journal
+
+      - name: Run paper trading
+        env:
+          MODE: paper
+        run: |
+          cd money-chaser
+          python src/main.py || true
+
+      - name: Monitor results
+        run: |
+          cd money-chaser
+          python scripts/monitor_paper_trading.py || true
+
+      - name: Save results
+        if: always()
+        run: |
+          cd money-chaser
+          # Save daily results to git
+          if [ -f state/daily_summary.json ]; then
+            git config --local user.email "action@github.com"
+            git config --local user.name "GitHub Action"
+            git add state/journal/ state/daily_summary.json || true
+            git commit -m "Paper trading: $(date +%Y-%m-%d)" || true
+            git push || true
+          fi
+
+      - name: Create summary
+        if: always()
+        run: |
+          cd money-chaser
+          echo "✅ Paper Trading Run Complete" > /tmp/summary.txt
+          if [ -f state/daily_summary.json ]; then
+            cat state/daily_summary.json >> /tmp/summary.txt
+          fi
+          cat /tmp/summary.txt
