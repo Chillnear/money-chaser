@@ -37,12 +37,12 @@
     
   
     <div class="card">
-      <h2>กราฟ Equity (7 จุด)</h2>
+      <h2>กราฟ Equity (8 จุด)</h2>
       <svg viewBox="0 0 760 180" width="100%" height="180" role="img" aria-label="กราฟ equity">
-        <polyline points="20.0,20.0 140.0,20.0 260.0,20.0 380.0,20.0 500.0,160.0 620.0,160.0 740.0,160.0" fill="none" stroke="#b91c1c" stroke-width="2" />
+        <polyline points="20.0,20.0 122.9,20.0 225.7,20.0 328.6,20.0 431.4,160.0 534.3,160.0 637.1,160.0 740.0,160.0" fill="none" stroke="#b91c1c" stroke-width="2" />
         <circle cx="740.0" cy="160.0" r="3.5" fill="#b91c1c" />
         <text x="20" y="176" font-size="11" fill="#6b7280">2026-07-29</text>
-        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-08-04</text>
+        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-08-05</text>
         <text x="20" y="14" font-size="11" fill="#6b7280">28.00</text>
         <text x="20" y="164" font-size="11" fill="#6b7280">27.76</text>
       </svg>
@@ -73,14 +73,14 @@
         
       <table>
         <thead><tr><th>Role</th><th>เรียกกี่ครั้ง</th><th>ต้นทุนรวม (USD)</th><th>latency เฉลี่ย (ms)</th><th>อัตรา abstain</th></tr></thead>
-        <tbody><tr><td>analyst_trend</td><td>2</td><td>0.0000</td><td>31044</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>2</td><td>0.0000</td><td>11836</td><td>0%</td></tr><tr><td>analyst_macro</td><td>2</td><td>0.0000</td><td>0</td><td>100%</td></tr><tr><td>redteam</td><td>2</td><td>0.0000</td><td>15331</td><td>0%</td></tr><tr><td>judge</td><td>2</td><td>0.0000</td><td>15594</td><td>0%</td></tr></tbody>
+        <tbody><tr><td>analyst_trend</td><td>3</td><td>0.0000</td><td>34163</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>3</td><td>0.0000</td><td>12919</td><td>0%</td></tr><tr><td>analyst_macro</td><td>3</td><td>0.0000</td><td>0</td><td>100%</td></tr><tr><td>redteam</td><td>3</td><td>0.0000</td><td>14401</td><td>0%</td></tr><tr><td>judge</td><td>3</td><td>0.0000</td><td>15301</td><td>0%</td></tr></tbody>
       </table>
     </div>
     
   
     <div class="card">
       <h2>ภาพรวม Analyst (เห็นตรงกับ judge บ่อยแค่ไหน)</h2>
-      <p class="hint">* วัดจาก 3 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
+      <p class="hint">* วัดจาก 4 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
       <table>
         <thead><tr><th>Role</th><th>จำนวนที่เทียบได้</th><th>% เห็นตรงกับ judge</th></tr></thead>
         <tbody><tr><td>analyst_trend</td><td>1</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>1</td><td>100%</td></tr><tr><td>analyst_macro</td><td>1</td><td>100%</td></tr><tr><td>redteam</td><td>0</td><td>0%</td></tr></tbody>
@@ -89,8 +89,43 @@
     
   
     <div class="card">
-      <h2>Log การตัดสินใจแบบเต็ม (ล่าสุด 4 วัน — คลิกเพื่อกาง)</h2>
+      <h2>Log การตัดสินใจแบบเต็ม (ล่าสุด 5 วัน — คลิกเพื่อกาง)</h2>
       
+            <details class="decision-entry">
+              <summary>2026-08-05 — llm — flat N/A
+                 (degrade level 0)</summary>
+              <div class="decision-body">
+            <p><strong>Shortlist วันนั้น:</strong></p>
+            <ul><li>PUMP — composite 0.97</li><li>HYPE — composite 0.64</li><li>PAXG — composite 0.62</li></ul>
+            <p class='hint'>ตัวอื่นในพูล: ZEC (0.49), ETH (0.41), SOL (0.30), BTC (0.23)</p>
+            <hr>
+            
+    <p><strong>analyst_trend (dashscope/qwen3.7-max):</strong>
+       cost=0.0000 USD, latency=40401ms</p>
+    <ul class='candidate-list'><li><strong>PUMP long</strong> (confidence 78.0) — ADX 34.13 ยืนยันเทรนด์แข็งแรง Donchian=1.000 breakout จุดสูงสุด 30 วัน EMA gap บวกทุกระยะ OI เพิ่ม 23.6% เงินใหม่ไหลเข้าต่อเนื่อง โมเมนตัม 7d/30d สูงมาก <em>[invalidation: RSI หักลงต่ำกว่า 60 หรือราคาหลุด EMA9 (gap 12%) หรือ ADX ลดต่ำกว่า 25 แสดงว่าเทรนด์หมดแรง]</em></li><li><strong>HYPE flat</strong> (confidence 35.0) — ADX 20.51 ต่ำกว่า 25 ไม่มีเทรนด์ชัดเจน regime chop_vol_low EMA ขัดกันเอง (9 บวก แต่ 21/50 ลบ) volume percentile 0.046 ต่ำมาก ไม่มีแรงส่งพอเทรดตามเทรนด์ <em>[invalidation: ADX เพิ่มขึ้นเหนือ 25 พร้อมราคา breakout Donchian high (0.857→1.0) ด้วย volume spike จะเปลี่ยนเป็น long thesis]</em></li><li><strong>PAXG flat</strong> (confidence 30.0) — ADX 18.88 ต่ำมาก ไม่มีเทรนด์ ATR% 1.47 ผันผวนน้อย regime chop_vol_low EMA gap ทุกเส้นแคบมาก (&lt;1.3%) ราคาเคลื่อนที่ sideway ใน range แคบ ไม่สามารถเทรดเทรนด์ได้ <em>[invalidation: ราคา breakout จาก range 4% พร้อม ADX เพิ่มเหนือ 25 และ ATR% ขยายตัว จะพิจารณา long/short ใหม่]</em></li></ul>
+    
+    <p><strong>analyst_positioning (claude-sonnet-5):</strong>
+       cost=0.0000 USD, latency=15086ms</p>
+    <ul class='candidate-list'><li><strong>PUMP short</strong> (confidence 62.0) — RSI 71.5, Donchian=1.0 ที่ high 30d, funding sub-score เต็ม 1.0 และ OI พุ่ง +23.6% ใน 24ชม. บ่งชี้ leverage build-up เร็วเกินไปบน trend ที่ยืดมาก (EMA50 gap 34%) เสี่ยง mean-revert/squeeze แม้ trend ยังแรง <em>[invalidation: ราคาทำ ATH ใหม่ต่อเนื่องพร้อม OI/funding เย็นลง หรือ ADX ยังไต่ขึ้นโดยไม่มี pullback ใน 2-3 วัน]</em></li><li><strong>HYPE flat</strong> (confidence 30.0) — Positioning ไม่สุดขั้ว funding sub-score 0.714 กลางๆ, vol percentile ต่ำ 0.046, chop regime, ราคาอยู่กลางเรนจ์ (Donchian 0.857) ไม่มี combination signal ที่ชัดเจนพอจะเข้าฝั่งใดฝั่งหนึ่ง <em>[invalidation: หาก OI/funding เปลี่ยนสุดขั้วชัดเจนพร้อม breakout ทิศทางใดทิศทางหนึ่ง]</em></li><li><strong>PAXG flat</strong> (confidence 25.0) — PAXG อยู่ใน chop_vol_low, ATR% ต่ำมาก 1.47, ไม่มีสัญญาณ funding/OI สุดขั้ว (OI 24h +2.62% เท่านั้น) ราคาใกล้กลางเรนจ์ ไม่มี positioning extreme ให้เล่น mean-reversion <em>[invalidation: หาก funding หรือ OI เปลี่ยนแปลงสุดขั้วอย่างรวดเร็ว หรือราคาทะลุ 30d high/low]</em></li></ul>
+    <p><strong>analyst_macro (dashscope/deepseek-v4-pro):</strong> abstain — parse/validate ไม่ผ่านหลัง retry 2 ครั้ง: Expecting value: line 1 column 1 (char 0)</p>
+            <hr>
+            
+    <p><strong>redteam (GPT 5.2):</strong>
+       cost=0.0000 USD, latency=12541ms</p>
+    <ul class='candidate-list'><li><strong>PUMP flat</strong> (confidence 58.0) — ค้านทั้ง trend ที่รีบไล่ long และ positioning ที่รีบ short: ข้อมูลชี้ “ทิศทาง” แต่คุณภาพสัญญาณแย่—Volume spike ratio แค่ 0.16 ทั้งที่ Donchian=1.0 และ OI +23.6% อาจเป็น thin-liquidity push/late breakout ทำให้เสี่ยง whipsaw มากกว่าขาขึ้น/mean-revert ที่คาด. <em>[invalidation: ถ้าเกิด breakout ต่อเนื่องพร้อม Volume spike ratio เพิ่มชัดเจนและ OI ไม่เร่งต่อ (หรือเริ่มทรง/ลด) ขณะราคายืนเหนือ EMA9 ได้หลายวัน]</em></li><li><strong>HYPE flat</strong> (confidence 70.0) — ไม่เห็นเหตุผลค้านที่หนักแน่นต่อมุมมอง flat ของ trend/positioning: regime chop_vol_low + ADX 20.51 และ vol percentile 0.046 ทำให้สัญญาณใดๆ เสี่ยงเป็น noise มากกว่าทิศทางจริง การพยายามเดาทางก่อน breakout คือกับดักหลัก. <em>[invalidation: ถ้า ADX ขึ้นเหนือ 25 พร้อม Donchian=1.0 และเกิด volume spike ชัดเจน (มากกว่าปัจจุบันอย่างมีนัย)]</em></li><li><strong>PAXG flat</strong> (confidence 66.0) — ไม่พบข้อค้านแรงต่อ consensus flat: ADX 18.88 + ATR% 1.47 และ EMA gap แคบมากทำให้เทรนด์ไม่มี edge; การคาดหวัง breakout/mean-revert ตอนนี้มักเจอ false move ในกรอบแคบ โดยเฉพาะเมื่อ volume spike ratio ยัง 0.16. <em>[invalidation: ถ้าราคาหลุดกรอบ 30d (high/low) พร้อม ADX &gt;25 และ ATR% ขยายตัวชัดเจน]</em></li></ul>
+    
+            <hr>
+            
+                <p><strong>Judge:</strong> flat N/A
+                   confidence=65.0
+                   stop=0.00% tp=0.00%</p>
+                <p class="hint">เหตุผล: PUMP มีสัญญาณขัดแย้งชัดเจน: trend เชียร์ long แต่ positioning เตือน squeeze risk (RSI 71.5, EMA50 gap 34%, OI +23.6%) และ red team ชี้ว่า volume spike ratio แค่ 0.16 ทำให้ breakout น่าสงสัย—thin liquidity เสี่ยง whipsaw ทั้งสองทาง. HYPE และ PAXG อยู่ใน chop_vol_low, ADX ต่ำกว่า 25, vol percentile ต่ำมาก ไม่มี edge. Macro analyst abstain ทำให้ conviction ลดลงอีก. FLAT เป็นคำตอบที่ถูกต้องเมื่อสัญญาณคุณภาพต่ำ—ไม่ควรบังคับเทรดเพียงเพราะ PUMP มี composite score สูง.</p>
+                <p class="hint">ทำไมเลือกตัวนี้แทนตัวอื่น: ไม่เลือก PUMP long เพราะ leverage build-up สุดขั้ว + volume ไม่ยืนยัน breakout; ไม่เลือก PUMP short เพราะ trend ยังแรงและ ADX 34; ไม่เลือก HYPE/PAXG เพราะ chop regime ไม่มี edge</p>
+                <p class="hint">ตอบข้อค้านของ redteam: เห็นด้วยกับ red team ว่า volume spike ratio 0.16 คือ red flag สำคัญที่หักล้าง breakout thesis ของ trend analyst</p>
+                
+            </div>
+            </details>
+            
             <details class="decision-entry">
               <summary>2026-08-04 — llm — flat N/A
                  (degrade level 0)</summary>
@@ -262,6 +297,6 @@ ImportError: Google Cloud SDK not found. Install it with: pip install &#x27;lite
     </div>
     
   <p>ยังไม่มี lessons.md (reflector ยังไม่เคยรัน หรือยังไม่พบบทเรียนใหม่)</p>
-  <p class="footer">อัปเดตล่าสุด: 2026-08-04T03:44:51.380923+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
+  <p class="footer">อัปเดตล่าสุด: 2026-08-05T03:40:20.646831+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
 </body>
 </html>

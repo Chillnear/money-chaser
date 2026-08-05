@@ -1,4 +1,12 @@
 {
   "equity_usd": 29.18713802,
-  "open_position": null
+  "open_position": {
+    "asset": "PUMP",
+    "side": "short",
+    "notional_usd": 10.0,
+    "entry_price": 0.002428785,
+    "stop_price": 0.0025745121,
+    "take_profit_price": 0.0021373308,
+    "opened_at_ts": 1785901123.1160507
+  }
 }
