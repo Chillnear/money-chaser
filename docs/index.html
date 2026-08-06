@@ -37,12 +37,12 @@
     
   
     <div class="card">
-      <h2>กราฟ Equity (8 จุด)</h2>
+      <h2>กราฟ Equity (9 จุด)</h2>
       <svg viewBox="0 0 760 180" width="100%" height="180" role="img" aria-label="กราฟ equity">
-        <polyline points="20.0,20.0 122.9,20.0 225.7,20.0 328.6,20.0 431.4,160.0 534.3,160.0 637.1,160.0 740.0,160.0" fill="none" stroke="#b91c1c" stroke-width="2" />
+        <polyline points="20.0,20.0 110.0,20.0 200.0,20.0 290.0,20.0 380.0,160.0 470.0,160.0 560.0,160.0 650.0,160.0 740.0,160.0" fill="none" stroke="#b91c1c" stroke-width="2" />
         <circle cx="740.0" cy="160.0" r="3.5" fill="#b91c1c" />
         <text x="20" y="176" font-size="11" fill="#6b7280">2026-07-29</text>
-        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-08-05</text>
+        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-08-06</text>
         <text x="20" y="14" font-size="11" fill="#6b7280">28.00</text>
         <text x="20" y="164" font-size="11" fill="#6b7280">27.76</text>
       </svg>
@@ -73,14 +73,14 @@
         
       <table>
         <thead><tr><th>Role</th><th>เรียกกี่ครั้ง</th><th>ต้นทุนรวม (USD)</th><th>latency เฉลี่ย (ms)</th><th>อัตรา abstain</th></tr></thead>
-        <tbody><tr><td>analyst_trend</td><td>3</td><td>0.0000</td><td>34163</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>3</td><td>0.0000</td><td>12919</td><td>0%</td></tr><tr><td>analyst_macro</td><td>3</td><td>0.0000</td><td>0</td><td>100%</td></tr><tr><td>redteam</td><td>3</td><td>0.0000</td><td>14401</td><td>0%</td></tr><tr><td>judge</td><td>3</td><td>0.0000</td><td>15301</td><td>0%</td></tr></tbody>
+        <tbody><tr><td>analyst_trend</td><td>4</td><td>0.0000</td><td>33799</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>4</td><td>0.0000</td><td>14040</td><td>0%</td></tr><tr><td>analyst_macro</td><td>4</td><td>0.0000</td><td>6171</td><td>75%</td></tr><tr><td>redteam</td><td>4</td><td>0.0000</td><td>14340</td><td>0%</td></tr><tr><td>judge</td><td>4</td><td>0.0000</td><td>16986</td><td>0%</td></tr></tbody>
       </table>
     </div>
     
   
     <div class="card">
       <h2>ภาพรวม Analyst (เห็นตรงกับ judge บ่อยแค่ไหน)</h2>
-      <p class="hint">* วัดจาก 4 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
+      <p class="hint">* วัดจาก 5 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
       <table>
         <thead><tr><th>Role</th><th>จำนวนที่เทียบได้</th><th>% เห็นตรงกับ judge</th></tr></thead>
         <tbody><tr><td>analyst_trend</td><td>1</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>1</td><td>100%</td></tr><tr><td>analyst_macro</td><td>1</td><td>100%</td></tr><tr><td>redteam</td><td>0</td><td>0%</td></tr></tbody>
@@ -89,8 +89,47 @@
     
   
     <div class="card">
-      <h2>Log การตัดสินใจแบบเต็ม (ล่าสุด 5 วัน — คลิกเพื่อกาง)</h2>
+      <h2>Log การตัดสินใจแบบเต็ม (ล่าสุด 6 วัน — คลิกเพื่อกาง)</h2>
       
+            <details class="decision-entry">
+              <summary>2026-08-06 — llm — flat N/A
+                 (degrade level 0)</summary>
+              <div class="decision-body">
+            <p><strong>Shortlist วันนั้น:</strong></p>
+            <ul><li>PUMP — composite 0.88</li><li>PAXG — composite 0.75</li><li>ZEC — composite 0.55</li></ul>
+            <p class='hint'>ตัวอื่นในพูล: HYPE (0.49), WLD (0.48), XRP (0.45), ETH (0.36), BTC (0.30), SOL (0.26)</p>
+            <hr>
+            
+    <p><strong>analyst_trend (dashscope/qwen3.7-max):</strong>
+       cost=0.0000 USD, latency=32709ms</p>
+    <ul class='candidate-list'><li><strong>PUMP long</strong> (confidence 65.0) — เทรนด์ขาขึ้นแข็งแรง ADX 34.98 ยืนยัน, EMA เรียง bullish ทุกเส้น, Donchian=1 ที่จุดสูงสุด, โมเมนตัม 30d +48% ยังแรง แต่ OI ลด 8.6% และ volume spike ต่ำทำให้ต้องลด confidence <em>[invalidation: ราคาปิดต่ำกว่า EMA21 (gap 14.59%) หรือ ADX หล่นใต้ 25 หรือ OI ลดต่อเนื่องเกิน 3 วันพร้อมราคาลง]</em></li><li><strong>PAXG flat</strong> (confidence 40.0) — ADX 22.02 ต่ำกว่า 25 regime chop_vol_mid ไม่มีเทรนด์ชัดเจน Donchian 0.556 อยู่กลาง range EMA gap แคบและ 200 ติดลบเล็กน้อย สัญญาณ trend sub-score เพียง 0.556 ไม่พอเข้าเทรด <em>[invalidation: ADX ขึ้นเหนือ 25 พร้อม breakout จาก Donchian &gt;0.8 หรือ &lt;0.2]</em></li><li><strong>ZEC flat</strong> (confidence 35.0) — ADX 13.61 ต่ำมาก regime chop_vol_low vol percentile เพียง 0.062 ไร้โมเมนตัมและสภาพคล่อง Donchian 0.333 ค่อนล่างแต่ไม่มีแรงส่ง trend sub-score 0.333 ต่ำสุดในพูล ไม่เข้าเกณฑ์เทรดเทรนด์ <em>[invalidation: Volume spike กลับมาเหนือ 0.5 และ ADX ขึ้นเหนือ 25]</em></li></ul>
+    
+    <p><strong>analyst_positioning (claude-sonnet-5):</strong>
+       cost=0.0000 USD, latency=17403ms</p>
+    <ul class='candidate-list'><li><strong>PUMP short</strong> (confidence 64.0) — Donchian สูงสุด 1.0 หลังพุ่ง 48% ใน 30 วัน แต่ 1d ติดลบ -3.61% พร้อม OI หด -8.63% ชี้ long เริ่ม unwind ADX สูงคือเทรนด์ overextended เสี่ยง mean-revert มากกว่าจะไปต่อ ราคาห่างจุดต่ำสุด 30 วันถึง 70% เกินสมดุล <em>[invalidation: หาก OI กลับมาเพิ่มพร้อมราคาทำ new high และ funding ไม่สุดโต่งฝั่ง long]</em></li><li><strong>PAXG flat</strong> (confidence 45.0) — funding sub-score สูง 0.944 และ OI 24h +8.70% แต่ ADX ต่ำ (22) chop regime ราคาห่าง high เพียง -0.88% ไม่มี extreme positioning ชัดเจนพอจะเข้าเทรด mean-revert หรือ trend follow <em>[invalidation: หาก funding rate จริงพุ่งสุดโต่งฝั่งใดฝั่งหนึ่งพร้อม OI เพิ่มต่อเนื่อง จะเปลี่ยนเป็นสัญญาณ squeeze]</em></li><li><strong>ZEC flat</strong> (confidence 40.0) — funding sub-score สูง 0.944 แต่ vol_fit ต่ำมาก 0.124 และ vol percentile 1y เพียง 0.062 บ่งชี้ momentum อ่อนแรงในบริบท vol ต่ำ ADX 13.6 ไม่มีเทรนด์ชัด ไม่มี positioning extreme พอเทรด <em>[invalidation: หาก ADX เพิ่มขึ้นพร้อม OI และ volume spike ชัดเจนไปทางใดทางหนึ่ง]</em></li></ul>
+    
+    <p><strong>analyst_macro (dashscope/deepseek-v4-pro):</strong>
+       cost=0.0000 USD, latency=24684ms</p>
+    <ul class='candidate-list'><li><strong>PUMP long</strong> (confidence 60.0) — DXY -0.25% และ US10Y -0.22% หนุน risk assets; Extreme Fear (25) มักนำหน้าการดีดกลับ; ข่าว Russia กฎหมาย retail crypto และ Block ปรับเป้าขึ้นเป็นบวกต่อ sentiment crypto โดยรวม <em>[invalidation: DXY กลับตัวขึ้นแรงหรือ Fear &amp; Greed ลดต่ำกว่า 20 โดยไม่มีปัจจัยบวกหนุนเพิ่ม]</em></li><li><strong>PAXG long</strong> (confidence 55.0) — DXY อ่อนค่า (-0.25%) เป็นบวกต่อทองคำและ PAXG ในฐานะ safe haven; OI เพิ่ม 8.70% ใน 24 ชม. สะท้อน positioning ฝั่ง long; ทองคำสปอตมีแนวโน้มได้แรงหนุนจากดอลลาร์อ่อน <em>[invalidation: DXY ดีดกลับเหนือ 100.5 หรือมีข่าว hawkish จาก Fed ที่ไม่คาดคิด]</em></li><li><strong>ZEC flat</strong> (confidence 70.0) — แม้ DXY อ่อนค่าและข่าว Russia crypto law เป็นบวกต่อ privacy coins ในทางทฤษฎี แต่โครงสร้างภายในของ ZEC อ่อนแอเกินไป (ADX 13.61, chop regime, vol ต่ำมากที่ percentile 0.062) จนมหภาคที่มีความเชื่อมั่นจำกัดไม่เพียงพอจะผลักดัน <em>[invalidation: ปริมาณซื้อขาย ZEC พุ่งผิดปกติหรือมีข่าวเฉพาะเจาะจงเกี่ยวกับ privacy coin adoption]</em></li></ul>
+    
+            <hr>
+            
+    <p><strong>redteam (GPT 5.2):</strong>
+       cost=0.0000 USD, latency=14159ms</p>
+    <ul class='candidate-list'><li><strong>PUMP flat</strong> (confidence 58.0) — ค้านทั้ง analyst_trend/analyst_macro ที่ long: Donchian=1.0 คือปลายทางไม่ใช่จุดเริ่ม, 1d -3.61% พร้อม OI -8.63% และ volume spike 0.29 ชี้แรงซื้อไม่ยืนยัน; เสี่ยง bull-trap/late-entry มากกว่าตามเทรนด์. ฝั่ง analyst_positioning short ก็ยังไม่มีสัญญาณ liquidation ชัดจึงเลือก FLAT. <em>[invalidation: ถ้าราคาทำ new high ต่อเนื่องพร้อม OI กลับมาเพิ่ม และ volume spike ฟื้นชัด (ยืนยัน demand) โดยยังไม่เห็นสัญญาณ distribution]</em></li><li><strong>PAXG flat</strong> (confidence 61.0) — ค้าน analyst_macro ที่ long: regime chop_vol_mid + ADX 22.02 ต่ำกว่า 25 ทำให้ “DXY อ่อน=ต้องขึ้น” อาจเป็น narrative trap; OI +8.70% แต่ volume spike 0.28 ต่ำ เสี่ยงเป็น leverage build ในกรอบมากกว่าขาเทรนด์. ตรงกับ trend/positioning ที่ flat. <em>[invalidation: ถ้า ADX ขึ้นเหนือ 25 พร้อม Donchian &gt;0.8 (breakout) และ volume spike ฟื้นชัด ยืนยันว่าการเพิ่ม OI เป็นแรงขับเทรนด์จริง]</em></li><li><strong>ZEC flat</strong> (confidence 73.0) — หาเหตุผลค้าน flat ของทั้งสามแทบไม่ได้: ADX 13.61, vol percentile 0.062, vol_fit 0.124 และ volume spike 0.10 แปลว่าไม่มีแรง/สภาพคล่องพอให้ edge. แม้ momentum sub-score 0.889 และ 7d +7.99% ก็ยังไม่พอหักล้างบริบท chop_vol_low. <em>[invalidation: ถ้า volume spike กลับมาสูงผิดปกติพร้อม ADX &gt;25 และ OI/ราคาเดินทางเดียวกันจนเกิดโครงสร้างเทรนด์ชัด]</em></li></ul>
+    
+            <hr>
+            
+                <p><strong>Judge:</strong> flat N/A
+                   confidence=65.0
+                   stop=0.00% tp=0.00%</p>
+                <p class="hint">เหตุผล: ไม่มีผู้เข้าชิงตัวใดให้ setup ที่ชัดพอ: PUMP มี composite สูงแต่ Donchian=1.0 หลังพุ่ง 48% ใน 30 วัน พร้อม 1d -3.61%, OI -8.63%, volume spike แค่ 0.29 — เป็น late-entry/bull-trap risk ตามที่ red team ชี้ analysts แตกกัน (trend/macro long vs positioning short) ไม่มี consensus. PAXG อยู่ chop_vol_mid, ADX 22 ต่ำกว่า 25, Donchian กลาง range, EMA gap แคบ — trend/positioning เห็น flat ตรงกัน มีแต่ macro เชียร์ long แบบ conf ต่ำ (55). ZEC ทั้ง 4 voices เห็น flat ตรงกัน (vol percentile 0.062, ADX 13.6). Fear &amp; Greed 25 (Extreme Fear) เพิ่ม tail risk ไม่ควรฝืน. FLAT ปลอดภัยและมีคะแนนเท่ากับเทรดถูก</p>
+                <p class="hint">ทำไมเลือกตัวนี้แทนตัวอื่น: เลือก FLAT เพราะไม่มีตัวใดผ่านเกณฑ์ confidence 60 แบบสะอาด — PUMP overextended, PAXG chop, ZEC ไร้สภาพคล่อง</p>
+                <p class="hint">ตอบข้อค้านของ redteam: เห็นด้วยกับ red team ทั้ง 3 เคส: PUMP เป็น late-entry risk, PAXG เป็น narrative trap ใน chop, ZEC ไร้ edge จาก vol ต่ำ</p>
+                
+            </div>
+            </details>
+            
             <details class="decision-entry">
               <summary>2026-08-05 — llm — flat N/A
                  (degrade level 0)</summary>
@@ -297,6 +336,6 @@ ImportError: Google Cloud SDK not found. Install it with: pip install &#x27;lite
     </div>
     
   <p>ยังไม่มี lessons.md (reflector ยังไม่เคยรัน หรือยังไม่พบบทเรียนใหม่)</p>
-  <p class="footer">อัปเดตล่าสุด: 2026-08-05T03:40:20.646831+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
+  <p class="footer">อัปเดตล่าสุด: 2026-08-06T03:45:19.905434+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
 </body>
 </html>
