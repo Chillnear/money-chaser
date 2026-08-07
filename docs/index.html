@@ -37,12 +37,12 @@
     
   
     <div class="card">
-      <h2>กราฟ Equity (9 จุด)</h2>
+      <h2>กราฟ Equity (10 จุด)</h2>
       <svg viewBox="0 0 760 180" width="100%" height="180" role="img" aria-label="กราฟ equity">
-        <polyline points="20.0,20.0 110.0,20.0 200.0,20.0 290.0,20.0 380.0,160.0 470.0,160.0 560.0,160.0 650.0,160.0 740.0,160.0" fill="none" stroke="#b91c1c" stroke-width="2" />
+        <polyline points="20.0,20.0 100.0,20.0 180.0,20.0 260.0,20.0 340.0,160.0 420.0,160.0 500.0,160.0 580.0,160.0 660.0,160.0 740.0,160.0" fill="none" stroke="#b91c1c" stroke-width="2" />
         <circle cx="740.0" cy="160.0" r="3.5" fill="#b91c1c" />
         <text x="20" y="176" font-size="11" fill="#6b7280">2026-07-29</text>
-        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-08-06</text>
+        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-08-07</text>
         <text x="20" y="14" font-size="11" fill="#6b7280">28.00</text>
         <text x="20" y="164" font-size="11" fill="#6b7280">27.76</text>
       </svg>
@@ -73,14 +73,14 @@
         
       <table>
         <thead><tr><th>Role</th><th>เรียกกี่ครั้ง</th><th>ต้นทุนรวม (USD)</th><th>latency เฉลี่ย (ms)</th><th>อัตรา abstain</th></tr></thead>
-        <tbody><tr><td>analyst_trend</td><td>4</td><td>0.0000</td><td>33799</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>4</td><td>0.0000</td><td>14040</td><td>0%</td></tr><tr><td>analyst_macro</td><td>4</td><td>0.0000</td><td>6171</td><td>75%</td></tr><tr><td>redteam</td><td>4</td><td>0.0000</td><td>14340</td><td>0%</td></tr><tr><td>judge</td><td>4</td><td>0.0000</td><td>16986</td><td>0%</td></tr></tbody>
+        <tbody><tr><td>analyst_trend</td><td>5</td><td>0.0000</td><td>31903</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>5</td><td>0.0000</td><td>14127</td><td>0%</td></tr><tr><td>analyst_macro</td><td>5</td><td>0.0000</td><td>9928</td><td>60%</td></tr><tr><td>redteam</td><td>5</td><td>0.0000</td><td>14607</td><td>0%</td></tr><tr><td>judge</td><td>5</td><td>0.0000</td><td>18259</td><td>0%</td></tr></tbody>
       </table>
     </div>
     
   
     <div class="card">
       <h2>ภาพรวม Analyst (เห็นตรงกับ judge บ่อยแค่ไหน)</h2>
-      <p class="hint">* วัดจาก 5 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
+      <p class="hint">* วัดจาก 6 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
       <table>
         <thead><tr><th>Role</th><th>จำนวนที่เทียบได้</th><th>% เห็นตรงกับ judge</th></tr></thead>
         <tbody><tr><td>analyst_trend</td><td>1</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>1</td><td>100%</td></tr><tr><td>analyst_macro</td><td>1</td><td>100%</td></tr><tr><td>redteam</td><td>0</td><td>0%</td></tr></tbody>
@@ -89,8 +89,47 @@
     
   
     <div class="card">
-      <h2>Log การตัดสินใจแบบเต็ม (ล่าสุด 6 วัน — คลิกเพื่อกาง)</h2>
+      <h2>Log การตัดสินใจแบบเต็ม (ล่าสุด 7 วัน — คลิกเพื่อกาง)</h2>
       
+            <details class="decision-entry">
+              <summary>2026-08-07 — llm — flat N/A
+                 (degrade level 0)</summary>
+              <div class="decision-body">
+            <p><strong>Shortlist วันนั้น:</strong></p>
+            <ul><li>PUMP — composite 0.92</li><li>HYPE — composite 0.62</li><li>PAXG — composite 0.58</li></ul>
+            <p class='hint'>ตัวอื่นในพูล: ZEC (0.54), XRP (0.42), SOL (0.41), ETH (0.32), BTC (0.29)</p>
+            <hr>
+            
+    <p><strong>analyst_trend (dashscope/qwen3.7-max):</strong>
+       cost=0.0000 USD, latency=24320ms</p>
+    <ul class='candidate-list'><li><strong>PUMP long</strong> (confidence 78.0) — Breakout จาก Donchian 1.000 พร้อม EMA stack เรียง bullish ทุกชั้น ADX 35.29 ยืนยันเทรนด์แข็งแรง momentum sub-score 1.000 <em>[invalidation: ADX หลุด 25 หรือราคาร่วงทะลุ EMA9 (gap กลบ) พร้อม volume spike ขาลง]</em></li><li><strong>HYPE flat</strong> (confidence 55.0) — ADX 17.24 ต่ำกว่า 25 regime chop_vol_low EMA gap ผสมสั้น-ยาว ไม่มี trend ชัดเจน volume percentile 0.065 ต่ำมาก <em>[invalidation: ADX ขึ้นเกิน 25 พร้อม Donchian break และ volume percentile &gt; 0.5]</em></li><li><strong>PAXG flat</strong> (confidence 50.0) — ADX 23.24 ยังไม่ยืนยัน trend, Donchian 0.250 อยู่กลาง-ล่างของ range, EMA gap สั้นยาวสลับ regime chop ไม่มี breakout <em>[invalidation: ราคา break Donchian &gt;0.8 พร้อม ADX &gt;25 และ volume spike]</em></li></ul>
+    
+    <p><strong>analyst_positioning (claude-sonnet-5):</strong>
+       cost=0.0000 USD, latency=14473ms</p>
+    <ul class='candidate-list'><li><strong>PUMP short</strong> (confidence 58.0) — ราคาพุ่ง 60%/30วัน, RSI 69, Donchian 100%, EMA200 gap 16.6% สะท้อน over-extension รุนแรง funding sub-score 0.812 บ่งชี้ long หนาแน่น เสี่ยง squeeze/liquidation ฝั่ง long หากโมเมนตัมชะลอ ระวัง mean-revert แรง <em>[invalidation: ราคาทำ new high ต่อเนื่องพร้อม OI เพิ่มขึ้นชัดเจนโดยไม่มีสัญญาณ funding สุดโต่งกลับด้าน]</em></li><li><strong>HYPE flat</strong> (confidence 40.0) — Positioning ไม่สุดโต่ง ADX ต่ำ (17.2) vol percentile ต่ำมาก (0.065) funding เป็นกลาง (0.5) ไม่มีสัญญาณ squeeze ชัดเจน ราคาอยู่กลาง range หลังปรับฐาน -17.8%/30วัน รอสัญญาณ extreme ก่อนเข้า <em>[invalidation: หาก funding หรือ OI เปลี่ยนแปลงสุดโต่งไปทางใดทางหนึ่งพร้อม breakout จาก range]</em></li><li><strong>PAXG short</strong> (confidence 45.0) — Donchian position ต่ำ (0.25) trend sub-score อ่อน (0.25) แต่ funding sub-score สูง (0.812) และ RSI 63.88 ค่อนไปทาง overbought สวนทางกับ trend อ่อนแรง OI ลด -2.5% 24h บ่งชี้ momentum จางลง เสี่ยง mean-revert ลงเล็กน้อย <em>[invalidation: ราคาทะลุ 30d high พร้อม OI และ funding กลับมาสมดุล]</em></li></ul>
+    
+    <p><strong>analyst_macro (dashscope/deepseek-v4-pro):</strong>
+       cost=0.0000 USD, latency=24957ms</p>
+    <ul class='candidate-list'><li><strong>PUMP flat</strong> (confidence 35.0) — Fear &amp; Greed 29 (Fear) และข่าว Senate เลื่อนโหวตกม.คริปโตเป็นลบต่อ sentiment โดยรวม ไม่มีปัจจัยมหภาคที่สนับสนุนการดันราคาต่อเนื่อง แรงโมเมนตัมล้วนเป็นเทคนิคัล ไม่ใช่ macro-driven <em>[invalidation: DXY ร่วงแรงกว่า 0.5% หรือมีข่าวบวกเชิงนโยบายคริปโตฉับพลัน]</em></li><li><strong>HYPE flat</strong> (confidence 30.0) — ตลาดอยู่ในภาวะ Fear, วอลุ่มต่ำมาก, ไม่มีตัวเร่งมหภาคหรือข่าวเฉพาะที่บ่งชี้ทิศทางชัด HYPE เป็น chop ทางเทคนิค สภาพแวดล้อม macro ไม่ได้เอื้อต่อการกลับตัวแรง <em>[invalidation: ข่าว partnership ใหญ่ของ Hyperliquid หรือ sentiment กลับเป็น Greed เร็วมาก]</em></li><li><strong>PAXG long</strong> (confidence 40.0) — DXY อ่อนค่าเล็กน้อย (-0.01%) และ Fear &amp; Greed 29 มักหนุน demand ทองคำ/สินทรัพย์ปลอดภัย PAXG ในฐานะทองดิจิทัลมีโอกาสได้แรงซื้อ แม้ไม่มีข้อมูล gold spot ชัดเจน <em>[invalidation: DXY ดีดกลับแรงกว่า 0.3% หรือ gold spot ร่วงหลุดแนวรับสำคัญ]</em></li></ul>
+    
+            <hr>
+            
+    <p><strong>redteam (GPT 5.2):</strong>
+       cost=0.0000 USD, latency=15672ms</p>
+    <ul class='candidate-list'><li><strong>PUMP flat</strong> (confidence 63.0) — ค้าน analyst_trend ที่มอง breakout แข็ง: volume spike ratio แค่ 0.05 และ OI 24h +0.19% ไม่รองรับการไล่ราคา—เสี่ยงเป็น breakout แบบไร้ participation/late-stage. ขณะเดียวกันค้าน analyst_positioning ที่จะ short: funding ยังไม่สุดโต่งและไม่มี combination read ยืนยัน long-squeeze จึงไม่คุ้มฟันธงกลับตัว <em>[invalidation: ถ้าเกิด breakout ทำ new high ต่อพร้อม volume spike ratio กระโดดสูงและ OI เพิ่มชัดเจนหลายช่วงเวลา → long ได้; หรือหลุด EMA9/ADX ลดแรงและมีขายหนัก → short ได้]</em></li><li><strong>HYPE flat</strong> (confidence 70.0) — ไม่มี consensus ให้ค้านมากนัก แต่ขอค้านความคิดที่อาจ “รอ breakout” ตาม trend: vol percentile 0.065 + volume spike 0.05 ทำให้ breakout ง่ายต่อการหลอก. และค้านมุม contrarian ว่า ‘ลงมาเยอะแล้วน่าลอง long’: RSI 43.96/30d -17.8% ยังสะท้อนแรงซื้อไม่กลับมา <em>[invalidation: ถ้า ADX &gt;25 พร้อม Donchian breakout และวอลุ่มกลับมามีนัย (vol percentile/volume spike สูงขึ้น) → ค่อยตามเทรนด์]</em></li><li><strong>PAXG flat</strong> (confidence 61.0) — ค้าน analyst_macro ที่ long เพราะอิง DXY -0.01% น้อยเกินเป็นตัวเร่ง และ US10Y +1.15% โดยทั่วไปเป็น headwind ต่อทอง. ขณะเดียวกันค้าน analyst_positioning ที่ short: ราคาแค่ -1.11% จาก 30d high และ RSI 63.88 ยังไม่ extreme; OI -2.5% อาจแค่ de-risk ไม่ใช่สัญญาณขายต่อ <em>[invalidation: ถ้า DXY อ่อนลงต่ออย่างมีนัย + ราคาเบรกขึ้นยืนเหนือ 30d high → long; หรือถ้าราคาไหลลงต่อพร้อม OI/วอลุ่มเร่งและ RSI พลิกลงชัด → short]</em></li></ul>
+    
+            <hr>
+            
+                <p><strong>Judge:</strong> flat N/A
+                   confidence=55.0
+                   stop=0.00% tp=0.00%</p>
+                <p class="hint">เหตุผล: ไม่มีผู้เข้าชิงตัวใดให้ setup ที่คุ้มความเสี่ยงชัดเจน: PUMP composite สูงสุดแต่ volume spike แค่ 0.05 และ OI +0.19% ไม่รองรับการไล่ราคา 60%/30d — เสี่ยง late-stage breakout; positioning ก็เตือน over-extension แต่ยังไม่มี combination read ยืนยัน squeeze จึง short ก็ไม่คุ้ม. HYPE regime chop_vol_low, ADX 17, vol percentile 0.065 — ไม่มีเทรนด์. PAXG trend sub-score 0.25, Donchian 0.25, ATR% แค่ 1.61 ให้ upside จำกัด และ US10Y +1.15% เป็น headwind ต่อทอง. Analyst ทั้ง 3 ไม่มี consensus ทิศทางในตัวใดตัวหนึ่ง และ red team ค้าน flat ทั้งสามตัว — FLAT เป็นคำตอบที่มี EV สูงสุด</p>
+                <p class="hint">ทำไมเลือกตัวนี้แทนตัวอื่น: ไม่เลือกเทรดเพราะทุกตัวมีจุดอ่อน: PUMP ขาด participation, HYPE ไม่มีเทรนด์, PAXG upside แคบและ macro mixed</p>
+                <p class="hint">ตอบข้อค้านของ redteam: เห็นด้วยกับ red team ทั้งหมด: PUMP ไม่มี volume/OI confirm, HYPE breakout หลอกง่าย, PAXG DXY ไม่ใช่ตัวเร่งพอและ US10Y เป็น headwind</p>
+                
+            </div>
+            </details>
+            
             <details class="decision-entry">
               <summary>2026-08-06 — llm — flat N/A
                  (degrade level 0)</summary>
@@ -336,6 +375,6 @@ ImportError: Google Cloud SDK not found. Install it with: pip install &#x27;lite
     </div>
     
   <p>ยังไม่มี lessons.md (reflector ยังไม่เคยรัน หรือยังไม่พบบทเรียนใหม่)</p>
-  <p class="footer">อัปเดตล่าสุด: 2026-08-06T03:45:19.905434+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
+  <p class="footer">อัปเดตล่าสุด: 2026-08-07T03:22:18.997571+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
 </body>
 </html>
