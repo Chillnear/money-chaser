@@ -31,18 +31,18 @@
       <h2>Equity</h2>
       <p><strong>ปัจจุบัน:</strong> 27.76 USD &nbsp; <strong>Peak:</strong> 28.00 USD
          &nbsp; <strong>Drawdown:</strong> 0.85%</p>
-      <p>ไม่มีไม้เปิดอยู่</p>
+      <p><strong>ไม้เปิดอยู่:</strong> PAXG long notional=22.38 USD, entry=4337.37, SL=4229.77, TP=4552.56</p>
       
     </div>
     
   
     <div class="card">
-      <h2>กราฟ Equity (10 จุด)</h2>
+      <h2>กราฟ Equity (11 จุด)</h2>
       <svg viewBox="0 0 760 180" width="100%" height="180" role="img" aria-label="กราฟ equity">
-        <polyline points="20.0,20.0 100.0,20.0 180.0,20.0 260.0,20.0 340.0,160.0 420.0,160.0 500.0,160.0 580.0,160.0 660.0,160.0 740.0,160.0" fill="none" stroke="#b91c1c" stroke-width="2" />
+        <polyline points="20.0,20.0 92.0,20.0 164.0,20.0 236.0,20.0 308.0,160.0 380.0,160.0 452.0,160.0 524.0,160.0 596.0,160.0 668.0,160.0 740.0,160.0" fill="none" stroke="#b91c1c" stroke-width="2" />
         <circle cx="740.0" cy="160.0" r="3.5" fill="#b91c1c" />
         <text x="20" y="176" font-size="11" fill="#6b7280">2026-07-29</text>
-        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-08-07</text>
+        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-08-08</text>
         <text x="20" y="14" font-size="11" fill="#6b7280">28.00</text>
         <text x="20" y="164" font-size="11" fill="#6b7280">27.76</text>
       </svg>
@@ -73,24 +73,59 @@
         
       <table>
         <thead><tr><th>Role</th><th>เรียกกี่ครั้ง</th><th>ต้นทุนรวม (USD)</th><th>latency เฉลี่ย (ms)</th><th>อัตรา abstain</th></tr></thead>
-        <tbody><tr><td>analyst_trend</td><td>5</td><td>0.0000</td><td>31903</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>5</td><td>0.0000</td><td>14127</td><td>0%</td></tr><tr><td>analyst_macro</td><td>5</td><td>0.0000</td><td>9928</td><td>60%</td></tr><tr><td>redteam</td><td>5</td><td>0.0000</td><td>14607</td><td>0%</td></tr><tr><td>judge</td><td>5</td><td>0.0000</td><td>18259</td><td>0%</td></tr></tbody>
+        <tbody><tr><td>analyst_trend</td><td>6</td><td>0.0000</td><td>43077</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>6</td><td>0.0000</td><td>14558</td><td>0%</td></tr><tr><td>analyst_macro</td><td>6</td><td>0.0000</td><td>11286</td><td>50%</td></tr><tr><td>redteam</td><td>6</td><td>0.0000</td><td>12172</td><td>17%</td></tr><tr><td>judge</td><td>6</td><td>0.0000</td><td>18353</td><td>0%</td></tr></tbody>
       </table>
     </div>
     
   
     <div class="card">
       <h2>ภาพรวม Analyst (เห็นตรงกับ judge บ่อยแค่ไหน)</h2>
-      <p class="hint">* วัดจาก 6 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
+      <p class="hint">* วัดจาก 7 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
       <table>
         <thead><tr><th>Role</th><th>จำนวนที่เทียบได้</th><th>% เห็นตรงกับ judge</th></tr></thead>
-        <tbody><tr><td>analyst_trend</td><td>1</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>1</td><td>100%</td></tr><tr><td>analyst_macro</td><td>1</td><td>100%</td></tr><tr><td>redteam</td><td>0</td><td>0%</td></tr></tbody>
+        <tbody><tr><td>analyst_trend</td><td>2</td><td>50%</td></tr><tr><td>analyst_positioning</td><td>2</td><td>50%</td></tr><tr><td>analyst_macro</td><td>2</td><td>100%</td></tr><tr><td>redteam</td><td>0</td><td>0%</td></tr></tbody>
       </table>
     </div>
     
   
     <div class="card">
-      <h2>Log การตัดสินใจแบบเต็ม (ล่าสุด 7 วัน — คลิกเพื่อกาง)</h2>
+      <h2>Log การตัดสินใจแบบเต็ม (ล่าสุด 8 วัน — คลิกเพื่อกาง)</h2>
       
+            <details class="decision-entry">
+              <summary>2026-08-08 — llm — long PAXG
+                 (degrade level 0)</summary>
+              <div class="decision-body">
+            <p><strong>Shortlist วันนั้น:</strong></p>
+            <ul><li>LIT — composite 0.92</li><li>PAXG — composite 0.56</li><li>HYPE — composite 0.56</li></ul>
+            <p class='hint'>ตัวอื่นในพูล: ZEC (0.54), ETH (0.48), XRP (0.38), SOL (0.37), BTC (0.28)</p>
+            <hr>
+            
+    <p><strong>analyst_trend (dashscope/qwen3.7-max):</strong>
+       cost=0.0000 USD, latency=98944ms</p>
+    <ul class='candidate-list'><li><strong>LIT long</strong> (confidence 62.0) — Breakout จาก chop regime ราคาแตะ Donchian high (1.000) ด้วย momentum sub-score เต็ม และ trend sub-score=1.0 แม้ ADX 17.69 ยังไม่ยืนยันเทรนด์แข็ง แต่ return 7d +14% บ่งชี้แรงซื้อเริ่มสร้างเทรนด์ใหม่ <em>[invalidation: ราคาหลุด EMA9 (gap หาย) หรือ ADX ลดต่ำกว่า 15 พร้อม volume แห้ง]</em></li><li><strong>PAXG long</strong> (confidence 55.0) — Regime trend_up + ADX 25.45 ยืนยันเทรนด์ขาขึ้นยังมีอยู่ การย่อมาที่ Donchian 0.125 เป็น pullback ในเทรนด์ OI +17.59% ใน 24 ชม. สะท้อน positioning ใหม่เข้าสะสม RSI 68 ยังไม่ overbought <em>[invalidation: Donchian หลุด 0 (ทำ low ใหม่ 20 วัน) หรือ EMA200 gap ติดลบต่อเนื่อง]</em></li><li><strong>HYPE flat</strong> (confidence 45.0) — Chop regime + ADX 17.02 ไม่มีเทรนด์ชัดเจน ราคาอยู่ใต้ EMA สั้นทุกเส้น (9/21/50 ลบ) แต่ Donchian 0.875 ขัดแย้ง สะท้อน range แคบ vol percentile 0.078 ต่ำสุด ไม่มี catalyst breakout <em>[invalidation: ถ้า ADX พุ่งเกิน 25 พร้อม EMA9 gap กลับบวก จะ reconsider เป็น long]</em></li></ul>
+    
+    <p><strong>analyst_positioning (claude-sonnet-5):</strong>
+       cost=0.0000 USD, latency=16716ms</p>
+    <ul class='candidate-list'><li><strong>LIT short</strong> (confidence 58.0) — Donchian position 1.000 ชนขอบบน funding sub-score สูง 0.812 บ่งชี้ long positioning ตึง ขณะที่ OI 24h ลด -5.27% สวนทางราคาที่ขึ้น 14% ใน 7 วัน สะท้อนขาดแรงซื้อใหม่ยืนยัน เสี่ยง mean-revert/squeeze แม้ ADX ยังอ่อน <em>[invalidation: หาก OI กลับมาเพิ่มพร้อมราคาทะลุ high ใหม่ด้วย volume spike ยืนยัน จะยกเลิก thesis short]</em></li><li><strong>PAXG flat</strong> (confidence 40.0) — Donchian position ต่ำ 0.125 แต่ RSI 68.37 ตึงสั้น OI 24h พุ่ง +17.59% ขณะราคาแทบไม่ขยับ (-0.18% 1d) บ่งชี้ leverage เข้าใหม่เร็วเสี่ยง overheat แต่ยังไม่ถึงระดับ squeeze สุดโต่งพอให้เข้าเทรดชัดเจน <em>[invalidation: หาก OI ยังพุ่งต่อพร้อม funding พลิกลบแรง หรือราคาหลุด EMA200 จะเปิดโอกาส short]</em></li><li><strong>HYPE flat</strong> (confidence 35.0) — Positioning ไม่สุดโต่ง funding sub-score กลาง 0.500 OI 24h ลดเล็กน้อย -2.32% Vol percentile ต่ำมาก 0.078 แสดง volatility หดตัว ไม่มีสัญญาณ squeeze หรือ mean-revert ชัดเจนพอให้เทรด แม้ momentum อ่อนและราคายังลึก -22% จาก high 30 วัน <em>[invalidation: หาก funding เอียงสุดโต่งด้านใดด้านหนึ่งพร้อม OI เปลี่ยนแปลงรุนแรง จะเปิดโอกาสเทรดใหม่]</em></li></ul>
+    
+    <p><strong>analyst_macro (dashscope/deepseek-v4-pro):</strong>
+       cost=0.0000 USD, latency=18074ms</p>
+    <ul class='candidate-list'><li><strong>LIT flat</strong> (confidence 45.0) — DXY อ่อนและ SPX บวกเป็นปัจจัยหนุน risk-on แต่ Fear &amp; Greed ที่ 30 (Fear) และข่าว Trump Media ถอนตัวจากคริปโต กดดัน sentiment สินทรัพย์เก็งกำไรขนาดเล็กอย่าง LIT โดยตรง น้ำหนักทั้งสองฝั่งหักล้างกัน ไม่มีปัจจัยมหภาคชี้ขาด <em>[invalidation: Fear &amp; Greed ดีดกลับเหนือ 50 ภายใน 24 ชม. หรือ DXY ร่วงแรงกว่า 1%]</em></li><li><strong>PAXG long</strong> (confidence 65.0) — DXY อ่อนค่า -0.37% และ US10Y ลดลง -0.21% เป็นแรงหนุนทองคำสปอตโดยตรง PAXG ในฐานะทองดิจิทัลได้ประโยชน์จาก safe-haven flow ท่ามกลาง Fear &amp; Greed ที่ 30 และความไม่แน่นอนจากข่าว Trump ถอนตัวจากคริปโต เงินอาจไหลออกจากคริปโตสู่ PAXG <em>[invalidation: DXY ดีดกลับแรงกว่า 0.5% หรือข่าว geopolitical คลี่คลายกะทันหัน]</em></li><li><strong>HYPE flat</strong> (confidence 50.0) — ปัจจัยมหภาคผสม: DXY อ่อนและ SPX บวกเป็นบวกต่อ risk assets แต่ข่าว Trump Media ถอนตัวจากคริปโตและ Fear &amp; Greed 30 กดดัน sentiment คริปโตโดยเฉพาะ altcoin HYPE อยู่ใน chop_vol_low และไม่มีปัจจัยมหภาคเฉพาะที่ชี้ทิศทางชัดเจน จึงควรถือ flat <em>[invalidation: Fear &amp; Greed พุ่งเหนือ 50 หรือมีข่าวบวกเฉพาะ HYPE]</em></li></ul>
+    
+            <hr>
+            <p><strong>redteam (GPT 5.2):</strong> abstain — เรียกไม่ผ่านทุก key: litellm.BadRequestError: OpenAIException - /chat/completions: Invalid model name passed in model=GPT 5.2. Call `/v1/models` to view available models for your key.</p>
+            <hr>
+            
+                <p><strong>Judge:</strong> long PAXG
+                   confidence=62.0
+                   stop=2.50% tp=5.00%</p>
+                <p class="hint">เหตุผล: PAXG มี setup ที่สมดุลที่สุด: regime trend_up_vol_mid ยืนยันด้วย ADX 25.45 (เทรนด์แข็งจริง) + macro tailwind ชัดเจน (DXY -0.37%, US10Y ลดลง, Fear &amp; Greed 30 หนุน safe-haven flow เข้าทอง) + ATR% ต่ำเพียง 1.65% ทำให้ risk คุมได้ดี ราคาห่างจาก high 30d แค่ -0.61% แต่ยังไม่ overbought เกินไป trend analyst และ macro analyst เห็นตรงกันว่า long ขณะที่ LIT มีสัญญาณค้านจาก positioning (Donchian 1.000 + OI ลดสวนราคา = squeeze risk) และ ATR% 7.90% เสี่ยงเกินไปสำหรับวันที่ sentiment เปราะ</p>
+                <p class="hint">ทำไมเลือกตัวนี้แทนตัวอื่น: LIT แม้ composite สูงสุดแต่มี divergence positioning อันตราย (ราคาชนขอบ + OI ลด) และ ATR สูง 5x ของ PAXG; HYPE ทุก analyst เห็นตรงกันว่า flat ไม่มี edge</p>
+                <p class="hint">ตอบข้อค้านของ redteam: Red team ไม่ทำงาน (API error) — จึงเพิ่มความระมัดระวังโดยใช้ confidence ระดับกลางและ stop แคบตาม ATR ต่ำ</p>
+                
+            </div>
+            </details>
+            
             <details class="decision-entry">
               <summary>2026-08-07 — llm — flat N/A
                  (degrade level 0)</summary>
@@ -375,6 +410,6 @@ ImportError: Google Cloud SDK not found. Install it with: pip install &#x27;lite
     </div>
     
   <p>ยังไม่มี lessons.md (reflector ยังไม่เคยรัน หรือยังไม่พบบทเรียนใหม่)</p>
-  <p class="footer">อัปเดตล่าสุด: 2026-08-07T03:22:18.997571+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
+  <p class="footer">อัปเดตล่าสุด: 2026-08-08T02:30:10.833895+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
 </body>
 </html>
