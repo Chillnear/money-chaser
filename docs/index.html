@@ -37,12 +37,12 @@
     
   
     <div class="card">
-      <h2>กราฟ Equity (16 จุด)</h2>
+      <h2>กราฟ Equity (17 จุด)</h2>
       <svg viewBox="0 0 760 180" width="100%" height="180" role="img" aria-label="กราฟ equity">
-        <polyline points="20.0,50.3 68.0,50.3 116.0,50.3 164.0,50.3 212.0,160.0 260.0,160.0 308.0,160.0 356.0,160.0 404.0,160.0 452.0,160.0 500.0,160.0 548.0,160.0 596.0,160.0 644.0,160.0 692.0,160.0 740.0,20.0" fill="none" stroke="#15803d" stroke-width="2" />
+        <polyline points="20.0,50.3 65.0,50.3 110.0,50.3 155.0,50.3 200.0,160.0 245.0,160.0 290.0,160.0 335.0,160.0 380.0,160.0 425.0,160.0 470.0,160.0 515.0,160.0 560.0,160.0 605.0,160.0 650.0,160.0 695.0,20.0 740.0,20.0" fill="none" stroke="#15803d" stroke-width="2" />
         <circle cx="740.0" cy="20.0" r="3.5" fill="#15803d" />
         <text x="20" y="176" font-size="11" fill="#6b7280">2026-07-29</text>
-        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-08-13</text>
+        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-08-14</text>
         <text x="20" y="14" font-size="11" fill="#6b7280">28.07</text>
         <text x="20" y="164" font-size="11" fill="#6b7280">27.76</text>
       </svg>
@@ -73,14 +73,14 @@
         
       <table>
         <thead><tr><th>Role</th><th>เรียกกี่ครั้ง</th><th>ต้นทุนรวม (USD)</th><th>latency เฉลี่ย (ms)</th><th>อัตรา abstain</th></tr></thead>
-        <tbody><tr><td>analyst_trend</td><td>6</td><td>0.0000</td><td>43077</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>6</td><td>0.0000</td><td>14558</td><td>0%</td></tr><tr><td>analyst_macro</td><td>6</td><td>0.0000</td><td>11286</td><td>50%</td></tr><tr><td>redteam</td><td>6</td><td>0.0000</td><td>12172</td><td>17%</td></tr><tr><td>judge</td><td>6</td><td>0.0000</td><td>18353</td><td>0%</td></tr></tbody>
+        <tbody><tr><td>analyst_trend</td><td>7</td><td>0.0000</td><td>40919</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>7</td><td>0.0000</td><td>14766</td><td>0%</td></tr><tr><td>analyst_macro</td><td>7</td><td>0.0000</td><td>9674</td><td>57%</td></tr><tr><td>redteam</td><td>7</td><td>0.0000</td><td>10433</td><td>29%</td></tr><tr><td>judge</td><td>7</td><td>0.0000</td><td>18603</td><td>0%</td></tr></tbody>
       </table>
     </div>
     
   
     <div class="card">
       <h2>ภาพรวม Analyst (เห็นตรงกับ judge บ่อยแค่ไหน)</h2>
-      <p class="hint">* วัดจาก 7 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
+      <p class="hint">* วัดจาก 8 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
       <table>
         <thead><tr><th>Role</th><th>จำนวนที่เทียบได้</th><th>% เห็นตรงกับ judge</th></tr></thead>
         <tbody><tr><td>analyst_trend</td><td>2</td><td>50%</td></tr><tr><td>analyst_positioning</td><td>2</td><td>50%</td></tr><tr><td>analyst_macro</td><td>2</td><td>100%</td></tr><tr><td>redteam</td><td>0</td><td>0%</td></tr></tbody>
@@ -89,8 +89,39 @@
     
   
     <div class="card">
-      <h2>Log การตัดสินใจแบบเต็ม (ล่าสุด 8 วัน — คลิกเพื่อกาง)</h2>
+      <h2>Log การตัดสินใจแบบเต็ม (ล่าสุด 9 วัน — คลิกเพื่อกาง)</h2>
       
+            <details class="decision-entry">
+              <summary>2026-08-14 — llm — flat N/A
+                 (degrade level 0)</summary>
+              <div class="decision-body">
+            <p><strong>Shortlist วันนั้น:</strong></p>
+            <ul><li>PUMP — composite 0.87</li><li>HYPE — composite 0.60</li><li>PAXG — composite 0.53</li></ul>
+            <p class='hint'>ตัวอื่นในพูล: XRP (0.49), ETH (0.39), BTC (0.36), SOL (0.34)</p>
+            <hr>
+            
+    <p><strong>analyst_trend (dashscope/qwen3.7-max):</strong>
+       cost=0.0000 USD, latency=27973ms</p>
+    <ul class='candidate-list'><li><strong>PUMP long</strong> (confidence 78.0) — ADX 42.98 ยืนยันเทรนด์แข็งแรง Donchian=1.000 อยู่ที่ high สุด 30d EMA เรียง bullish ทุกเส้น gap กว้าง (9=11%, 50=44%) momentum sub-score 1.000 ต่อเนื่องจาก return 7d +32% แนวโน้มยัง intact แม้ RSI overbought <em>[invalidation: ราคาปิดต่ำกว่า EMA9 (gap หดเป็นลบ) หรือ ADX หลุด 25 พร้อม volume spike ฝั่ง sell]</em></li><li><strong>HYPE flat</strong> (confidence 72.0) — ADX 14.47 ต่ำมากบ่งชี้ไร้ทิศทาง regime chop_vol_low EMA gap สลับบวก/ลบ (50=-2%, 200=+11.5%) RSI 50.51 กึ่งกลาง ไม่มี breakout จาก range ชัดเจน volume percentile ต่ำสุด 0.057 ไม่สนับสนุนการเคลื่อนไหว <em>[invalidation: ADX ดีดเกิน 25 พร้อมราคา break Donchian high/low ด้วย volume spike]</em></li><li><strong>PAXG flat</strong> (confidence 65.0) — ADX 34.20 ดูแข็งแรงแต่ EMA9 gap เพียง 0.01% ราคาแนบเส้นเฉลี่ย momentum sub-score ต่ำ 0.143 return 1d/7d ติดลบ แม้ regime trend_up แต่การ pullback ทดสอบ EMA9 ยังไม่ยืนยัน continuation EMA200 gap ติดลบ โครงสร้างยังไม่นิ่ง <em>[invalidation: ราคาดีดกลับเหนือ EMA9 ด้วย volume หรือหลุด EMA50 (gap 2.97%) จนเสียโครงสร้าง]</em></li></ul>
+    
+    <p><strong>analyst_positioning (claude-sonnet-5):</strong>
+       cost=0.0000 USD, latency=16013ms</p>
+    <ul class='candidate-list'><li><strong>PUMP short</strong> (confidence 68.0) — RSI 76.87 และ Donchian position 1.000 สะท้อนภาวะสุดโต่งชัดเจน ราคาห่างจุดต่ำสุด 30 วัน 87.52% ขณะ OI 7d +56.77% แต่ volume spike ratio ต่ำเพียง 0.16 บ่งชี้ positioning หนาแน่นบนสภาพคล่องบาง เสี่ยง mean-revert/squeeze แม้เทรนด์ยังแรง <em>[invalidation: หาก volume spike ratio เพิ่มขึ้นชัดเจน (&gt;0.5) พร้อม RSI ยังสูง แสดงว่ามีดีมานด์จริงหนุน ไม่ใช่แค่ positioning เก็งกำไร]</em></li><li><strong>HYPE flat</strong> (confidence 25.0) — ADX 14.47 อ่อนแรง RSI 50.51 กลางๆ ไม่มีสัญญาณ positioning สุดโต่ง OI 7d เพิ่มเพียง 4.21% volume spike ratio ต่ำมาก 0.06 บ่งชี้ตลาดยังไม่มี conviction พอให้เทรดฝั่งใดฝั่งหนึ่ง <em>[invalidation: หาก ADX ทะลุ 25 พร้อม OI/volume เร่งตัวขึ้นอย่างมีนัยสำคัญไปทิศทางใดทิศทางหนึ่ง จะเปลี่ยนมุมมองเป็นมีทิศทางชัดเจน]</em></li><li><strong>PAXG flat</strong> (confidence 30.0) — Trend/momentum ปานกลาง (ADX 34.2, RSI 59.83) ไม่สุดโต่ง OI 7d +38.80% กับ volume spike ratio สูง 0.76 น่าสนใจแต่ยังไม่ชัดเจนพอเป็นสัญญาณ squeeze ราคาห่างจุดสูงสุดเพียง 2.76% ยังไม่มี extreme positioning ให้เล่นฝั่งใดฝั่งหนึ่ง <em>[invalidation: หาก OI และ volume spike ratio ยังเร่งตัวต่อพร้อมราคาทะลุ high 30 วันใหม่ จะเป็นสัญญาณ breakout ที่ต้องพิจารณาทิศทางใหม่]</em></li></ul>
+    <p><strong>analyst_macro (dashscope/deepseek-v4-pro):</strong> abstain — parse/validate ไม่ผ่านหลัง retry 2 ครั้ง: Expecting value: line 1 column 1 (char 0)</p>
+            <hr>
+            <p><strong>redteam (GPT 5.2):</strong> abstain — เรียกไม่ผ่านทุก key: litellm.BadRequestError: OpenAIException - /chat/completions: Invalid model name passed in model=GPT 5.2. Call `/v1/models` to view available models for your key.</p>
+            <hr>
+            
+                <p><strong>Judge:</strong> flat N/A
+                   confidence=55.0
+                   stop=0.00% tp=0.00%</p>
+                <p class="hint">เหตุผล: PUMP มีเทรนด์แข็งแรงแต่ RSI 76.87, Donchian 1.000, ราคาห่างจุดต่ำสุด 30d +87.52%, OI 7d +56.77% พร้อม volume spike ratio เพียง 0.16 — เป็น setup ที่ trend analyst เชียร์ long แต่ positioning analyst เตือน squeeze risk บนสภาพคล่องบาง ความขัดแย้งชัดเจนและ risk/reward ที่ไล่ตามยอด parabolic ไม่คุ้ม HYPE ไม่มีทิศทาง (ADX 14.47, chop regime) analyst 2/2 บอก flat PAXG โมเมนตัมอ่อน (sub-score 0.143), EMA9 gap เกือบศูนย์, return 1d/7d ติดลบ แม้ volume spike 0.76 น่าสนใจแต่ไม่มี directional edge macro analyst abstain และ redteam abstain ทำให้ไม่มี challenge จริง — เลือก FLAT ปลอดภัยกว่าไล่ยอดหรือเดา chop</p>
+                <p class="hint">ทำไมเลือกตัวนี้แทนตัวอื่น: ไม่มีตัวใดให้ edge ชัดเจน: PUMP overbought+thin volume, HYPE chop, PAXG โมเมนตัมเสื่อม การรอ setup ที่ดีกว่ามีค่า expected value สูงกว่าการเข้าฝืน</p>
+                <p class="hint">ตอบข้อค้านของ redteam: redteam abstain ไม่มี challenge — จึงใช้ positioning analyst เป็น internal red team ค้าน trend view บน PUMP ซึ่งทำให้ conviction ลด</p>
+                
+            </div>
+            </details>
+            
             <details class="decision-entry">
               <summary>2026-08-08 — llm — long PAXG
                  (degrade level 0)</summary>
@@ -410,6 +441,6 @@ ImportError: Google Cloud SDK not found. Install it with: pip install &#x27;lite
     </div>
     
   <p>ยังไม่มี lessons.md (reflector ยังไม่เคยรัน หรือยังไม่พบบทเรียนใหม่)</p>
-  <p class="footer">อัปเดตล่าสุด: 2026-08-13T02:49:54.215996+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
+  <p class="footer">อัปเดตล่าสุด: 2026-08-14T02:53:16.962768+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
 </body>
 </html>
