@@ -29,34 +29,34 @@
   
     <div class="card">
       <h2>Equity</h2>
-      <p><strong>ปัจจุบัน:</strong> 27.76 USD &nbsp; <strong>Peak:</strong> 28.00 USD
-         &nbsp; <strong>Drawdown:</strong> 0.85%</p>
-      <p>ไม่มีไม้เปิดอยู่</p>
+      <p><strong>ปัจจุบัน:</strong> 28.07 USD &nbsp; <strong>Peak:</strong> 28.07 USD
+         &nbsp; <strong>Drawdown:</strong> 0.00%</p>
+      <p><strong>ไม้เปิดอยู่:</strong> LINK long notional=11.40 USD, entry=9.50, SL=9.04, TP=10.44</p>
       
     </div>
     
   
     <div class="card">
-      <h2>กราฟ Equity (6 จุด)</h2>
+      <h2>กราฟ Equity (20 จุด)</h2>
       <svg viewBox="0 0 760 180" width="100%" height="180" role="img" aria-label="กราฟ equity">
-        <polyline points="20.0,20.0 164.0,20.0 308.0,20.0 452.0,20.0 596.0,160.0 740.0,160.0" fill="none" stroke="#b91c1c" stroke-width="2" />
-        <circle cx="740.0" cy="160.0" r="3.5" fill="#b91c1c" />
+        <polyline points="20.0,50.3 57.9,50.3 95.8,50.3 133.7,50.3 171.6,160.0 209.5,160.0 247.4,160.0 285.3,160.0 323.2,160.0 361.1,160.0 398.9,160.0 436.8,160.0 474.7,160.0 512.6,160.0 550.5,160.0 588.4,20.0 626.3,20.0 664.2,20.0 702.1,20.0 740.0,20.0" fill="none" stroke="#15803d" stroke-width="2" />
+        <circle cx="740.0" cy="20.0" r="3.5" fill="#15803d" />
         <text x="20" y="176" font-size="11" fill="#6b7280">2026-07-29</text>
-        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-08-03</text>
-        <text x="20" y="14" font-size="11" fill="#6b7280">28.00</text>
+        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-08-17</text>
+        <text x="20" y="14" font-size="11" fill="#6b7280">28.07</text>
         <text x="20" y="164" font-size="11" fill="#6b7280">27.76</text>
       </svg>
     </div>
     
   
     <div class="card">
-      <h2>สถิติผลงาน (1 ไม้ที่ปิดแล้ว)</h2>
+      <h2>สถิติผลงาน (2 ไม้ที่ปิดแล้ว)</h2>
       <div class="stat-grid">
-        <div><span class="stat-label">Win rate</span><br>0.0%</div>
-        <div><span class="stat-label">PnL รวม</span><br>-0.24 USD</div>
-        <div><span class="stat-label">กำไรเฉลี่ย/ไม้ชนะ</span><br>0.00 USD</div>
+        <div><span class="stat-label">Win rate</span><br>50.0%</div>
+        <div><span class="stat-label">PnL รวม</span><br>0.07 USD</div>
+        <div><span class="stat-label">กำไรเฉลี่ย/ไม้ชนะ</span><br>0.31 USD</div>
         <div><span class="stat-label">ขาดทุนเฉลี่ย/ไม้แพ้</span><br>-0.24 USD</div>
-        <div><span class="stat-label">Profit factor</span><br>0.00</div>
+        <div><span class="stat-label">Profit factor</span><br>1.28</div>
       </div>
     </div>
     
@@ -73,24 +73,308 @@
         
       <table>
         <thead><tr><th>Role</th><th>เรียกกี่ครั้ง</th><th>ต้นทุนรวม (USD)</th><th>latency เฉลี่ย (ms)</th><th>อัตรา abstain</th></tr></thead>
-        <tbody><tr><td>analyst_trend</td><td>1</td><td>0.0000</td><td>30753</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>1</td><td>0.0000</td><td>12565</td><td>0%</td></tr><tr><td>analyst_macro</td><td>1</td><td>0.0000</td><td>0</td><td>100%</td></tr><tr><td>redteam</td><td>1</td><td>0.0000</td><td>14301</td><td>0%</td></tr><tr><td>judge</td><td>1</td><td>0.0000</td><td>14240</td><td>0%</td></tr></tbody>
+        <tbody><tr><td>analyst_trend</td><td>9</td><td>0.0000</td><td>39956</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>9</td><td>0.0000</td><td>15151</td><td>0%</td></tr><tr><td>analyst_macro</td><td>9</td><td>0.0000</td><td>11064</td><td>44%</td></tr><tr><td>redteam</td><td>9</td><td>0.0000</td><td>8115</td><td>44%</td></tr><tr><td>judge</td><td>9</td><td>0.0000</td><td>18694</td><td>0%</td></tr></tbody>
       </table>
     </div>
     
   
     <div class="card">
       <h2>ภาพรวม Analyst (เห็นตรงกับ judge บ่อยแค่ไหน)</h2>
-      <p class="hint">* วัดจาก 2 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
+      <p class="hint">* วัดจาก 10 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
       <table>
         <thead><tr><th>Role</th><th>จำนวนที่เทียบได้</th><th>% เห็นตรงกับ judge</th></tr></thead>
-        <tbody><tr><td>analyst_trend</td><td>1</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>1</td><td>100%</td></tr><tr><td>analyst_macro</td><td>1</td><td>100%</td></tr><tr><td>redteam</td><td>0</td><td>0%</td></tr></tbody>
+        <tbody><tr><td>analyst_trend</td><td>3</td><td>67%</td></tr><tr><td>analyst_positioning</td><td>3</td><td>33%</td></tr><tr><td>analyst_macro</td><td>3</td><td>67%</td></tr><tr><td>redteam</td><td>0</td><td>0%</td></tr></tbody>
       </table>
     </div>
     
   
     <div class="card">
-      <h2>Log การตัดสินใจแบบเต็ม (ล่าสุด 3 วัน — คลิกเพื่อกาง)</h2>
+      <h2>Log การตัดสินใจแบบเต็ม (ล่าสุด 11 วัน — คลิกเพื่อกาง)</h2>
       
+            <details class="decision-entry">
+              <summary>2026-08-16 — llm — long LINK
+                 (degrade level 0)</summary>
+              <div class="decision-body">
+            <p><strong>Shortlist วันนั้น:</strong></p>
+            <ul><li>PUMP — composite 0.80</li><li>LINK — composite 0.75</li><li>PAXG — composite 0.62</li></ul>
+            <p class='hint'>ตัวอื่นในพูล: HYPE (0.56), BTC (0.42), ETH (0.33), SOL (0.15)</p>
+            <hr>
+            
+    <p><strong>analyst_trend (dashscope/qwen3.7-max):</strong>
+       cost=0.0000 USD, latency=36962ms</p>
+    <ul class='candidate-list'><li><strong>PUMP long</strong> (confidence 65.0) — ADX 44.49 ยืนยันเทรนด์แข็งแกร่ง Donchian 1.000 ราคาปิดเหนือ EMA ทุกเส้น pullback -8.59% จาก high 30d เป็นโอกาส continuation แต่ volume spike 0.02 ต่ำมากทำให้ขาดแรงยืนยัน breakout ใหม่ <em>[invalidation: ราคาหลุด EMA9 (gap 1.60%) หรือ ADX ลดต่ำกว่า 30 พร้อม volume spike ฟื้นตัวแต่ราคาลง = exhaustion]</em></li><li><strong>LINK long</strong> (confidence 52.0) — ADX 25.34 เพิ่งเข้าเขตเทรนด์ Donchian 0.857 ใกล้ upper band RSI 71.84 ยังไม่ overbought แต่ momentum score 1.000 + OI เพิ่มสองหลักยืนยัน positioning ใหม่ ปัญหาหลักคือ vol percentile 0.143 ต่ำเกินไปที่จะยืนยัน breakout ที่ยั่งยืน <em>[invalidation: RSI break 75 แล้ว fail หรือราคาหลุด EMA9 (gap 6.51%) = เทรนด์ยังไม่เกิดจริง ADX อาจ revert]</em></li><li><strong>PAXG flat</strong> (confidence 42.0) — ADX 34.93 ชี้เทรนด์ขึ้น แต่ EMA gap แคบมาก (9=0.68%, 21=2.63%) และ momentum sub-score เพียง 0.143 ต่ำสุดในกลุ่ม = ราคาขึ้นแบบไร้แรงส่ง Donchian 0.714 กลางๆ ไม่มีสัญญาณ breakout หรือ continuation ที่ชัดเจน <em>[invalidation: ถ้าราคา break Donchian upper band พร้อม momentum ฟื้น = ต้อง reassess เป็น long; ถ้าหลุด EMA50 (gap 3.95%) = short]</em></li></ul>
+    
+    <p><strong>analyst_positioning (claude-sonnet-5):</strong>
+       cost=0.0000 USD, latency=17011ms</p>
+    <ul class='candidate-list'><li><strong>PUMP short</strong> (confidence 68.0) — Donchian=1.0 ติดขอบบนสุด 30วัน ห่าง EMA200 +27.7% แต่โมเมนตัมแผ่ว (1d -0.73%, 7d +2.24%) ขณะ OI 7d พอง +42% แล้วเริ่มหด 24h -5.89% วอลุ่มไม่ยืนยัน (spike 0.02) เสี่ยง blow-off/mean-revert <em>[invalidation: OI 24h กลับเป็นบวกพร้อม volume spike สูงขึ้น และราคาทำ high ใหม่เหนือ Donchian เดิม]</em></li><li><strong>LINK short</strong> (confidence 55.0) — RSI 71.84 เข้าเขต overbought, momentum sub-score เต็ม 1.0 แต่ OI 24h/7d พองพร้อมกัน (+15.28%/+22.31%) ขณะ vol_fit ต่ำ (0.286) บ่งชี้ leverage ไล่ราคาเร็วเกินสภาพความผันผวนจริง เสี่ยง squeeze/mean-revert หลัง 7d return พุ่งแรง +16% <em>[invalidation: RSI ลดต่ำกว่า 60 พร้อม OI ชะลอตัวลงและราคายืนเหนือ Donchian high]</em></li><li><strong>PAXG flat</strong> (confidence 30.0) — Positioning ไม่สุดโต่ง ADX 34.9 มีเทรนด์แต่ momentum sub-score ต่ำ (0.143) และ OI 24h เกือบทรงตัว (-0.66%) ขณะ 7d OI ขึ้น +26.86% แบบค่อยเป็นค่อยไป ไม่มี squeeze signal ชัดเจน ราคายังไม่ทดสอบ extreme (Donchian 0.714) <em>[invalidation: หาก OI พุ่งเร็วผิดปกติ (&gt;15% ใน 24h) พร้อม RSI ทะลุ 75 จะเปลี่ยนเป็น short bias]</em></li></ul>
+    
+    <p><strong>analyst_macro (dashscope/deepseek-v4-pro):</strong>
+       cost=0.0000 USD, latency=12441ms</p>
+    <ul class='candidate-list'><li><strong>PUMP flat</strong> (confidence 25.0) — No macro data, cross-asset signals, or news available to assess external drivers for this low-cap token. Macro factors missing; flat is appropriate. <em>[invalidation: If DXY drops sharply while gold and equity futures rise, a risk-on sentiment could lift altcoins like PUMP.]</em></li><li><strong>LINK flat</strong> (confidence 25.0) — Absent macro inputs, cannot gauge impact of DXY, SPX, or US10Y on LINK. No cross-asset correlation insights possible. Flat due to incomplete external picture. <em>[invalidation: A sudden equity rally or large-cap crypto surge without macro data could favor LINK, but not enough to override flat.]</em></li><li><strong>PAXG flat</strong> (confidence 20.0) — PAXG usually moves with gold spot and inverse DXY, but no gold price or DXY level provided. Without those, cannot assess its macro-driven direction. Flat. <em>[invalidation: If gold spot breaks above recent highs on news (e.g., geopolitical risk), PAXG could rally; but data missing prevents conviction.]</em></li></ul>
+    
+            <hr>
+            <p><strong>redteam (GPT 5.2):</strong> abstain — เรียกไม่ผ่านทุก key: litellm.BadRequestError: OpenAIException - /chat/completions: Invalid model name passed in model=GPT 5.2. Call `/v1/models` to view available models for your key.</p>
+            <hr>
+            
+                <p><strong>Judge:</strong> long LINK
+                   confidence=62.0
+                   stop=3.50% tp=7.00%</p>
+                <p class="hint">เหตุผล: LINK แสดงเทรนด์ขึ้นที่เพิ่งเริ่มก่อตัว (ADX 25.34 เข้าเขตเทรนด์) พร้อม momentum sub-score เต็ม 1.0 และ 7d return +16% ที่ยืนยันด้วย OI เพิ่ม +22% ราคายังห่าง EMA200 เพียง -0.40% ไม่ overextended เท่า PUMP ที่ +27.7% จาก EMA200 แม้ RSI 71.84 เริ่มร้อน แต่ ATR% 3.28 ต่ำ ทำให้ stop เหมาะสม ระดับ vol_fit ต่ำเป็นข้อกังวลแต่ไม่ถึงกับตัดโอกาส trend-following ในช่วง early breakout</p>
+                <p class="hint">ทำไมเลือกตัวนี้แทนตัวอื่น: PUMP overextended มาก (+66.77% 30d, Donchian 1.0, +27.7% เหนือ EMA200) พร้อม volume spike ต่ำมาก (0.02) และ OI 24h เริ่มหด -5.89% = blow-off risk สูง; PAXG momentum ต่ำ (0.143) และ EMA gap แคบเกินไป ไม่มี edge ชัดเจน; LINK มี trend+momentum ที่ balance ที่สุดในกลุ่ม</p>
+                <p class="hint">ตอบข้อค้านของ redteam: Red team abstain (model error) จึงไม่มีข้อค้านให้ตอบ ใช้ Positioning เป็น counter-view แทน — รับรู้ความเสี่ยง squeeze จึงตั้ง stop แคบและ TP ไม่โลภ</p>
+                
+            </div>
+            </details>
+            
+            <details class="decision-entry">
+              <summary>2026-08-15 — llm — flat N/A
+                 (degrade level 0)</summary>
+              <div class="decision-body">
+            <p><strong>Shortlist วันนั้น:</strong></p>
+            <ul><li>PUMP — composite 0.92</li><li>PAXG — composite 0.59</li><li>XRP — composite 0.58</li></ul>
+            <p class='hint'>ตัวอื่นในพูล: HYPE (0.57), BTC (0.47), ZEC (0.36), ETH (0.31), SOL (0.18)</p>
+            <hr>
+            
+    <p><strong>analyst_trend (dashscope/qwen3.7-max):</strong>
+       cost=0.0000 USD, latency=36209ms</p>
+    <ul class='candidate-list'><li><strong>PUMP long</strong> (confidence 74.0) — เทรนด์ขาขึ้นแข็งแรง ADX 44.22 ยืนยัน trend strength, Donchian=1.000 แสดง breakout ที่ high 30 วัน, EMA เรียง bullish ทุกระดับ, OI เพิ่ม 51% ใน 7 วันสนับสนุนกระแสเงินเข้า โมเมนตัมยังวิ่งต่อได้แม้ RSI ใกล้ 70 <em>[invalidation: ADX หลุด 25 หรือราคาปิดต่ำกว่า EMA21 (gap หาย) หรือ volume spike กลับมาแต่ราคาไม่ไปต่อ = false breakout]</em></li><li><strong>PAXG long</strong> (confidence 42.0) — EMA ยังเรียง bullish และ ADX 34.58 พอมีเทรนด์ แต่ momentum sub-score ต่ำเพียง 0.125 และ Donchian 0.625 ไม่ได้ breakout — เป็นขาขึ้นอ่อนๆ มากกว่า breakout จริง OI เพิ่มแต่ volume spike ต่ำมาก ยืนยันแรงส่งน้อย <em>[invalidation: ราคาหลุด EMA50 (gap 4.10% หาย) หรือ ADX ลดลงต่ำกว่า 25 = เทรนด์จบ]</em></li><li><strong>XRP flat</strong> (confidence 30.0) — Regime chop_vol_low + ADX 22.81 ต่ำกว่า 25 = ไม่มีเทรนด์ชัดเจน EMA bearish ทุกรายแต่ Donchian 0.875 บอกว่าราคาอยู่ขอบบนของ range เล็ก — เป็น bounce ใน sideway ไม่ใช่ breakout จริง volume percentile 0.3% ต่ำสุด ไม่มีแรงยืนยันทิศทาง <em>[invalidation: ADX กลับขึ้นเหนือ 25 พร้อมราคาปิดเหนือ EMA21 = เริ่มมีเทรนด์ใหม่ (อาจ long หรือ short แล้วแต่ทิศทาง)]</em></li></ul>
+    
+    <p><strong>analyst_positioning (claude-sonnet-5):</strong>
+       cost=0.0000 USD, latency=15982ms</p>
+    <ul class='candidate-list'><li><strong>PUMP short</strong> (confidence 62.0) — Parabolic +64.58%/30d, Donchian=1.0 ใกล้ high สุด แต่ volume spike ต่ำ(0.08) ราคาวิ่งไร้แรงหนุนใหม่ OI 24h หด-8.94% หลังพอง 7d+51.25% ส่งสัญญาณ long เริ่ม unwind funding sub-score สูง(0.75)ฝั่ง long จ่าย เสี่ยง squeeze/mean-revert แรง <em>[invalidation: ถ้า OI กลับมาเพิ่มพร้อม volume spike สูงขึ้นและราคา breakout high ใหม่ต่อเนื่อง]</em></li><li><strong>PAXG flat</strong> (confidence 40.0) — เทรนด์ขึ้นอ่อนแรง momentum sub-score ต่ำ(0.125) RSI 65 ยังไม่สุดโต่ง OI 24h/7d เพิ่ม(8.19%/27.70%)แต่ราคาแทบไม่ขยับ(1d -0.03%) ไม่มี positioning สุดโต่งพอเทรด รอสัญญาณ funding/OI ชัดเจนกว่านี้ <em>[invalidation: ถ้า OI พุ่งแรงพร้อมราคาทะลุ high 30 วันใหม่ ให้พิจารณา long ตาม trend]</em></li><li><strong>XRP flat</strong> (confidence 35.0) — chop_vol_low ADX ต่ำ(22.81) vol percentile ต่ำสุด(0.003) funding sub-score ต่ำ(0.25)ฝั่ง short เอนเปรียบเล็กน้อย แต่ OI 7d +45.56% ขณะราคาทรง sideways ไม่มี squeeze สุดโต่งชัดเจนพอให้เข้าเทรด <em>[invalidation: ถ้า OI ยังพองต่อพร้อม funding สุดโต่งฝั่งใดฝั่งหนึ่งชัดเจน หรือ breakout จาก range]</em></li></ul>
+    
+    <p><strong>analyst_macro (dashscope/deepseek-v4-pro):</strong>
+       cost=0.0000 USD, latency=19423ms</p>
+    <ul class='candidate-list'><li><strong>PUMP flat</strong> (confidence 10.0) — ไม่มีข้อมูลมหภาค ความกลัว/ความโลภ หรือข่าวให้วิเคราะห์ ปัจจัยภายนอกไม่ชัดเจน ไม่สามารถระบุทิศทางจาก macro/cross-asset ได้ <em>[invalidation: หากมีข้อมูลมหภาคหรือข่าวที่ชี้ชัดในทิศทางใดทิศทางหนึ่ง]</em></li><li><strong>PAXG flat</strong> (confidence 10.0) — ไม่สามารถเชื่อมโยงกับทองคำสปอตและ DXY ได้เนื่องจากข้อมูลมหภาคขาดหาย ไม่มีปัจจัยภายนอกชี้นำ <em>[invalidation: ข้อมูลราคาทองคำหรือ DXY กลับมามีผลชัดเจน]</em></li><li><strong>XRP flat</strong> (confidence 10.0) — ข่าวและมหภาคว่างเปล่า ไม่สามารถประเมิน sentiment ภายนอกได้ คงคำแนะนำ flat <em>[invalidation: หากมีข่าวสำคัญหรือการเปลี่ยนแปลงของดัชนีมหภาคที่ชัดเจน]</em></li></ul>
+    
+            <hr>
+            <p><strong>redteam (GPT 5.2):</strong> abstain — เรียกไม่ผ่านทุก key: litellm.BadRequestError: OpenAIException - /chat/completions: Invalid model name passed in model=GPT 5.2. Call `/v1/models` to view available models for your key.</p>
+            <hr>
+            
+                <p><strong>Judge:</strong> flat N/A
+                   confidence=50.0
+                   stop=0.00% tp=0.00%</p>
+                <p class="hint">เหตุผล: PUMP มี composite score สูงสุด แต่ analysts แตกทางกันชัดเจน: trend เชียร์ long (74) เพราะ ADX 44 + breakout Donchian 1.0, ส่วน positioning เตือน short (62) เพราะ OI 24h -8.94% หลังพอง 51%/7d = long unwind + volume spike ต่ำ 0.08 บอกว่า breakout ไร้แรงหนุนใหม่ RSI 69 ใกล้ overbought หลัง +64%/30d เสี่ยง mean-revert สูง PAXG momentum อ่อน (0.125) ไม่มี edge XRP อยู่ใน chop_vol_low ADX 22 ไม่มีเทรนด์ Red team เรียกไม่ผ่าน = ไม่มี sanity check เพิ่ม เมื่อ trend vs positioning ขัดกันบน asset เดียวและ macro ให้ flat ทั้งหมด การรอเป็นทางเลือกที่ EV เท่ากับการเทรดที่ถูก</p>
+                <p class="hint">ทำไมเลือกตัวนี้แทนตัวอื่น: ไม่เลือกเทรดตัวใดเพราะ PUMP มีความขัดแย้ง trend/positioning ชัด (long breakout vs long unwind), PAXG momentum อ่อนไม่มี edge, XRP อยู่ใน chop ADX ต่ำ</p>
+                <p class="hint">ตอบข้อค้านของ redteam: Red team abstain (model error) จึงไม่มี sanity check ยิ่งเป็นเหตุผลให้ระมัดระวังและเลือก flat เมื่อ analysts ขัดกัน</p>
+                
+            </div>
+            </details>
+            
+            <details class="decision-entry">
+              <summary>2026-08-14 — llm — flat N/A
+                 (degrade level 0)</summary>
+              <div class="decision-body">
+            <p><strong>Shortlist วันนั้น:</strong></p>
+            <ul><li>PUMP — composite 0.87</li><li>HYPE — composite 0.60</li><li>PAXG — composite 0.53</li></ul>
+            <p class='hint'>ตัวอื่นในพูล: XRP (0.49), ETH (0.39), BTC (0.36), SOL (0.34)</p>
+            <hr>
+            
+    <p><strong>analyst_trend (dashscope/qwen3.7-max):</strong>
+       cost=0.0000 USD, latency=27973ms</p>
+    <ul class='candidate-list'><li><strong>PUMP long</strong> (confidence 78.0) — ADX 42.98 ยืนยันเทรนด์แข็งแรง Donchian=1.000 อยู่ที่ high สุด 30d EMA เรียง bullish ทุกเส้น gap กว้าง (9=11%, 50=44%) momentum sub-score 1.000 ต่อเนื่องจาก return 7d +32% แนวโน้มยัง intact แม้ RSI overbought <em>[invalidation: ราคาปิดต่ำกว่า EMA9 (gap หดเป็นลบ) หรือ ADX หลุด 25 พร้อม volume spike ฝั่ง sell]</em></li><li><strong>HYPE flat</strong> (confidence 72.0) — ADX 14.47 ต่ำมากบ่งชี้ไร้ทิศทาง regime chop_vol_low EMA gap สลับบวก/ลบ (50=-2%, 200=+11.5%) RSI 50.51 กึ่งกลาง ไม่มี breakout จาก range ชัดเจน volume percentile ต่ำสุด 0.057 ไม่สนับสนุนการเคลื่อนไหว <em>[invalidation: ADX ดีดเกิน 25 พร้อมราคา break Donchian high/low ด้วย volume spike]</em></li><li><strong>PAXG flat</strong> (confidence 65.0) — ADX 34.20 ดูแข็งแรงแต่ EMA9 gap เพียง 0.01% ราคาแนบเส้นเฉลี่ย momentum sub-score ต่ำ 0.143 return 1d/7d ติดลบ แม้ regime trend_up แต่การ pullback ทดสอบ EMA9 ยังไม่ยืนยัน continuation EMA200 gap ติดลบ โครงสร้างยังไม่นิ่ง <em>[invalidation: ราคาดีดกลับเหนือ EMA9 ด้วย volume หรือหลุด EMA50 (gap 2.97%) จนเสียโครงสร้าง]</em></li></ul>
+    
+    <p><strong>analyst_positioning (claude-sonnet-5):</strong>
+       cost=0.0000 USD, latency=16013ms</p>
+    <ul class='candidate-list'><li><strong>PUMP short</strong> (confidence 68.0) — RSI 76.87 และ Donchian position 1.000 สะท้อนภาวะสุดโต่งชัดเจน ราคาห่างจุดต่ำสุด 30 วัน 87.52% ขณะ OI 7d +56.77% แต่ volume spike ratio ต่ำเพียง 0.16 บ่งชี้ positioning หนาแน่นบนสภาพคล่องบาง เสี่ยง mean-revert/squeeze แม้เทรนด์ยังแรง <em>[invalidation: หาก volume spike ratio เพิ่มขึ้นชัดเจน (&gt;0.5) พร้อม RSI ยังสูง แสดงว่ามีดีมานด์จริงหนุน ไม่ใช่แค่ positioning เก็งกำไร]</em></li><li><strong>HYPE flat</strong> (confidence 25.0) — ADX 14.47 อ่อนแรง RSI 50.51 กลางๆ ไม่มีสัญญาณ positioning สุดโต่ง OI 7d เพิ่มเพียง 4.21% volume spike ratio ต่ำมาก 0.06 บ่งชี้ตลาดยังไม่มี conviction พอให้เทรดฝั่งใดฝั่งหนึ่ง <em>[invalidation: หาก ADX ทะลุ 25 พร้อม OI/volume เร่งตัวขึ้นอย่างมีนัยสำคัญไปทิศทางใดทิศทางหนึ่ง จะเปลี่ยนมุมมองเป็นมีทิศทางชัดเจน]</em></li><li><strong>PAXG flat</strong> (confidence 30.0) — Trend/momentum ปานกลาง (ADX 34.2, RSI 59.83) ไม่สุดโต่ง OI 7d +38.80% กับ volume spike ratio สูง 0.76 น่าสนใจแต่ยังไม่ชัดเจนพอเป็นสัญญาณ squeeze ราคาห่างจุดสูงสุดเพียง 2.76% ยังไม่มี extreme positioning ให้เล่นฝั่งใดฝั่งหนึ่ง <em>[invalidation: หาก OI และ volume spike ratio ยังเร่งตัวต่อพร้อมราคาทะลุ high 30 วันใหม่ จะเป็นสัญญาณ breakout ที่ต้องพิจารณาทิศทางใหม่]</em></li></ul>
+    <p><strong>analyst_macro (dashscope/deepseek-v4-pro):</strong> abstain — parse/validate ไม่ผ่านหลัง retry 2 ครั้ง: Expecting value: line 1 column 1 (char 0)</p>
+            <hr>
+            <p><strong>redteam (GPT 5.2):</strong> abstain — เรียกไม่ผ่านทุก key: litellm.BadRequestError: OpenAIException - /chat/completions: Invalid model name passed in model=GPT 5.2. Call `/v1/models` to view available models for your key.</p>
+            <hr>
+            
+                <p><strong>Judge:</strong> flat N/A
+                   confidence=55.0
+                   stop=0.00% tp=0.00%</p>
+                <p class="hint">เหตุผล: PUMP มีเทรนด์แข็งแรงแต่ RSI 76.87, Donchian 1.000, ราคาห่างจุดต่ำสุด 30d +87.52%, OI 7d +56.77% พร้อม volume spike ratio เพียง 0.16 — เป็น setup ที่ trend analyst เชียร์ long แต่ positioning analyst เตือน squeeze risk บนสภาพคล่องบาง ความขัดแย้งชัดเจนและ risk/reward ที่ไล่ตามยอด parabolic ไม่คุ้ม HYPE ไม่มีทิศทาง (ADX 14.47, chop regime) analyst 2/2 บอก flat PAXG โมเมนตัมอ่อน (sub-score 0.143), EMA9 gap เกือบศูนย์, return 1d/7d ติดลบ แม้ volume spike 0.76 น่าสนใจแต่ไม่มี directional edge macro analyst abstain และ redteam abstain ทำให้ไม่มี challenge จริง — เลือก FLAT ปลอดภัยกว่าไล่ยอดหรือเดา chop</p>
+                <p class="hint">ทำไมเลือกตัวนี้แทนตัวอื่น: ไม่มีตัวใดให้ edge ชัดเจน: PUMP overbought+thin volume, HYPE chop, PAXG โมเมนตัมเสื่อม การรอ setup ที่ดีกว่ามีค่า expected value สูงกว่าการเข้าฝืน</p>
+                <p class="hint">ตอบข้อค้านของ redteam: redteam abstain ไม่มี challenge — จึงใช้ positioning analyst เป็น internal red team ค้าน trend view บน PUMP ซึ่งทำให้ conviction ลด</p>
+                
+            </div>
+            </details>
+            
+            <details class="decision-entry">
+              <summary>2026-08-08 — llm — long PAXG
+                 (degrade level 0)</summary>
+              <div class="decision-body">
+            <p><strong>Shortlist วันนั้น:</strong></p>
+            <ul><li>LIT — composite 0.92</li><li>PAXG — composite 0.56</li><li>HYPE — composite 0.56</li></ul>
+            <p class='hint'>ตัวอื่นในพูล: ZEC (0.54), ETH (0.48), XRP (0.38), SOL (0.37), BTC (0.28)</p>
+            <hr>
+            
+    <p><strong>analyst_trend (dashscope/qwen3.7-max):</strong>
+       cost=0.0000 USD, latency=98944ms</p>
+    <ul class='candidate-list'><li><strong>LIT long</strong> (confidence 62.0) — Breakout จาก chop regime ราคาแตะ Donchian high (1.000) ด้วย momentum sub-score เต็ม และ trend sub-score=1.0 แม้ ADX 17.69 ยังไม่ยืนยันเทรนด์แข็ง แต่ return 7d +14% บ่งชี้แรงซื้อเริ่มสร้างเทรนด์ใหม่ <em>[invalidation: ราคาหลุด EMA9 (gap หาย) หรือ ADX ลดต่ำกว่า 15 พร้อม volume แห้ง]</em></li><li><strong>PAXG long</strong> (confidence 55.0) — Regime trend_up + ADX 25.45 ยืนยันเทรนด์ขาขึ้นยังมีอยู่ การย่อมาที่ Donchian 0.125 เป็น pullback ในเทรนด์ OI +17.59% ใน 24 ชม. สะท้อน positioning ใหม่เข้าสะสม RSI 68 ยังไม่ overbought <em>[invalidation: Donchian หลุด 0 (ทำ low ใหม่ 20 วัน) หรือ EMA200 gap ติดลบต่อเนื่อง]</em></li><li><strong>HYPE flat</strong> (confidence 45.0) — Chop regime + ADX 17.02 ไม่มีเทรนด์ชัดเจน ราคาอยู่ใต้ EMA สั้นทุกเส้น (9/21/50 ลบ) แต่ Donchian 0.875 ขัดแย้ง สะท้อน range แคบ vol percentile 0.078 ต่ำสุด ไม่มี catalyst breakout <em>[invalidation: ถ้า ADX พุ่งเกิน 25 พร้อม EMA9 gap กลับบวก จะ reconsider เป็น long]</em></li></ul>
+    
+    <p><strong>analyst_positioning (claude-sonnet-5):</strong>
+       cost=0.0000 USD, latency=16716ms</p>
+    <ul class='candidate-list'><li><strong>LIT short</strong> (confidence 58.0) — Donchian position 1.000 ชนขอบบน funding sub-score สูง 0.812 บ่งชี้ long positioning ตึง ขณะที่ OI 24h ลด -5.27% สวนทางราคาที่ขึ้น 14% ใน 7 วัน สะท้อนขาดแรงซื้อใหม่ยืนยัน เสี่ยง mean-revert/squeeze แม้ ADX ยังอ่อน <em>[invalidation: หาก OI กลับมาเพิ่มพร้อมราคาทะลุ high ใหม่ด้วย volume spike ยืนยัน จะยกเลิก thesis short]</em></li><li><strong>PAXG flat</strong> (confidence 40.0) — Donchian position ต่ำ 0.125 แต่ RSI 68.37 ตึงสั้น OI 24h พุ่ง +17.59% ขณะราคาแทบไม่ขยับ (-0.18% 1d) บ่งชี้ leverage เข้าใหม่เร็วเสี่ยง overheat แต่ยังไม่ถึงระดับ squeeze สุดโต่งพอให้เข้าเทรดชัดเจน <em>[invalidation: หาก OI ยังพุ่งต่อพร้อม funding พลิกลบแรง หรือราคาหลุด EMA200 จะเปิดโอกาส short]</em></li><li><strong>HYPE flat</strong> (confidence 35.0) — Positioning ไม่สุดโต่ง funding sub-score กลาง 0.500 OI 24h ลดเล็กน้อย -2.32% Vol percentile ต่ำมาก 0.078 แสดง volatility หดตัว ไม่มีสัญญาณ squeeze หรือ mean-revert ชัดเจนพอให้เทรด แม้ momentum อ่อนและราคายังลึก -22% จาก high 30 วัน <em>[invalidation: หาก funding เอียงสุดโต่งด้านใดด้านหนึ่งพร้อม OI เปลี่ยนแปลงรุนแรง จะเปิดโอกาสเทรดใหม่]</em></li></ul>
+    
+    <p><strong>analyst_macro (dashscope/deepseek-v4-pro):</strong>
+       cost=0.0000 USD, latency=18074ms</p>
+    <ul class='candidate-list'><li><strong>LIT flat</strong> (confidence 45.0) — DXY อ่อนและ SPX บวกเป็นปัจจัยหนุน risk-on แต่ Fear &amp; Greed ที่ 30 (Fear) และข่าว Trump Media ถอนตัวจากคริปโต กดดัน sentiment สินทรัพย์เก็งกำไรขนาดเล็กอย่าง LIT โดยตรง น้ำหนักทั้งสองฝั่งหักล้างกัน ไม่มีปัจจัยมหภาคชี้ขาด <em>[invalidation: Fear &amp; Greed ดีดกลับเหนือ 50 ภายใน 24 ชม. หรือ DXY ร่วงแรงกว่า 1%]</em></li><li><strong>PAXG long</strong> (confidence 65.0) — DXY อ่อนค่า -0.37% และ US10Y ลดลง -0.21% เป็นแรงหนุนทองคำสปอตโดยตรง PAXG ในฐานะทองดิจิทัลได้ประโยชน์จาก safe-haven flow ท่ามกลาง Fear &amp; Greed ที่ 30 และความไม่แน่นอนจากข่าว Trump ถอนตัวจากคริปโต เงินอาจไหลออกจากคริปโตสู่ PAXG <em>[invalidation: DXY ดีดกลับแรงกว่า 0.5% หรือข่าว geopolitical คลี่คลายกะทันหัน]</em></li><li><strong>HYPE flat</strong> (confidence 50.0) — ปัจจัยมหภาคผสม: DXY อ่อนและ SPX บวกเป็นบวกต่อ risk assets แต่ข่าว Trump Media ถอนตัวจากคริปโตและ Fear &amp; Greed 30 กดดัน sentiment คริปโตโดยเฉพาะ altcoin HYPE อยู่ใน chop_vol_low และไม่มีปัจจัยมหภาคเฉพาะที่ชี้ทิศทางชัดเจน จึงควรถือ flat <em>[invalidation: Fear &amp; Greed พุ่งเหนือ 50 หรือมีข่าวบวกเฉพาะ HYPE]</em></li></ul>
+    
+            <hr>
+            <p><strong>redteam (GPT 5.2):</strong> abstain — เรียกไม่ผ่านทุก key: litellm.BadRequestError: OpenAIException - /chat/completions: Invalid model name passed in model=GPT 5.2. Call `/v1/models` to view available models for your key.</p>
+            <hr>
+            
+                <p><strong>Judge:</strong> long PAXG
+                   confidence=62.0
+                   stop=2.50% tp=5.00%</p>
+                <p class="hint">เหตุผล: PAXG มี setup ที่สมดุลที่สุด: regime trend_up_vol_mid ยืนยันด้วย ADX 25.45 (เทรนด์แข็งจริง) + macro tailwind ชัดเจน (DXY -0.37%, US10Y ลดลง, Fear &amp; Greed 30 หนุน safe-haven flow เข้าทอง) + ATR% ต่ำเพียง 1.65% ทำให้ risk คุมได้ดี ราคาห่างจาก high 30d แค่ -0.61% แต่ยังไม่ overbought เกินไป trend analyst และ macro analyst เห็นตรงกันว่า long ขณะที่ LIT มีสัญญาณค้านจาก positioning (Donchian 1.000 + OI ลดสวนราคา = squeeze risk) และ ATR% 7.90% เสี่ยงเกินไปสำหรับวันที่ sentiment เปราะ</p>
+                <p class="hint">ทำไมเลือกตัวนี้แทนตัวอื่น: LIT แม้ composite สูงสุดแต่มี divergence positioning อันตราย (ราคาชนขอบ + OI ลด) และ ATR สูง 5x ของ PAXG; HYPE ทุก analyst เห็นตรงกันว่า flat ไม่มี edge</p>
+                <p class="hint">ตอบข้อค้านของ redteam: Red team ไม่ทำงาน (API error) — จึงเพิ่มความระมัดระวังโดยใช้ confidence ระดับกลางและ stop แคบตาม ATR ต่ำ</p>
+                
+            </div>
+            </details>
+            
+            <details class="decision-entry">
+              <summary>2026-08-07 — llm — flat N/A
+                 (degrade level 0)</summary>
+              <div class="decision-body">
+            <p><strong>Shortlist วันนั้น:</strong></p>
+            <ul><li>PUMP — composite 0.92</li><li>HYPE — composite 0.62</li><li>PAXG — composite 0.58</li></ul>
+            <p class='hint'>ตัวอื่นในพูล: ZEC (0.54), XRP (0.42), SOL (0.41), ETH (0.32), BTC (0.29)</p>
+            <hr>
+            
+    <p><strong>analyst_trend (dashscope/qwen3.7-max):</strong>
+       cost=0.0000 USD, latency=24320ms</p>
+    <ul class='candidate-list'><li><strong>PUMP long</strong> (confidence 78.0) — Breakout จาก Donchian 1.000 พร้อม EMA stack เรียง bullish ทุกชั้น ADX 35.29 ยืนยันเทรนด์แข็งแรง momentum sub-score 1.000 <em>[invalidation: ADX หลุด 25 หรือราคาร่วงทะลุ EMA9 (gap กลบ) พร้อม volume spike ขาลง]</em></li><li><strong>HYPE flat</strong> (confidence 55.0) — ADX 17.24 ต่ำกว่า 25 regime chop_vol_low EMA gap ผสมสั้น-ยาว ไม่มี trend ชัดเจน volume percentile 0.065 ต่ำมาก <em>[invalidation: ADX ขึ้นเกิน 25 พร้อม Donchian break และ volume percentile &gt; 0.5]</em></li><li><strong>PAXG flat</strong> (confidence 50.0) — ADX 23.24 ยังไม่ยืนยัน trend, Donchian 0.250 อยู่กลาง-ล่างของ range, EMA gap สั้นยาวสลับ regime chop ไม่มี breakout <em>[invalidation: ราคา break Donchian &gt;0.8 พร้อม ADX &gt;25 และ volume spike]</em></li></ul>
+    
+    <p><strong>analyst_positioning (claude-sonnet-5):</strong>
+       cost=0.0000 USD, latency=14473ms</p>
+    <ul class='candidate-list'><li><strong>PUMP short</strong> (confidence 58.0) — ราคาพุ่ง 60%/30วัน, RSI 69, Donchian 100%, EMA200 gap 16.6% สะท้อน over-extension รุนแรง funding sub-score 0.812 บ่งชี้ long หนาแน่น เสี่ยง squeeze/liquidation ฝั่ง long หากโมเมนตัมชะลอ ระวัง mean-revert แรง <em>[invalidation: ราคาทำ new high ต่อเนื่องพร้อม OI เพิ่มขึ้นชัดเจนโดยไม่มีสัญญาณ funding สุดโต่งกลับด้าน]</em></li><li><strong>HYPE flat</strong> (confidence 40.0) — Positioning ไม่สุดโต่ง ADX ต่ำ (17.2) vol percentile ต่ำมาก (0.065) funding เป็นกลาง (0.5) ไม่มีสัญญาณ squeeze ชัดเจน ราคาอยู่กลาง range หลังปรับฐาน -17.8%/30วัน รอสัญญาณ extreme ก่อนเข้า <em>[invalidation: หาก funding หรือ OI เปลี่ยนแปลงสุดโต่งไปทางใดทางหนึ่งพร้อม breakout จาก range]</em></li><li><strong>PAXG short</strong> (confidence 45.0) — Donchian position ต่ำ (0.25) trend sub-score อ่อน (0.25) แต่ funding sub-score สูง (0.812) และ RSI 63.88 ค่อนไปทาง overbought สวนทางกับ trend อ่อนแรง OI ลด -2.5% 24h บ่งชี้ momentum จางลง เสี่ยง mean-revert ลงเล็กน้อย <em>[invalidation: ราคาทะลุ 30d high พร้อม OI และ funding กลับมาสมดุล]</em></li></ul>
+    
+    <p><strong>analyst_macro (dashscope/deepseek-v4-pro):</strong>
+       cost=0.0000 USD, latency=24957ms</p>
+    <ul class='candidate-list'><li><strong>PUMP flat</strong> (confidence 35.0) — Fear &amp; Greed 29 (Fear) และข่าว Senate เลื่อนโหวตกม.คริปโตเป็นลบต่อ sentiment โดยรวม ไม่มีปัจจัยมหภาคที่สนับสนุนการดันราคาต่อเนื่อง แรงโมเมนตัมล้วนเป็นเทคนิคัล ไม่ใช่ macro-driven <em>[invalidation: DXY ร่วงแรงกว่า 0.5% หรือมีข่าวบวกเชิงนโยบายคริปโตฉับพลัน]</em></li><li><strong>HYPE flat</strong> (confidence 30.0) — ตลาดอยู่ในภาวะ Fear, วอลุ่มต่ำมาก, ไม่มีตัวเร่งมหภาคหรือข่าวเฉพาะที่บ่งชี้ทิศทางชัด HYPE เป็น chop ทางเทคนิค สภาพแวดล้อม macro ไม่ได้เอื้อต่อการกลับตัวแรง <em>[invalidation: ข่าว partnership ใหญ่ของ Hyperliquid หรือ sentiment กลับเป็น Greed เร็วมาก]</em></li><li><strong>PAXG long</strong> (confidence 40.0) — DXY อ่อนค่าเล็กน้อย (-0.01%) และ Fear &amp; Greed 29 มักหนุน demand ทองคำ/สินทรัพย์ปลอดภัย PAXG ในฐานะทองดิจิทัลมีโอกาสได้แรงซื้อ แม้ไม่มีข้อมูล gold spot ชัดเจน <em>[invalidation: DXY ดีดกลับแรงกว่า 0.3% หรือ gold spot ร่วงหลุดแนวรับสำคัญ]</em></li></ul>
+    
+            <hr>
+            
+    <p><strong>redteam (GPT 5.2):</strong>
+       cost=0.0000 USD, latency=15672ms</p>
+    <ul class='candidate-list'><li><strong>PUMP flat</strong> (confidence 63.0) — ค้าน analyst_trend ที่มอง breakout แข็ง: volume spike ratio แค่ 0.05 และ OI 24h +0.19% ไม่รองรับการไล่ราคา—เสี่ยงเป็น breakout แบบไร้ participation/late-stage. ขณะเดียวกันค้าน analyst_positioning ที่จะ short: funding ยังไม่สุดโต่งและไม่มี combination read ยืนยัน long-squeeze จึงไม่คุ้มฟันธงกลับตัว <em>[invalidation: ถ้าเกิด breakout ทำ new high ต่อพร้อม volume spike ratio กระโดดสูงและ OI เพิ่มชัดเจนหลายช่วงเวลา → long ได้; หรือหลุด EMA9/ADX ลดแรงและมีขายหนัก → short ได้]</em></li><li><strong>HYPE flat</strong> (confidence 70.0) — ไม่มี consensus ให้ค้านมากนัก แต่ขอค้านความคิดที่อาจ “รอ breakout” ตาม trend: vol percentile 0.065 + volume spike 0.05 ทำให้ breakout ง่ายต่อการหลอก. และค้านมุม contrarian ว่า ‘ลงมาเยอะแล้วน่าลอง long’: RSI 43.96/30d -17.8% ยังสะท้อนแรงซื้อไม่กลับมา <em>[invalidation: ถ้า ADX &gt;25 พร้อม Donchian breakout และวอลุ่มกลับมามีนัย (vol percentile/volume spike สูงขึ้น) → ค่อยตามเทรนด์]</em></li><li><strong>PAXG flat</strong> (confidence 61.0) — ค้าน analyst_macro ที่ long เพราะอิง DXY -0.01% น้อยเกินเป็นตัวเร่ง และ US10Y +1.15% โดยทั่วไปเป็น headwind ต่อทอง. ขณะเดียวกันค้าน analyst_positioning ที่ short: ราคาแค่ -1.11% จาก 30d high และ RSI 63.88 ยังไม่ extreme; OI -2.5% อาจแค่ de-risk ไม่ใช่สัญญาณขายต่อ <em>[invalidation: ถ้า DXY อ่อนลงต่ออย่างมีนัย + ราคาเบรกขึ้นยืนเหนือ 30d high → long; หรือถ้าราคาไหลลงต่อพร้อม OI/วอลุ่มเร่งและ RSI พลิกลงชัด → short]</em></li></ul>
+    
+            <hr>
+            
+                <p><strong>Judge:</strong> flat N/A
+                   confidence=55.0
+                   stop=0.00% tp=0.00%</p>
+                <p class="hint">เหตุผล: ไม่มีผู้เข้าชิงตัวใดให้ setup ที่คุ้มความเสี่ยงชัดเจน: PUMP composite สูงสุดแต่ volume spike แค่ 0.05 และ OI +0.19% ไม่รองรับการไล่ราคา 60%/30d — เสี่ยง late-stage breakout; positioning ก็เตือน over-extension แต่ยังไม่มี combination read ยืนยัน squeeze จึง short ก็ไม่คุ้ม. HYPE regime chop_vol_low, ADX 17, vol percentile 0.065 — ไม่มีเทรนด์. PAXG trend sub-score 0.25, Donchian 0.25, ATR% แค่ 1.61 ให้ upside จำกัด และ US10Y +1.15% เป็น headwind ต่อทอง. Analyst ทั้ง 3 ไม่มี consensus ทิศทางในตัวใดตัวหนึ่ง และ red team ค้าน flat ทั้งสามตัว — FLAT เป็นคำตอบที่มี EV สูงสุด</p>
+                <p class="hint">ทำไมเลือกตัวนี้แทนตัวอื่น: ไม่เลือกเทรดเพราะทุกตัวมีจุดอ่อน: PUMP ขาด participation, HYPE ไม่มีเทรนด์, PAXG upside แคบและ macro mixed</p>
+                <p class="hint">ตอบข้อค้านของ redteam: เห็นด้วยกับ red team ทั้งหมด: PUMP ไม่มี volume/OI confirm, HYPE breakout หลอกง่าย, PAXG DXY ไม่ใช่ตัวเร่งพอและ US10Y เป็น headwind</p>
+                
+            </div>
+            </details>
+            
+            <details class="decision-entry">
+              <summary>2026-08-06 — llm — flat N/A
+                 (degrade level 0)</summary>
+              <div class="decision-body">
+            <p><strong>Shortlist วันนั้น:</strong></p>
+            <ul><li>PUMP — composite 0.88</li><li>PAXG — composite 0.75</li><li>ZEC — composite 0.55</li></ul>
+            <p class='hint'>ตัวอื่นในพูล: HYPE (0.49), WLD (0.48), XRP (0.45), ETH (0.36), BTC (0.30), SOL (0.26)</p>
+            <hr>
+            
+    <p><strong>analyst_trend (dashscope/qwen3.7-max):</strong>
+       cost=0.0000 USD, latency=32709ms</p>
+    <ul class='candidate-list'><li><strong>PUMP long</strong> (confidence 65.0) — เทรนด์ขาขึ้นแข็งแรง ADX 34.98 ยืนยัน, EMA เรียง bullish ทุกเส้น, Donchian=1 ที่จุดสูงสุด, โมเมนตัม 30d +48% ยังแรง แต่ OI ลด 8.6% และ volume spike ต่ำทำให้ต้องลด confidence <em>[invalidation: ราคาปิดต่ำกว่า EMA21 (gap 14.59%) หรือ ADX หล่นใต้ 25 หรือ OI ลดต่อเนื่องเกิน 3 วันพร้อมราคาลง]</em></li><li><strong>PAXG flat</strong> (confidence 40.0) — ADX 22.02 ต่ำกว่า 25 regime chop_vol_mid ไม่มีเทรนด์ชัดเจน Donchian 0.556 อยู่กลาง range EMA gap แคบและ 200 ติดลบเล็กน้อย สัญญาณ trend sub-score เพียง 0.556 ไม่พอเข้าเทรด <em>[invalidation: ADX ขึ้นเหนือ 25 พร้อม breakout จาก Donchian &gt;0.8 หรือ &lt;0.2]</em></li><li><strong>ZEC flat</strong> (confidence 35.0) — ADX 13.61 ต่ำมาก regime chop_vol_low vol percentile เพียง 0.062 ไร้โมเมนตัมและสภาพคล่อง Donchian 0.333 ค่อนล่างแต่ไม่มีแรงส่ง trend sub-score 0.333 ต่ำสุดในพูล ไม่เข้าเกณฑ์เทรดเทรนด์ <em>[invalidation: Volume spike กลับมาเหนือ 0.5 และ ADX ขึ้นเหนือ 25]</em></li></ul>
+    
+    <p><strong>analyst_positioning (claude-sonnet-5):</strong>
+       cost=0.0000 USD, latency=17403ms</p>
+    <ul class='candidate-list'><li><strong>PUMP short</strong> (confidence 64.0) — Donchian สูงสุด 1.0 หลังพุ่ง 48% ใน 30 วัน แต่ 1d ติดลบ -3.61% พร้อม OI หด -8.63% ชี้ long เริ่ม unwind ADX สูงคือเทรนด์ overextended เสี่ยง mean-revert มากกว่าจะไปต่อ ราคาห่างจุดต่ำสุด 30 วันถึง 70% เกินสมดุล <em>[invalidation: หาก OI กลับมาเพิ่มพร้อมราคาทำ new high และ funding ไม่สุดโต่งฝั่ง long]</em></li><li><strong>PAXG flat</strong> (confidence 45.0) — funding sub-score สูง 0.944 และ OI 24h +8.70% แต่ ADX ต่ำ (22) chop regime ราคาห่าง high เพียง -0.88% ไม่มี extreme positioning ชัดเจนพอจะเข้าเทรด mean-revert หรือ trend follow <em>[invalidation: หาก funding rate จริงพุ่งสุดโต่งฝั่งใดฝั่งหนึ่งพร้อม OI เพิ่มต่อเนื่อง จะเปลี่ยนเป็นสัญญาณ squeeze]</em></li><li><strong>ZEC flat</strong> (confidence 40.0) — funding sub-score สูง 0.944 แต่ vol_fit ต่ำมาก 0.124 และ vol percentile 1y เพียง 0.062 บ่งชี้ momentum อ่อนแรงในบริบท vol ต่ำ ADX 13.6 ไม่มีเทรนด์ชัด ไม่มี positioning extreme พอเทรด <em>[invalidation: หาก ADX เพิ่มขึ้นพร้อม OI และ volume spike ชัดเจนไปทางใดทางหนึ่ง]</em></li></ul>
+    
+    <p><strong>analyst_macro (dashscope/deepseek-v4-pro):</strong>
+       cost=0.0000 USD, latency=24684ms</p>
+    <ul class='candidate-list'><li><strong>PUMP long</strong> (confidence 60.0) — DXY -0.25% และ US10Y -0.22% หนุน risk assets; Extreme Fear (25) มักนำหน้าการดีดกลับ; ข่าว Russia กฎหมาย retail crypto และ Block ปรับเป้าขึ้นเป็นบวกต่อ sentiment crypto โดยรวม <em>[invalidation: DXY กลับตัวขึ้นแรงหรือ Fear &amp; Greed ลดต่ำกว่า 20 โดยไม่มีปัจจัยบวกหนุนเพิ่ม]</em></li><li><strong>PAXG long</strong> (confidence 55.0) — DXY อ่อนค่า (-0.25%) เป็นบวกต่อทองคำและ PAXG ในฐานะ safe haven; OI เพิ่ม 8.70% ใน 24 ชม. สะท้อน positioning ฝั่ง long; ทองคำสปอตมีแนวโน้มได้แรงหนุนจากดอลลาร์อ่อน <em>[invalidation: DXY ดีดกลับเหนือ 100.5 หรือมีข่าว hawkish จาก Fed ที่ไม่คาดคิด]</em></li><li><strong>ZEC flat</strong> (confidence 70.0) — แม้ DXY อ่อนค่าและข่าว Russia crypto law เป็นบวกต่อ privacy coins ในทางทฤษฎี แต่โครงสร้างภายในของ ZEC อ่อนแอเกินไป (ADX 13.61, chop regime, vol ต่ำมากที่ percentile 0.062) จนมหภาคที่มีความเชื่อมั่นจำกัดไม่เพียงพอจะผลักดัน <em>[invalidation: ปริมาณซื้อขาย ZEC พุ่งผิดปกติหรือมีข่าวเฉพาะเจาะจงเกี่ยวกับ privacy coin adoption]</em></li></ul>
+    
+            <hr>
+            
+    <p><strong>redteam (GPT 5.2):</strong>
+       cost=0.0000 USD, latency=14159ms</p>
+    <ul class='candidate-list'><li><strong>PUMP flat</strong> (confidence 58.0) — ค้านทั้ง analyst_trend/analyst_macro ที่ long: Donchian=1.0 คือปลายทางไม่ใช่จุดเริ่ม, 1d -3.61% พร้อม OI -8.63% และ volume spike 0.29 ชี้แรงซื้อไม่ยืนยัน; เสี่ยง bull-trap/late-entry มากกว่าตามเทรนด์. ฝั่ง analyst_positioning short ก็ยังไม่มีสัญญาณ liquidation ชัดจึงเลือก FLAT. <em>[invalidation: ถ้าราคาทำ new high ต่อเนื่องพร้อม OI กลับมาเพิ่ม และ volume spike ฟื้นชัด (ยืนยัน demand) โดยยังไม่เห็นสัญญาณ distribution]</em></li><li><strong>PAXG flat</strong> (confidence 61.0) — ค้าน analyst_macro ที่ long: regime chop_vol_mid + ADX 22.02 ต่ำกว่า 25 ทำให้ “DXY อ่อน=ต้องขึ้น” อาจเป็น narrative trap; OI +8.70% แต่ volume spike 0.28 ต่ำ เสี่ยงเป็น leverage build ในกรอบมากกว่าขาเทรนด์. ตรงกับ trend/positioning ที่ flat. <em>[invalidation: ถ้า ADX ขึ้นเหนือ 25 พร้อม Donchian &gt;0.8 (breakout) และ volume spike ฟื้นชัด ยืนยันว่าการเพิ่ม OI เป็นแรงขับเทรนด์จริง]</em></li><li><strong>ZEC flat</strong> (confidence 73.0) — หาเหตุผลค้าน flat ของทั้งสามแทบไม่ได้: ADX 13.61, vol percentile 0.062, vol_fit 0.124 และ volume spike 0.10 แปลว่าไม่มีแรง/สภาพคล่องพอให้ edge. แม้ momentum sub-score 0.889 และ 7d +7.99% ก็ยังไม่พอหักล้างบริบท chop_vol_low. <em>[invalidation: ถ้า volume spike กลับมาสูงผิดปกติพร้อม ADX &gt;25 และ OI/ราคาเดินทางเดียวกันจนเกิดโครงสร้างเทรนด์ชัด]</em></li></ul>
+    
+            <hr>
+            
+                <p><strong>Judge:</strong> flat N/A
+                   confidence=65.0
+                   stop=0.00% tp=0.00%</p>
+                <p class="hint">เหตุผล: ไม่มีผู้เข้าชิงตัวใดให้ setup ที่ชัดพอ: PUMP มี composite สูงแต่ Donchian=1.0 หลังพุ่ง 48% ใน 30 วัน พร้อม 1d -3.61%, OI -8.63%, volume spike แค่ 0.29 — เป็น late-entry/bull-trap risk ตามที่ red team ชี้ analysts แตกกัน (trend/macro long vs positioning short) ไม่มี consensus. PAXG อยู่ chop_vol_mid, ADX 22 ต่ำกว่า 25, Donchian กลาง range, EMA gap แคบ — trend/positioning เห็น flat ตรงกัน มีแต่ macro เชียร์ long แบบ conf ต่ำ (55). ZEC ทั้ง 4 voices เห็น flat ตรงกัน (vol percentile 0.062, ADX 13.6). Fear &amp; Greed 25 (Extreme Fear) เพิ่ม tail risk ไม่ควรฝืน. FLAT ปลอดภัยและมีคะแนนเท่ากับเทรดถูก</p>
+                <p class="hint">ทำไมเลือกตัวนี้แทนตัวอื่น: เลือก FLAT เพราะไม่มีตัวใดผ่านเกณฑ์ confidence 60 แบบสะอาด — PUMP overextended, PAXG chop, ZEC ไร้สภาพคล่อง</p>
+                <p class="hint">ตอบข้อค้านของ redteam: เห็นด้วยกับ red team ทั้ง 3 เคส: PUMP เป็น late-entry risk, PAXG เป็น narrative trap ใน chop, ZEC ไร้ edge จาก vol ต่ำ</p>
+                
+            </div>
+            </details>
+            
+            <details class="decision-entry">
+              <summary>2026-08-05 — llm — flat N/A
+                 (degrade level 0)</summary>
+              <div class="decision-body">
+            <p><strong>Shortlist วันนั้น:</strong></p>
+            <ul><li>PUMP — composite 0.97</li><li>HYPE — composite 0.64</li><li>PAXG — composite 0.62</li></ul>
+            <p class='hint'>ตัวอื่นในพูล: ZEC (0.49), ETH (0.41), SOL (0.30), BTC (0.23)</p>
+            <hr>
+            
+    <p><strong>analyst_trend (dashscope/qwen3.7-max):</strong>
+       cost=0.0000 USD, latency=40401ms</p>
+    <ul class='candidate-list'><li><strong>PUMP long</strong> (confidence 78.0) — ADX 34.13 ยืนยันเทรนด์แข็งแรง Donchian=1.000 breakout จุดสูงสุด 30 วัน EMA gap บวกทุกระยะ OI เพิ่ม 23.6% เงินใหม่ไหลเข้าต่อเนื่อง โมเมนตัม 7d/30d สูงมาก <em>[invalidation: RSI หักลงต่ำกว่า 60 หรือราคาหลุด EMA9 (gap 12%) หรือ ADX ลดต่ำกว่า 25 แสดงว่าเทรนด์หมดแรง]</em></li><li><strong>HYPE flat</strong> (confidence 35.0) — ADX 20.51 ต่ำกว่า 25 ไม่มีเทรนด์ชัดเจน regime chop_vol_low EMA ขัดกันเอง (9 บวก แต่ 21/50 ลบ) volume percentile 0.046 ต่ำมาก ไม่มีแรงส่งพอเทรดตามเทรนด์ <em>[invalidation: ADX เพิ่มขึ้นเหนือ 25 พร้อมราคา breakout Donchian high (0.857→1.0) ด้วย volume spike จะเปลี่ยนเป็น long thesis]</em></li><li><strong>PAXG flat</strong> (confidence 30.0) — ADX 18.88 ต่ำมาก ไม่มีเทรนด์ ATR% 1.47 ผันผวนน้อย regime chop_vol_low EMA gap ทุกเส้นแคบมาก (&lt;1.3%) ราคาเคลื่อนที่ sideway ใน range แคบ ไม่สามารถเทรดเทรนด์ได้ <em>[invalidation: ราคา breakout จาก range 4% พร้อม ADX เพิ่มเหนือ 25 และ ATR% ขยายตัว จะพิจารณา long/short ใหม่]</em></li></ul>
+    
+    <p><strong>analyst_positioning (claude-sonnet-5):</strong>
+       cost=0.0000 USD, latency=15086ms</p>
+    <ul class='candidate-list'><li><strong>PUMP short</strong> (confidence 62.0) — RSI 71.5, Donchian=1.0 ที่ high 30d, funding sub-score เต็ม 1.0 และ OI พุ่ง +23.6% ใน 24ชม. บ่งชี้ leverage build-up เร็วเกินไปบน trend ที่ยืดมาก (EMA50 gap 34%) เสี่ยง mean-revert/squeeze แม้ trend ยังแรง <em>[invalidation: ราคาทำ ATH ใหม่ต่อเนื่องพร้อม OI/funding เย็นลง หรือ ADX ยังไต่ขึ้นโดยไม่มี pullback ใน 2-3 วัน]</em></li><li><strong>HYPE flat</strong> (confidence 30.0) — Positioning ไม่สุดขั้ว funding sub-score 0.714 กลางๆ, vol percentile ต่ำ 0.046, chop regime, ราคาอยู่กลางเรนจ์ (Donchian 0.857) ไม่มี combination signal ที่ชัดเจนพอจะเข้าฝั่งใดฝั่งหนึ่ง <em>[invalidation: หาก OI/funding เปลี่ยนสุดขั้วชัดเจนพร้อม breakout ทิศทางใดทิศทางหนึ่ง]</em></li><li><strong>PAXG flat</strong> (confidence 25.0) — PAXG อยู่ใน chop_vol_low, ATR% ต่ำมาก 1.47, ไม่มีสัญญาณ funding/OI สุดขั้ว (OI 24h +2.62% เท่านั้น) ราคาใกล้กลางเรนจ์ ไม่มี positioning extreme ให้เล่น mean-reversion <em>[invalidation: หาก funding หรือ OI เปลี่ยนแปลงสุดขั้วอย่างรวดเร็ว หรือราคาทะลุ 30d high/low]</em></li></ul>
+    <p><strong>analyst_macro (dashscope/deepseek-v4-pro):</strong> abstain — parse/validate ไม่ผ่านหลัง retry 2 ครั้ง: Expecting value: line 1 column 1 (char 0)</p>
+            <hr>
+            
+    <p><strong>redteam (GPT 5.2):</strong>
+       cost=0.0000 USD, latency=12541ms</p>
+    <ul class='candidate-list'><li><strong>PUMP flat</strong> (confidence 58.0) — ค้านทั้ง trend ที่รีบไล่ long และ positioning ที่รีบ short: ข้อมูลชี้ “ทิศทาง” แต่คุณภาพสัญญาณแย่—Volume spike ratio แค่ 0.16 ทั้งที่ Donchian=1.0 และ OI +23.6% อาจเป็น thin-liquidity push/late breakout ทำให้เสี่ยง whipsaw มากกว่าขาขึ้น/mean-revert ที่คาด. <em>[invalidation: ถ้าเกิด breakout ต่อเนื่องพร้อม Volume spike ratio เพิ่มชัดเจนและ OI ไม่เร่งต่อ (หรือเริ่มทรง/ลด) ขณะราคายืนเหนือ EMA9 ได้หลายวัน]</em></li><li><strong>HYPE flat</strong> (confidence 70.0) — ไม่เห็นเหตุผลค้านที่หนักแน่นต่อมุมมอง flat ของ trend/positioning: regime chop_vol_low + ADX 20.51 และ vol percentile 0.046 ทำให้สัญญาณใดๆ เสี่ยงเป็น noise มากกว่าทิศทางจริง การพยายามเดาทางก่อน breakout คือกับดักหลัก. <em>[invalidation: ถ้า ADX ขึ้นเหนือ 25 พร้อม Donchian=1.0 และเกิด volume spike ชัดเจน (มากกว่าปัจจุบันอย่างมีนัย)]</em></li><li><strong>PAXG flat</strong> (confidence 66.0) — ไม่พบข้อค้านแรงต่อ consensus flat: ADX 18.88 + ATR% 1.47 และ EMA gap แคบมากทำให้เทรนด์ไม่มี edge; การคาดหวัง breakout/mean-revert ตอนนี้มักเจอ false move ในกรอบแคบ โดยเฉพาะเมื่อ volume spike ratio ยัง 0.16. <em>[invalidation: ถ้าราคาหลุดกรอบ 30d (high/low) พร้อม ADX &gt;25 และ ATR% ขยายตัวชัดเจน]</em></li></ul>
+    
+            <hr>
+            
+                <p><strong>Judge:</strong> flat N/A
+                   confidence=65.0
+                   stop=0.00% tp=0.00%</p>
+                <p class="hint">เหตุผล: PUMP มีสัญญาณขัดแย้งชัดเจน: trend เชียร์ long แต่ positioning เตือน squeeze risk (RSI 71.5, EMA50 gap 34%, OI +23.6%) และ red team ชี้ว่า volume spike ratio แค่ 0.16 ทำให้ breakout น่าสงสัย—thin liquidity เสี่ยง whipsaw ทั้งสองทาง. HYPE และ PAXG อยู่ใน chop_vol_low, ADX ต่ำกว่า 25, vol percentile ต่ำมาก ไม่มี edge. Macro analyst abstain ทำให้ conviction ลดลงอีก. FLAT เป็นคำตอบที่ถูกต้องเมื่อสัญญาณคุณภาพต่ำ—ไม่ควรบังคับเทรดเพียงเพราะ PUMP มี composite score สูง.</p>
+                <p class="hint">ทำไมเลือกตัวนี้แทนตัวอื่น: ไม่เลือก PUMP long เพราะ leverage build-up สุดขั้ว + volume ไม่ยืนยัน breakout; ไม่เลือก PUMP short เพราะ trend ยังแรงและ ADX 34; ไม่เลือก HYPE/PAXG เพราะ chop regime ไม่มี edge</p>
+                <p class="hint">ตอบข้อค้านของ redteam: เห็นด้วยกับ red team ว่า volume spike ratio 0.16 คือ red flag สำคัญที่หักล้าง breakout thesis ของ trend analyst</p>
+                
+            </div>
+            </details>
+            
+            <details class="decision-entry">
+              <summary>2026-08-04 — llm — flat N/A
+                 (degrade level 0)</summary>
+              <div class="decision-body">
+            <p><strong>Shortlist วันนั้น:</strong></p>
+            <ul><li>PUMP — composite 0.86</li><li>PAXG — composite 0.63</li><li>HYPE — composite 0.60</li></ul>
+            <p class='hint'>ตัวอื่นในพูล: XRP (0.45), ZEC (0.42), ETH (0.38), BTC (0.35), SOL (0.34)</p>
+            <hr>
+            
+    <p><strong>analyst_trend (dashscope/qwen3.7-max):</strong>
+       cost=0.0000 USD, latency=31334ms</p>
+    <ul class='candidate-list'><li><strong>PUMP long</strong> (confidence 80.0) — Uptrend แข็งแรง EMA gap บวกทุกเส้น ADX 31.53 ยืนยันเทรนด์ Donchian 1.000 แตะ high สุดของ range พร้อม momentum ต่อเนื่อง 1d/7d/30d บวกทั้งหมด <em>[invalidation: ราคาหลุด EMA9 (gap &lt;0) หรือ ADX ลดต่ำกว่า 25 พร้อม volume spike ฝั่ง sell]</em></li><li><strong>PAXG flat</strong> (confidence 55.0) — Regime chop_vol_low ADX 19.51 ต่ำกว่า 25 ไม่พบเทรนด์ชัดเจน EMA gap ทุกเส้นใกล้ศูนย์และคละสัญญาณ ไม่มี breakout จาก range <em>[invalidation: ราคา breakout ขึ้นเหนือ EMA50 พร้อม ADX &gt;25 อาจเปิด long หรือหลุด low 30d เปิด short]</em></li><li><strong>HYPE flat</strong> (confidence 50.0) — Regime chop_vol_low ADX 21.86 ไม่ยืนยันเทรนด์ EMA gap ระยะสั้นเป็นลบแต่ 200 เป็นบวกให้สัญญาณขัดแย้ง Volume percentile 0.027 ต่ำมาก ไม่มีแรงส่ง breakout <em>[invalidation: Volume spike ratio &gt;1 พร้อมราคาหลุด EMA200 จะเปิด short หรือ reclaim EMA50 ด้วย volume เปิด long]</em></li></ul>
+    
+    <p><strong>analyst_positioning (claude-sonnet-5):</strong>
+       cost=0.0000 USD, latency=11106ms</p>
+    <ul class='candidate-list'><li><strong>PUMP short</strong> (confidence 58.0) — Parabolic +33% in 30d, Donchian position 1.0 (extreme), OI 24h +8.75% while volume spike ratio only 0.14 signals thin liquidity chasing longs. Risk of long squeeze/mean-revert despite non-extreme funding sub-score. <em>[invalidation: If OI declines while price holds above EMA9/21 (healthy continuation) or funding flips strongly negative attracting fresh short squeeze]</em></li><li><strong>PAXG flat</strong> (confidence 30.0) — Positioning not extreme: ADX 19.51 low, chop regime, RSI neutral 47.95, OI 24h flat (+0.26%). No squeeze or mean-revert edge visible; wait for clearer funding/OI extremity before taking a side. <em>[invalidation: A sharp OI surge combined with funding extremity in either direction would invalidate flat stance]</em></li><li><strong>HYPE long</strong> (confidence 45.0) — Price down -23.98% in 30d and -25.64% from high, RSI 39.77 approaching oversold, Donchian position 0.875 despite downtrend suggests late-stage capitulation. Low vol percentile (0.027) and modest OI uptick (+1.55%) hint at mean-revert bounce potential, not fresh short pressure. <em>[invalidation: If price breaks below 30d low with rising OI and volume spike, confirming trend continuation rather than reversion]</em></li></ul>
+    <p><strong>analyst_macro (dashscope/deepseek-v4-pro):</strong> abstain — parse/validate ไม่ผ่านหลัง retry 2 ครั้ง: Expecting value: line 1 column 1 (char 0)</p>
+            <hr>
+            
+    <p><strong>redteam (GPT 5.2):</strong>
+       cost=0.0000 USD, latency=16361ms</p>
+    <ul class='candidate-list'><li><strong>PUMP flat</strong> (confidence 62.0) — ค้านทั้ง trend ที่อยาก long และ positioning ที่อยาก short: สัญญาณยืดสุด (Donchian 1.000, +33%/30d) แต่ Volume spike ratio แค่ 0.14 ขณะ OI +8.75% ทำให้ทั้งฝั่งไล่ซื้อและฝั่งสวนมีโอกาสเจอ whipsaw/stop-run ในสภาพคล่องบาง—ไม่มี combination read ยืนยันทิศทาง จึงไม่คุ้มเสี่ยงเทรดทิศทางเดียว <em>[invalidation: หาก volume spike ratio พุ่งชัดเจนพร้อมราคายืนเหนือ EMA9/21 ต่อเนื่อง (เทรนด์ต่อ) หรือหลุด EMA9/21 พร้อม OI ยังเพิ่มและแรงขายชัด (กลับตัวลง)]</em></li><li><strong>PAXG flat</strong> (confidence 70.0) — เห็นด้วยกับ trend/positioning ที่ flat: Regime chop_vol_low + ADX 19.51 ทำให้สัญญาณเทรนด์ไม่น่าเชื่อถือ และ OI 24h แทบไม่ขยับ (+0.26%) กับ Volume spike ratio 0.08 บอกว่าตลาดเฉื่อย—การเดาทิศทางเสี่ยงโดนแกว่งกินสต็อปมากกว่ามี edge <em>[invalidation: ถ้าเกิด breakout จริง: ราคาเคลื่อนออกจากโซน EMA50/Donchian พร้อม ADX &gt;25 และ volume เพิ่มเด่น หรือหลุด low 30d ด้วยแรงขายชัด]</em></li><li><strong>HYPE flat</strong> (confidence 60.0) — ค้าน positioning ที่มอง long mean-revert: RSI 39.77 ยังไม่ใช่ oversold สุดโต่ง และการเด้งที่ไม่มี volume รองรับมักเป็น bull trap โดยเฉพาะ vol percentile 0.027 + volume spike ratio 0.06 บ่งชี้สภาพคล่อง/แรงซื้อหาย ขณะ EMA gap 21/50 ติดลบลึก (-5.34/-8.99) ทำให้การ long สวนมี R/R แย่ <em>[invalidation: หากมี volume spike ชัด (ratio เพิ่มมาก) พร้อม reclaim EMA50/โครงสร้างสูงขึ้น หรือในทางลง ถ้าหลุด low 30d พร้อม OI/volume เร่ง จะทำให้ bias เอียง short แทน flat]</em></li></ul>
+    
+            <hr>
+            
+                <p><strong>Judge:</strong> flat N/A
+                   confidence=65.0
+                   stop=0.00% tp=0.00%</p>
+                <p class="hint">เหตุผล: ผู้เข้าชิงทั้งสามไม่มีตัวไหนให้ edge ชัดเจน: PUMP มี trend แข็งแต่ Donchian แตะ 1.000, +33%/30d, OI +8.75% ขณะ volume spike ratio แค่ 0.14 = ไล่ซื้อในสภาพคล่องบาง เสี่ยง whipsaw ทั้งสองทิศ; PAXG chop_vol_low ADX 19.5 ไม่มีเทรนด์ OI/volume เฉื่อย; HYPE RSI 39.77 ยังไม่ oversold จริง + vol percentile 0.027 การเด้งไม่มี volume รองรับมักเป็น bull trap. Analysts แตกกันเอง (trend long PUMP vs positioning short PUMP) และ macro abstain ทำให้ conviction ต่ำ. FLAT คือคำตอบที่มี expected value สูงสุดวันนี้</p>
+                <p class="hint">ทำไมเลือกตัวนี้แทนตัวอื่น: เลือก FLAT เพราะไม่มีตัวใดผ่านเกณฑ์ conviction: PUMP มีความขัดแย้งภายใน analysts + สภาพคล่องบาง, PAXG ไม่มี edge ใน chop regime, HYPE เป็น mean-revert เสี่ยงไม่มี volume ยืนยัน</p>
+                <p class="hint">ตอบข้อค้านของ redteam: เห็นด้วยกับ red team ทั้งสามประเด็น: PUMP volume บาง เสี่ยง whipsaw, PAXG ตลาดเฉื่อยไม่มี edge, HYPE bounce ไม่มี volume รองรับเป็น bull trap risk</p>
+                
+            </div>
+            </details>
+            
             <details class="decision-entry">
               <summary>2026-08-03 — llm — flat N/A
                  (degrade level 0)</summary>
@@ -219,14 +503,14 @@ ImportError: Google Cloud SDK not found. Install it with: pip install &#x27;lite
     
   
     <div class="card">
-      <h2>ไม้ที่ปิดล่าสุด (1 รายการทั้งหมด)</h2>
+      <h2>ไม้ที่ปิดล่าสุด (2 รายการทั้งหมด)</h2>
       <table>
         <thead><tr><th>Asset</th><th>Side</th><th>Notional (USD)</th><th>PnL (USD)</th><th>เหตุผลปิด</th></tr></thead>
-        <tbody><tr><td>PAXG</td><td>long</td><td>25.34</td><td style='color:#b91c1c'>-0.24</td><td>max_holding_days_exceeded</td></tr></tbody>
+        <tbody><tr><td>PAXG</td><td>long</td><td>22.38</td><td style='color:#15803d'>0.31</td><td>max_holding_days_exceeded</td></tr><tr><td>PAXG</td><td>long</td><td>25.34</td><td style='color:#b91c1c'>-0.24</td><td>max_holding_days_exceeded</td></tr></tbody>
       </table>
     </div>
     
   <p>ยังไม่มี lessons.md (reflector ยังไม่เคยรัน หรือยังไม่พบบทเรียนใหม่)</p>
-  <p class="footer">อัปเดตล่าสุด: 2026-08-03T04:02:33.143158+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
+  <p class="footer">อัปเดตล่าสุด: 2026-08-17T01:57:52.122071+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
 </body>
 </html>

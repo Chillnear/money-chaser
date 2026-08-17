@@ -1,1 +1,2 @@
 {"asset": "LIT", "side": "short", "notional_usd": 10.0, "entry_price": 2.2360814, "exit_price": 1.968735507816, "opened_at_ts": 1785382218.217383, "closed_at_ts": 1785729642.4525132, "pnl_usd": 1.1871380200000006, "fee_usd": 0.00846198, "exit_reason": "take_profit_hit"}
+{"asset": "PUMP", "side": "short", "notional_usd": 10.0, "entry_price": 0.002428785, "exit_price": 0.00257579935605, "opened_at_ts": 1785901123.1160507, "closed_at_ts": 1786329333.5798707, "pnl_usd": -0.6145723849999992, "fee_usd": 0.009272384999999998, "exit_reason": "stop_loss_hit"}
