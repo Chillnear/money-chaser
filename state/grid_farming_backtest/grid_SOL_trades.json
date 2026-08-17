@@ -1,0 +1,242 @@
+[
+  {
+    "date": "2026-02-18",
+    "action": "open",
+    "reason": "Volatility 3.56% > threshold 1.5%. Grid width ±5.0%, 5 levels, capital $25",
+    "deployed_capital_usd": 25.2
+  },
+  {
+    "date": "2026-02-26",
+    "action": "close",
+    "reason": "Harvest target hit (31.3% profit collected, capital can redeploy)",
+    "pnl_usd": 7.896197994848947,
+    "deployed_capital_usd": 25.2
+  },
+  {
+    "date": "2026-02-27",
+    "action": "open",
+    "reason": "Volatility 5.51% > threshold 1.5%. Grid width ±5.0%, 5 levels, capital $32",
+    "deployed_capital_usd": 32.306578195364054
+  },
+  {
+    "date": "2026-03-04",
+    "action": "close",
+    "reason": "Harvest target hit (35.1% profit collected, capital can redeploy)",
+    "pnl_usd": 11.334008150128957,
+    "deployed_capital_usd": 32.306578195364054
+  },
+  {
+    "date": "2026-03-05",
+    "action": "open",
+    "reason": "Volatility 3.15% > threshold 1.5%. Grid width ±5.0%, 5 levels, capital $43",
+    "deployed_capital_usd": 42.507185530480115
+  },
+  {
+    "date": "2026-03-09",
+    "action": "close",
+    "reason": "Price drifted beyond grid (grid center 90.811, current 81.552), inefficient, rebalance",
+    "pnl_usd": 3.7082158876189695,
+    "deployed_capital_usd": 42.507185530480115
+  },
+  {
+    "date": "2026-03-10",
+    "action": "open",
+    "reason": "Volatility 3.41% > threshold 1.5%. Grid width ±5.0%, 5 levels, capital $46",
+    "deployed_capital_usd": 45.84457982933719
+  },
+  {
+    "date": "2026-03-17",
+    "action": "close",
+    "reason": "Price drifted beyond grid (grid center 84.924, current 96.138), inefficient, rebalance",
+    "pnl_usd": 9.134831813118957,
+    "deployed_capital_usd": 45.84457982933719
+  },
+  {
+    "date": "2026-03-18",
+    "action": "open",
+    "reason": "Volatility 2.33% > threshold 1.5%. Grid width ±5.0%, 5 levels, capital $54",
+    "deployed_capital_usd": 54.06592846114425
+  },
+  {
+    "date": "2026-03-28",
+    "action": "close",
+    "reason": "Price drifted beyond grid (grid center 94.548, current 83.045), inefficient, rebalance",
+    "pnl_usd": 10.319508320182267,
+    "deployed_capital_usd": 54.06592846114425
+  },
+  {
+    "date": "2026-03-29",
+    "action": "open",
+    "reason": "Volatility 3.74% > threshold 1.5%. Grid width ±5.0%, 5 levels, capital $63",
+    "deployed_capital_usd": 63.353485949308286
+  },
+  {
+    "date": "2026-04-05",
+    "action": "close",
+    "reason": "Harvest target hit (31.5% profit collected, capital can redeploy)",
+    "pnl_usd": 19.959608438140783,
+    "deployed_capital_usd": 63.353485949308286
+  },
+  {
+    "date": "2026-04-06",
+    "action": "open",
+    "reason": "Volatility 1.80% > threshold 1.5%. Grid width ±5.0%, 5 levels, capital $81",
+    "deployed_capital_usd": 81.31713354363498
+  },
+  {
+    "date": "2026-04-13",
+    "action": "close",
+    "reason": "Harvest target hit (33.8% profit collected, capital can redeploy)",
+    "pnl_usd": 27.475781504239308,
+    "deployed_capital_usd": 81.31713354363498
+  },
+  {
+    "date": "2026-04-14",
+    "action": "open",
+    "reason": "Volatility 3.41% > threshold 1.5%. Grid width ±5.0%, 5 levels, capital $106",
+    "deployed_capital_usd": 106.04533689745035
+  },
+  {
+    "date": "2026-04-21",
+    "action": "close",
+    "reason": "Harvest target hit (31.8% profit collected, capital can redeploy)",
+    "pnl_usd": 33.737110745453386,
+    "deployed_capital_usd": 106.04533689745035
+  },
+  {
+    "date": "2026-04-22",
+    "action": "open",
+    "reason": "Volatility 2.83% > threshold 1.5%. Grid width ±5.0%, 5 levels, capital $136",
+    "deployed_capital_usd": 136.4087365683584
+  },
+  {
+    "date": "2026-05-04",
+    "action": "close",
+    "reason": "Harvest target hit (31.2% profit collected, capital can redeploy)",
+    "pnl_usd": 42.56666189329837,
+    "deployed_capital_usd": 136.4087365683584
+  },
+  {
+    "date": "2026-05-08",
+    "action": "open",
+    "reason": "Volatility 1.53% > threshold 1.5%. Grid width ±5.0%, 5 levels, capital $175",
+    "deployed_capital_usd": 174.71873227232695
+  },
+  {
+    "date": "2026-05-20",
+    "action": "close",
+    "reason": "Harvest target hit (30.1% profit collected, capital can redeploy)",
+    "pnl_usd": 52.511741869727274,
+    "deployed_capital_usd": 174.71873227232695
+  },
+  {
+    "date": "2026-05-21",
+    "action": "open",
+    "reason": "Volatility 1.87% > threshold 1.5%. Grid width ±5.0%, 5 levels, capital $222",
+    "deployed_capital_usd": 221.97929995508147
+  },
+  {
+    "date": "2026-05-31",
+    "action": "close",
+    "reason": "Harvest target hit (30.8% profit collected, capital can redeploy)",
+    "pnl_usd": 68.29623863067246,
+    "deployed_capital_usd": 221.97929995508147
+  },
+  {
+    "date": "2026-06-03",
+    "action": "open",
+    "reason": "Volatility 3.22% > threshold 1.5%. Grid width ±5.0%, 5 levels, capital $283",
+    "deployed_capital_usd": 283.44591472268667
+  },
+  {
+    "date": "2026-06-06",
+    "action": "close",
+    "reason": "Price drifted beyond grid (grid center 74.159, current 63.591), inefficient, rebalance",
+    "pnl_usd": 24.0267184227341,
+    "deployed_capital_usd": 283.44591472268667
+  },
+  {
+    "date": "2026-06-07",
+    "action": "open",
+    "reason": "Volatility 2.70% > threshold 1.5%. Grid width ±5.0%, 5 levels, capital $305",
+    "deployed_capital_usd": 305.0699613031474
+  },
+  {
+    "date": "2026-06-14",
+    "action": "close",
+    "reason": "Price drifted beyond grid (grid center 62.162, current 68.887), inefficient, rebalance",
+    "pnl_usd": 50.558573515188144,
+    "deployed_capital_usd": 305.0699613031474
+  },
+  {
+    "date": "2026-06-15",
+    "action": "open",
+    "reason": "Volatility 3.25% > threshold 1.5%. Grid width ±5.0%, 5 levels, capital $351",
+    "deployed_capital_usd": 350.5726774668167
+  },
+  {
+    "date": "2026-06-21",
+    "action": "close",
+    "reason": "Harvest target hit (30.4% profit collected, capital can redeploy)",
+    "pnl_usd": 106.48825849236317,
+    "deployed_capital_usd": 350.5726774668167
+  },
+  {
+    "date": "2026-06-22",
+    "action": "open",
+    "reason": "Volatility 2.62% > threshold 1.5%. Grid width ±5.0%, 5 levels, capital $446",
+    "deployed_capital_usd": 446.41211010994357
+  },
+  {
+    "date": "2026-06-30",
+    "action": "close",
+    "reason": "Harvest target hit (35.6% profit collected, capital can redeploy)",
+    "pnl_usd": 158.75426182420273,
+    "deployed_capital_usd": 446.41211010994357
+  },
+  {
+    "date": "2026-07-01",
+    "action": "open",
+    "reason": "Volatility 3.33% > threshold 1.5%. Grid width ±5.0%, 5 levels, capital $589",
+    "deployed_capital_usd": 589.290945751726
+  },
+  {
+    "date": "2026-07-04",
+    "action": "close",
+    "reason": "Price drifted beyond grid (grid center 73.643, current 82.367), inefficient, rebalance",
+    "pnl_usd": 43.349820123025886,
+    "deployed_capital_usd": 589.290945751726
+  },
+  {
+    "date": "2026-07-05",
+    "action": "open",
+    "reason": "Volatility 2.88% > threshold 1.5%. Grid width ±5.0%, 5 levels, capital $628",
+    "deployed_capital_usd": 628.3057838624493
+  },
+  {
+    "date": "2026-07-29",
+    "action": "close",
+    "reason": "Price drifted beyond grid (grid center 81.78, current 73.769), inefficient, rebalance",
+    "pnl_usd": 174.64512952813763,
+    "deployed_capital_usd": 628.3057838624493
+  },
+  {
+    "date": "2026-07-30",
+    "action": "open",
+    "reason": "Volatility 2.10% > threshold 1.5%. Grid width ±5.0%, 5 levels, capital $785",
+    "deployed_capital_usd": 785.4864004377732
+  },
+  {
+    "date": "2026-08-10",
+    "action": "close",
+    "reason": "Harvest target hit (31.4% profit collected, capital can redeploy)",
+    "pnl_usd": 246.80370469201682,
+    "deployed_capital_usd": 785.4864004377732
+  },
+  {
+    "date": "2026-08-11",
+    "action": "open",
+    "reason": "Volatility 1.53% > threshold 1.5%. Grid width ±5.0%, 5 levels, capital $1008",
+    "deployed_capital_usd": 1007.6097346605883
+  }
+]
