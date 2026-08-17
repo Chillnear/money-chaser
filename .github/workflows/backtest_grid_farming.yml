@@ -1,0 +1,59 @@
+name: Grid + Funding Farmer Backtest (manual, free)
+
+# Backtest จริง (ไม่ใช้ AI เลย) สำหรับ GridTradingAgent และ FundingFarmingAgent ด้วยราคา/funding ย้อนหลัง
+# จริงจาก Hyperliquid — ดูรายละเอียด/ข้อจำกัดที่ scripts/backtest_grid_farming.py (P5.10)
+#
+# สร้างขึ้นเพราะ scripts/backtest_multi_strategy.py (ของเดิม) ใช้ราคาสุ่มปลอมกับ win rate ที่ตั้งไว้ตายตัว
+# ไม่ใช่ backtest จริง ผลจากตัวนั้นห้ามเชื่อ — ตัวนี้เรียก agent จริงด้วยข้อมูลจริงแทน
+
+on:
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "จำลองกี่วันย้อนหลังจากเมื่อวาน (ฟรี ใส่มากได้)"
+        required: false
+        default: "180"
+      coins:
+        description: 'เหรียญที่จะจำลอง (คั่นด้วย comma) หรือใส่ "auto" เพื่อดึงพูล liquid ทั้งหมดจาก Hyperliquid ตอนนี้จริง'
+        required: false
+        default: "auto"
+      starting_equity_usd:
+        description: "ทุนตั้งต้นสมมติ (หมายเหตุ: funding_farmer ปัจจุบันต้องการอย่างน้อย ~40 USD ถึงจะเปิดไม้ได้เลย)"
+        required: false
+        default: "28.0"
+
+permissions:
+  contents: write
+
+jobs:
+  backtest_grid_farming:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pytest (ต้องผ่านทั้งหมดก่อนรันจริง — เหมือน safety gate ของ workflow อื่นๆ)
+        run: MODE=paper python -m pytest -q
+
+      - name: Run grid + funding farmer backtest (ไม่มี AI, ไม่มีค่าใช้จ่าย)
+        env:
+          MODE: paper
+        run: |
+          python scripts/backtest_grid_farming.py \
+            --days "${{ inputs.days }}" \
+            --coins "${{ inputs.coins }}" \
+            --starting-equity-usd "${{ inputs.starting_equity_usd }}"
+
+      - name: Commit backtest results
+        run: |
+          git config user.name "money-chaser-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add state/grid_farming_backtest/
+          git diff --cached --quiet && echo "ไม่มีอะไรเปลี่ยน ข้าม commit" || git commit -m "chore: grid+funding farmer backtest results $(date -u +%Y-%m-%d)"
+          git push

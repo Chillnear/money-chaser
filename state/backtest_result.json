@@ -1,0 +1,44 @@
+{
+  "backtest_params": {
+    "days": 30,
+    "start_capital_usd": 100.0,
+    "start_date": "2026-06-30T15:00:09.244812",
+    "end_date": "2026-07-30T15:00:09.244828"
+  },
+  "allocation": {
+    "directional_usd": 40.0,
+    "farming_usd": 30.0,
+    "grid_usd": 30.0,
+    "cash_buffer_usd": 0
+  },
+  "strategy_results": {
+    "directional": {
+      "total_pnl_usd": -5.6000000000000005,
+      "total_pnl_pct": -14.000000000000002,
+      "num_trades": 4,
+      "winning_trades": 1,
+      "losing_trades": 3,
+      "win_rate": 0.25
+    },
+    "farming": {
+      "total_pnl_usd": 0.43500000000000016,
+      "total_pnl_pct": 1.4500000000000006,
+      "num_cycles": 90,
+      "avg_daily_pnl_usd": 0.014500000000000006,
+      "volatility": 0.0
+    },
+    "grid": {
+      "total_pnl_usd": 0.0,
+      "total_pnl_pct": 0.0,
+      "cycles_completed": 0,
+      "grid_active_pct": 100
+    }
+  },
+  "portfolio_summary": {
+    "start_capital_usd": 100.0,
+    "final_capital_usd": 94.835,
+    "total_pnl_usd": -5.165,
+    "total_pnl_pct": -5.165,
+    "monthly_pnl_pct": -5.165
+  }
+}
