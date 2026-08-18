@@ -1,0 +1,182 @@
+{
+  "grid": {
+    "BTC": {
+      "coin": "BTC",
+      "start_date": "2026-02-18",
+      "end_date": "2026-08-16",
+      "grids_opened": 12,
+      "grids_closed": 11,
+      "win_rate_pct": 100.0,
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 462.16,
+      "total_pnl_usd": 434.16
+    },
+    "ETH": {
+      "coin": "ETH",
+      "start_date": "2026-02-18",
+      "end_date": "2026-08-16",
+      "grids_opened": 19,
+      "grids_closed": 18,
+      "win_rate_pct": 100.0,
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 1086.94,
+      "total_pnl_usd": 1058.94
+    },
+    "SOL": {
+      "coin": "SOL",
+      "start_date": "2026-02-18",
+      "end_date": "2026-08-16",
+      "grids_opened": 19,
+      "grids_closed": 18,
+      "win_rate_pct": 100.0,
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 1221.95,
+      "total_pnl_usd": 1193.95
+    },
+    "XRP": {
+      "coin": "XRP",
+      "start_date": "2026-02-18",
+      "end_date": "2026-08-16",
+      "grids_opened": 15,
+      "grids_closed": 14,
+      "win_rate_pct": 100.0,
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 715.53,
+      "total_pnl_usd": 687.53
+    },
+    "HYPE": {
+      "coin": "HYPE",
+      "start_date": "2026-02-18",
+      "end_date": "2026-08-16",
+      "grids_opened": 26,
+      "grids_closed": 25,
+      "win_rate_pct": 100.0,
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 3051.46,
+      "total_pnl_usd": 3023.46
+    },
+    "PUMP": {
+      "coin": "PUMP",
+      "start_date": "2026-02-18",
+      "end_date": "2026-08-16",
+      "grids_opened": 32,
+      "grids_closed": 32,
+      "win_rate_pct": 100.0,
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 7655.8,
+      "total_pnl_usd": 7627.8
+    },
+    "ZEC": {
+      "coin": "ZEC",
+      "start_date": "2026-02-18",
+      "end_date": "2026-08-16",
+      "grids_opened": 35,
+      "grids_closed": 35,
+      "win_rate_pct": 100.0,
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 5203.87,
+      "total_pnl_usd": 5175.87
+    },
+    "PAXG": {
+      "coin": "PAXG",
+      "start_date": "2026-02-18",
+      "end_date": "2026-08-16",
+      "grids_opened": 6,
+      "grids_closed": 5,
+      "win_rate_pct": 100.0,
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 90.22,
+      "total_pnl_usd": 62.22
+    }
+  },
+  "funding_farmer": {
+    "BTC": {
+      "coin": "BTC",
+      "start_date": "2026-02-18",
+      "end_date": "2026-08-16",
+      "positions_opened": 0,
+      "positions_closed": 0,
+      "win_rate_pct": 0.0,
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 28.0,
+      "total_pnl_usd": 0.0
+    },
+    "ETH": {
+      "coin": "ETH",
+      "start_date": "2026-02-18",
+      "end_date": "2026-08-16",
+      "positions_opened": 0,
+      "positions_closed": 0,
+      "win_rate_pct": 0.0,
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 28.0,
+      "total_pnl_usd": 0.0
+    },
+    "SOL": {
+      "coin": "SOL",
+      "start_date": "2026-02-18",
+      "end_date": "2026-08-16",
+      "positions_opened": 0,
+      "positions_closed": 0,
+      "win_rate_pct": 0.0,
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 28.0,
+      "total_pnl_usd": 0.0
+    },
+    "XRP": {
+      "coin": "XRP",
+      "start_date": "2026-02-18",
+      "end_date": "2026-08-16",
+      "positions_opened": 0,
+      "positions_closed": 0,
+      "win_rate_pct": 0.0,
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 28.0,
+      "total_pnl_usd": 0.0
+    },
+    "HYPE": {
+      "coin": "HYPE",
+      "start_date": "2026-02-18",
+      "end_date": "2026-08-16",
+      "positions_opened": 0,
+      "positions_closed": 0,
+      "win_rate_pct": 0.0,
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 28.0,
+      "total_pnl_usd": 0.0
+    },
+    "PUMP": {
+      "coin": "PUMP",
+      "start_date": "2026-02-18",
+      "end_date": "2026-08-16",
+      "positions_opened": 0,
+      "positions_closed": 0,
+      "win_rate_pct": 0.0,
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 28.0,
+      "total_pnl_usd": 0.0
+    },
+    "ZEC": {
+      "coin": "ZEC",
+      "start_date": "2026-02-18",
+      "end_date": "2026-08-16",
+      "positions_opened": 0,
+      "positions_closed": 0,
+      "win_rate_pct": 0.0,
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 28.0,
+      "total_pnl_usd": 0.0
+    },
+    "PAXG": {
+      "coin": "PAXG",
+      "start_date": "2026-02-18",
+      "end_date": "2026-08-16",
+      "positions_opened": 0,
+      "positions_closed": 0,
+      "win_rate_pct": 0.0,
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 28.0,
+      "total_pnl_usd": 0.0
+    }
+  }
+}
