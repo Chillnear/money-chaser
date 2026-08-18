@@ -18,6 +18,12 @@ PaperBroker เดิมได้ตรงๆ):
     ขอบเขต grid แทน (ยิ่งวันไหน range กว้างครอบคลุมทั้ง 2 ฝั่งของ grid มาก ยิ่งนับว่าเก็บ cycle ได้มาก)
   - liquidity ประมาณจาก daily volume ของแท่งเทียน (v * close) ไม่ใช่ order book depth จริง — ใช้แค่ log
     warning ใน agent ไม่ได้ hard-block อยู่แล้ว จึงไม่กระทบผลลัพธ์มากนัก
+
+บั๊กที่เจอและแก้แล้ว (รันครั้งแรก 2026-08-17): grid backtest ให้ win_rate 100% ทุกเหรียญที่ทดสอบ (8/8) พร้อม
+กำไรเกินจริงมาก (เช่น PUMP $28 -> $7,655 ใน 180 วัน) ซึ่งเป็นไปไม่ได้ในชีวิตจริง — สาเหตุคือสูตรนับ cycle
+เดิมบวกกำไรได้อย่างเดียว ไม่มีทางลบเลย (ไม่ว่าราคาจะวิ่งทางไหน) จึงชนะทุกไม้เสมอ 100% แล้วยิ่ง compound ทบต้น
+ผ่านทุนที่โตขึ้นเรื่อยๆ ยิ่งดูเกินจริงหนักขึ้น แก้โดยเพิ่ม mark-to-market ขาดทุนที่ยังไม่ realize เวลาราคาหลุด
+ขอบล่างของ grid โดยไม่กลับมา (ดูคอมเมนต์ในโค้ด run_grid_backtest) ตอนนี้ผลลัพธ์ควรมีทั้งไม้ชนะและไม้แพ้แล้ว
 """
 from __future__ import annotations
 
@@ -53,6 +59,7 @@ def run_grid_backtest(
 
     cash = starting_equity_usd
     position: GridPosition | None = None
+    realized_pnl_usd = 0.0  # กำไรจาก cycle ที่ "เกิดจริง" สะสมตลอดชีวิตของ position ปัจจุบัน (monotonic)
     trades: list[dict] = []
     equity_curve: list[dict] = []
 
@@ -72,10 +79,37 @@ def run_grid_backtest(
             upper = position.center_price * (1 + position.grid_width_pct / 100)
             overlap = max(0.0, min(day_high, upper) - max(day_low, lower))
             one_way_width = position.center_price * position.grid_width_pct / 100
-            cycles_today = min(overlap / (one_way_width * 2), 3.0) if one_way_width > 0 else 0.0
+            raw_cycles_today = min(overlap / (one_way_width * 2), 3.0) if one_way_width > 0 else 0.0
+
+            # แก้บั๊กหลักที่ทำให้ win_rate 100% ทุกเหรียญ: สูตร overlap เดิมนับกำไรจาก "ช่วง high-low ของวัน
+            # เทียบกรอบ grid" โดยไม่สนทิศทางเลย ทำให้วันที่ราคาวิ่งทางเดียวยาวๆ ต่อเนื่อง (ไม่ได้ไป-กลับจริง)
+            # ก็ยังนับเป็นกำไรเต็มเหมือนวันที่แกว่งไป-กลับจริง ทั้งที่ grid trading จริงต้อง "ไป-กลับครบรอบ"
+            # (ซื้อแล้วขายได้จริง) ถึงจะ realize กำไร ถ้าราคาวิ่งทางเดียวต่อเนื่อง (ทิศเดียวกับเมื่อวาน) คือแค่
+            # ซื้อ/ขายฝั่งเดียวเพิ่ม ยังไม่ครบรอบ ไม่ควรนับเป็นกำไร — จึง gate ด้วยว่าวันนี้ต้อง "กลับทิศ" จาก
+            # เมื่อวานจริง (close เทียบ close ของ 2 วันก่อนหน้าสลับเครื่องหมาย) ถึงจะนับ cycle ได้
+            is_reversal_day = True  # ข้อมูลไม่พอเทียบ (แท่งแรกๆ) -> fail-open ตามพฤติกรรมเดิม
+            if len(closes) >= 3:
+                change_today = closes[-1] - closes[-2]
+                change_yesterday = closes[-2] - closes[-3]
+                if change_yesterday != 0 and change_today != 0:
+                    is_reversal_day = (change_today > 0) != (change_yesterday > 0)
+            cycles_today = raw_cycles_today if is_reversal_day else 0.0
+
             fee_per_cycle_pct = fee_per_leg_pct * 2  # เข้า 1 ครั้ง ออก 1 ครั้งต่อ cycle
             pnl_pct_today = cycles_today * (position.grid_width_pct * 2 - fee_per_cycle_pct)
-            position.accumulated_pnl += pnl_pct_today / 100 * position.total_capital
+            realized_pnl_usd += pnl_pct_today / 100 * position.total_capital
+
+            # แก้บั๊กที่เจอจริงตอนรันครั้งแรก (ทุกเหรียญ win_rate 100%, PUMP +27,000%): สูตร cycle เดิมนับ
+            # กำไรได้อย่างเดียว ไม่มีทางขาดทุนเลย ทั้งที่ grid trading จริงมีความเสี่ยงจริงเวลาราคาวิ่งทาง
+            # เดียวยาวๆ ไม่ย้อนกลับมาในกรอบ (หลุดขอบล่าง = เหลือ inventory ที่ซื้อไว้แพงกว่าราคาปัจจุบันจริง)
+            # จึง mark-to-market ผลขาดทุนที่ยังไม่ realize ทุกวัน (คำนวณใหม่จากราคาปัจจุบันเทียบขอบล่าง ไม่ใช่
+            # บวกสะสมซ้ำ) เฉพาะฝั่งหลุดขอบล่างเท่านั้น — หลุดขอบบนถือว่าขายของหมดแล้วพลาดขาขึ้น (เสียโอกาส
+            # ไม่ใช่ทุนหาย จึงไม่คิดเป็นลบ) สมมติว่า grid ถือ inventory เฉลี่ยประมาณครึ่งนึงของทุนตอนหลุดขอบ
+            unrealized_loss_usd = 0.0
+            if current_price < lower:
+                drawdown_pct = (lower - current_price) / lower * 100
+                unrealized_loss_usd = drawdown_pct * 0.5 / 100 * position.total_capital
+            position.accumulated_pnl = realized_pnl_usd - unrealized_loss_usd
 
         decision = agent.decide(
             current_position=position, current_price=current_price, volatility_24h=vol_24h,
@@ -90,12 +124,14 @@ def run_grid_backtest(
                 "pnl_usd": position.accumulated_pnl, "deployed_capital_usd": position.total_capital,
             })
             position = None
+            realized_pnl_usd = 0.0
         elif decision.action == "open" and position is None:
             position = GridPosition(
                 symbol=coin, center_price=current_price, grid_width_pct=decision.grid_width_pct,
                 num_levels=decision.num_levels, total_capital=decision.total_capital_usd, entry_time=date_str,
             )
             cash -= decision.total_capital_usd
+            realized_pnl_usd = 0.0
             trades.append({"date": date_str, "action": "open", "reason": decision.reason, "deployed_capital_usd": decision.total_capital_usd})
 
         equity_today = cash + (position.total_capital + position.accumulated_pnl if position else 0.0)

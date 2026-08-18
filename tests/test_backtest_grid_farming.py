@@ -77,6 +77,24 @@ def test_grid_backtest_opens_and_tracks_equity_on_volatile_market(bt, gf):
     assert result["final_equity_usd"] > 0
 
 
+def test_grid_backtest_can_lose_money_on_persistent_downtrend(bt, gf):
+    # หมายเหตุ: กันบั๊กที่เจอจริงตอนรันครั้งแรก (win_rate 100% ทุกเหรียญ, PUMP +27,000%) — เพราะสูตรเดิม
+    # นับ cycle บวกกำไรได้อย่างเดียว ไม่มีทางขาดทุนเลย grid ที่เปิดแล้วราคาร่วงยาวๆ ไม่ย้อนกลับ ต้องขาดทุนจริง
+    settings = _settings()
+    # วันแรกๆ ผันผวนพอให้เปิด grid ได้ จากนั้นร่วงต่อเนื่องทางเดียวยาวๆ โดยไม่ย้อนกลับเข้ากรอบเดิมเลย —
+    # ใช้ขนาด % ที่สลับกัน (ไม่ใช่ค่าคงที่) เพราะ compute_volatility_24h วัดจาก std ของ return ถ้าติดลบ
+    # เท่ากันทุกวัน std=0 (ดูนิ่งทั้งที่จริงร่วงหนัก) agent เลยจะไม่เปิด grid เลย ต้องมี variance ด้วย
+    daily_pcts = [8.0, -8.0, 8.0, -8.0] + [-3.0, -9.0, -4.0, -8.0] * 10
+    candles = _make_calendar_candles("2025-01-01", n_days=50, daily_pcts=daily_pcts)
+    hist_client = bt.HistoricalHyperliquidClient({"BTC": candles}, {"BTC": []})
+
+    result = gf.run_grid_backtest(settings, hist_client, "BTC", "2025-01-15", "2025-02-10", starting_equity_usd=28.0)
+
+    assert result["grids_opened"] > 0
+    losing_trades = [t for t in result["trade_list"] if t["action"] == "close" and t["pnl_usd"] < 0]
+    assert len(losing_trades) > 0  # ต้องมีไม้แพ้จริงตอนราคาวิ่งทางเดียวยาวๆ ไม่ใช่ชนะ 100% เสมอ
+
+
 def test_grid_backtest_stays_flat_on_calm_market(bt, gf):
     settings = _settings()
     candles = _make_calendar_candles("2025-01-01", n_days=50, daily_pcts=[0.05, -0.03])  # นิ่งมาก
