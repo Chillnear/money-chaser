@@ -215,6 +215,57 @@ class GridTradingAgent:
         )
 
 
+def apply_daily_grid_pnl(
+    position: GridPosition,
+    day_high: float,
+    day_low: float,
+    current_price: float,
+    closes: list[float],
+    fee_per_leg_pct: float,
+    realized_pnl_usd: float,
+) -> float:
+    """คำนวณ P&L ของ grid position ใน 1 วัน แล้วอัปเดต position.accumulated_pnl ในที่ (in-place) คืนค่า
+    realized_pnl_usd สะสมใหม่ (ต้องเก็บสถานะนี้แยกจาก position.accumulated_pnl เพราะ accumulated_pnl =
+    realized - unrealized ไม่ใช่ realized เพียวๆ — ใครเรียกต้องเก็บ realized_pnl_usd ไว้ข้ามวันเอง แล้วรีเซ็ต
+    เป็น 0 ทุกครั้งที่เปิด/ปิด position ใหม่)
+
+    ใช้ร่วมกันทั้ง backtest (scripts/backtest_grid_farming.py) และ shadow tracker (src/shadow_grid.py)
+    โดยตั้งใจ — เพื่อไม่ให้ตรรกะเพี้ยนไปคนละทางจนเทียบผล backtest กับ live shadow กันไม่ได้จริง
+
+    บั๊กที่เจอและแก้แล้ว (2026-08-17, ดู docstring บนสุดของ scripts/backtest_grid_farming.py): เดิมนับ
+    "cycle กำไร" จากแค่ช่วง high-low ของวันเทียบกรอบ grid โดยไม่สนทิศทาง ทำให้วันที่ราคาวิ่งทางเดียวยาวๆ
+    (ไม่ได้ไป-กลับจริง) ก็นับเป็นกำไรเต็มเหมือนวันที่แกว่งไป-กลับจริง เลยไม่มีทางขาดทุนเลย (win rate 100%
+    ทุกเหรียญ ทั้งที่เป็นไปไม่ได้จริง) แก้โดย (1) นับ cycle ได้เฉพาะวันที่ราคา "กลับทิศ" จากเมื่อวานจริง
+    (ไม่ใช่วิ่งทางเดียวต่อเนื่อง) และ (2) mark-to-market ขาดทุนที่ยังไม่ realize เมื่อราคาหลุดขอบล่างของ grid
+    ไปเรื่อยๆ ไม่กลับมา (ของที่ถืออยู่มีมูลค่าลดลงจริง ไม่ใช่แค่ประมาณการเฉยๆ)
+    """
+    lower = position.center_price * (1 - position.grid_width_pct / 100)
+    upper = position.center_price * (1 + position.grid_width_pct / 100)
+    overlap = max(0.0, min(day_high, upper) - max(day_low, lower))
+    one_way_width = position.center_price * position.grid_width_pct / 100
+    raw_cycles_today = min(overlap / (one_way_width * 2), 3.0) if one_way_width > 0 else 0.0
+
+    is_reversal_day = True  # ข้อมูลไม่พอเทียบ (แท่งแรกๆ) -> fail-open ตามพฤติกรรมเดิม
+    if len(closes) >= 3:
+        change_today = closes[-1] - closes[-2]
+        change_yesterday = closes[-2] - closes[-3]
+        if change_yesterday != 0 and change_today != 0:
+            is_reversal_day = (change_today > 0) != (change_yesterday > 0)
+    cycles_today = raw_cycles_today if is_reversal_day else 0.0
+
+    fee_per_cycle_pct = fee_per_leg_pct * 2  # เข้า 1 ครั้ง ออก 1 ครั้งต่อ cycle
+    pnl_pct_today = cycles_today * (position.grid_width_pct * 2 - fee_per_cycle_pct)
+    new_realized_pnl_usd = realized_pnl_usd + pnl_pct_today / 100 * position.total_capital
+
+    unrealized_loss_usd = 0.0
+    if current_price < lower:
+        drawdown_pct = (lower - current_price) / lower * 100
+        unrealized_loss_usd = drawdown_pct * 0.5 / 100 * position.total_capital
+
+    position.accumulated_pnl = new_realized_pnl_usd - unrealized_loss_usd
+    return new_realized_pnl_usd
+
+
 def generate_grid_orders(
     center_price: float, grid_width_pct: float, num_levels: int, total_capital_usd: float
 ) -> list[GridOrder]:

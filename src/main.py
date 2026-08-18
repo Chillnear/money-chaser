@@ -103,6 +103,7 @@ class DailyRunResult:
     equity_usd: float
     open_position: dict | None = None  # P5.6: ให้ LINE morning report บอก "ตอนนี้ถือไม้อะไรอยู่" ได้ด้วย
     shadow_funding_carry: dict | None = None  # P5.9: ผล shadow tracker (ดู src/shadow.py) — ไม่ใช้ AI เลย
+    shadow_grid: dict | None = None  # P5.10b: ผล grid shadow tracker (ดู src/shadow_grid.py) — ไม่ใช้ AI เลย
 
 
 def _agent_result_to_log_dict(r: AgentRunResult) -> dict:
@@ -675,6 +676,13 @@ def run_daily_pipeline(
         )
     except Exception as exc:  # noqa: BLE001 - shadow ต้องไม่พังการเทรดจริงเด็ดขาด (ผลจริงคำนวณเสร็จไปแล้วด้านบน)
         result.shadow_funding_carry = {"action": "error", "error": str(exc)}
+
+    try:
+        from src.shadow_grid import run_grid_shadow_day
+
+        result.shadow_grid = run_grid_shadow_day(settings, hl_client, shadow_now_ts, journal_dir)
+    except Exception as exc:  # noqa: BLE001 - shadow ต้องไม่พังการเทรดจริงเด็ดขาด (ผลจริงคำนวณเสร็จไปแล้วด้านบน)
+        result.shadow_grid = {"action": "error", "error": str(exc)}
 
     return result
 

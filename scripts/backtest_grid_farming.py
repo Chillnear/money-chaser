@@ -37,7 +37,7 @@ sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(SCRIPTS_DIR))
 
 from src.agents.funding_farmer import FarmingPosition, FundingFarmingAgent, FundingRate  # noqa: E402
-from src.agents.grid_trader import GridPosition, GridTradingAgent  # noqa: E402
+from src.agents.grid_trader import GridPosition, GridTradingAgent, apply_daily_grid_pnl  # noqa: E402
 from src.data.market_volatility import compute_volatility_24h  # noqa: E402
 from src.settings import load_settings  # noqa: E402
 from src.util.io import save_json  # noqa: E402
@@ -75,41 +75,11 @@ def run_grid_backtest(
         vol_24h = compute_volatility_24h(closes, lookback=7)
 
         if position is not None:
-            lower = position.center_price * (1 - position.grid_width_pct / 100)
-            upper = position.center_price * (1 + position.grid_width_pct / 100)
-            overlap = max(0.0, min(day_high, upper) - max(day_low, lower))
-            one_way_width = position.center_price * position.grid_width_pct / 100
-            raw_cycles_today = min(overlap / (one_way_width * 2), 3.0) if one_way_width > 0 else 0.0
-
-            # แก้บั๊กหลักที่ทำให้ win_rate 100% ทุกเหรียญ: สูตร overlap เดิมนับกำไรจาก "ช่วง high-low ของวัน
-            # เทียบกรอบ grid" โดยไม่สนทิศทางเลย ทำให้วันที่ราคาวิ่งทางเดียวยาวๆ ต่อเนื่อง (ไม่ได้ไป-กลับจริง)
-            # ก็ยังนับเป็นกำไรเต็มเหมือนวันที่แกว่งไป-กลับจริง ทั้งที่ grid trading จริงต้อง "ไป-กลับครบรอบ"
-            # (ซื้อแล้วขายได้จริง) ถึงจะ realize กำไร ถ้าราคาวิ่งทางเดียวต่อเนื่อง (ทิศเดียวกับเมื่อวาน) คือแค่
-            # ซื้อ/ขายฝั่งเดียวเพิ่ม ยังไม่ครบรอบ ไม่ควรนับเป็นกำไร — จึง gate ด้วยว่าวันนี้ต้อง "กลับทิศ" จาก
-            # เมื่อวานจริง (close เทียบ close ของ 2 วันก่อนหน้าสลับเครื่องหมาย) ถึงจะนับ cycle ได้
-            is_reversal_day = True  # ข้อมูลไม่พอเทียบ (แท่งแรกๆ) -> fail-open ตามพฤติกรรมเดิม
-            if len(closes) >= 3:
-                change_today = closes[-1] - closes[-2]
-                change_yesterday = closes[-2] - closes[-3]
-                if change_yesterday != 0 and change_today != 0:
-                    is_reversal_day = (change_today > 0) != (change_yesterday > 0)
-            cycles_today = raw_cycles_today if is_reversal_day else 0.0
-
-            fee_per_cycle_pct = fee_per_leg_pct * 2  # เข้า 1 ครั้ง ออก 1 ครั้งต่อ cycle
-            pnl_pct_today = cycles_today * (position.grid_width_pct * 2 - fee_per_cycle_pct)
-            realized_pnl_usd += pnl_pct_today / 100 * position.total_capital
-
-            # แก้บั๊กที่เจอจริงตอนรันครั้งแรก (ทุกเหรียญ win_rate 100%, PUMP +27,000%): สูตร cycle เดิมนับ
-            # กำไรได้อย่างเดียว ไม่มีทางขาดทุนเลย ทั้งที่ grid trading จริงมีความเสี่ยงจริงเวลาราคาวิ่งทาง
-            # เดียวยาวๆ ไม่ย้อนกลับมาในกรอบ (หลุดขอบล่าง = เหลือ inventory ที่ซื้อไว้แพงกว่าราคาปัจจุบันจริง)
-            # จึง mark-to-market ผลขาดทุนที่ยังไม่ realize ทุกวัน (คำนวณใหม่จากราคาปัจจุบันเทียบขอบล่าง ไม่ใช่
-            # บวกสะสมซ้ำ) เฉพาะฝั่งหลุดขอบล่างเท่านั้น — หลุดขอบบนถือว่าขายของหมดแล้วพลาดขาขึ้น (เสียโอกาส
-            # ไม่ใช่ทุนหาย จึงไม่คิดเป็นลบ) สมมติว่า grid ถือ inventory เฉลี่ยประมาณครึ่งนึงของทุนตอนหลุดขอบ
-            unrealized_loss_usd = 0.0
-            if current_price < lower:
-                drawdown_pct = (lower - current_price) / lower * 100
-                unrealized_loss_usd = drawdown_pct * 0.5 / 100 * position.total_capital
-            position.accumulated_pnl = realized_pnl_usd - unrealized_loss_usd
+            # ตรรกะคำนวณ P&L รายวัน (รวม fix ของบั๊ก win_rate 100%) อยู่ใน apply_daily_grid_pnl() ใช้
+            # ร่วมกับ src/shadow_grid.py เพื่อไม่ให้ backtest กับ live shadow ตรรกะเพี้ยนไปคนละทาง
+            realized_pnl_usd = apply_daily_grid_pnl(
+                position, day_high, day_low, current_price, closes, fee_per_leg_pct, realized_pnl_usd,
+            )
 
         decision = agent.decide(
             current_position=position, current_price=current_price, volatility_24h=vol_24h,
