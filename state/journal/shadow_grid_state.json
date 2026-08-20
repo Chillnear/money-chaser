@@ -1,5 +1,15 @@
 {
-  "cash_usd": 28.0,
-  "open_position": null,
+  "cash_usd": 2.8000000000000007,
+  "open_position": {
+    "symbol": "BTC",
+    "center_price": 69696.0,
+    "grid_width_pct": 5.0,
+    "num_levels": 5,
+    "total_capital": 25.2,
+    "orders": [],
+    "filled_volume_usd": 0.0,
+    "accumulated_pnl": 0.0,
+    "entry_time": "1787190772.3824627"
+  },
   "realized_pnl_usd": 0.0
 }
