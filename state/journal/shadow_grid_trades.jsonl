@@ -1,1 +1,2 @@
 {"date_ts": 1787190772.3824627, "action": "open", "reason": "Volatility 2.60% > threshold 1.5%. Grid width ±5.0%, 5 levels, capital $25", "deployed_capital_usd": 25.2}
+{"date_ts": 1787363788.9142578, "action": "close", "reason": "Price drifted beyond grid (grid center 69696.0, current 77991.0), inefficient, rebalance", "pnl_usd": 0.0, "deployed_capital_usd": 25.2}

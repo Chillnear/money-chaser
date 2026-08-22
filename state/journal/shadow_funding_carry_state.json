@@ -1,4 +1,12 @@
 {
   "equity_usd": 27.957993249999998,
-  "open_position": null
+  "open_position": {
+    "asset": "ENA",
+    "side": "short",
+    "notional_usd": 10.0,
+    "entry_price": 0.143778075,
+    "stop_price": 0.15240475950000001,
+    "take_profit_price": 0.12652470600000001,
+    "opened_at_ts": 1787363788.9142578
+  }
 }
