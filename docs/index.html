@@ -37,12 +37,12 @@
     
   
     <div class="card">
-      <h2>กราฟ Equity (28 จุด)</h2>
+      <h2>กราฟ Equity (29 จุด)</h2>
       <svg viewBox="0 0 760 180" width="100%" height="180" role="img" aria-label="กราฟ equity">
-        <polyline points="20.0,136.3 46.7,136.3 73.3,136.3 100.0,136.3 126.7,160.0 153.3,160.0 180.0,160.0 206.7,160.0 233.3,160.0 260.0,160.0 286.7,160.0 313.3,160.0 340.0,160.0 366.7,160.0 393.3,160.0 420.0,129.7 446.7,129.7 473.3,129.7 500.0,129.7 526.7,129.7 553.3,129.7 580.0,129.7 606.7,20.0 633.3,20.0 660.0,20.0 686.7,20.0 713.3,20.0 740.0,20.0" fill="none" stroke="#15803d" stroke-width="2" />
+        <polyline points="20.0,136.3 45.7,136.3 71.4,136.3 97.1,136.3 122.9,160.0 148.6,160.0 174.3,160.0 200.0,160.0 225.7,160.0 251.4,160.0 277.1,160.0 302.9,160.0 328.6,160.0 354.3,160.0 380.0,160.0 405.7,129.7 431.4,129.7 457.1,129.7 482.9,129.7 508.6,129.7 534.3,129.7 560.0,129.7 585.7,20.0 611.4,20.0 637.1,20.0 662.9,20.0 688.6,20.0 714.3,20.0 740.0,20.0" fill="none" stroke="#15803d" stroke-width="2" />
         <circle cx="740.0" cy="20.0" r="3.5" fill="#15803d" />
         <text x="20" y="176" font-size="11" fill="#6b7280">2026-07-29</text>
-        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-08-25</text>
+        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-08-26</text>
         <text x="20" y="14" font-size="11" fill="#6b7280">29.17</text>
         <text x="20" y="164" font-size="11" fill="#6b7280">27.76</text>
       </svg>
@@ -73,14 +73,14 @@
         
       <table>
         <thead><tr><th>Role</th><th>เรียกกี่ครั้ง</th><th>ต้นทุนรวม (USD)</th><th>latency เฉลี่ย (ms)</th><th>อัตรา abstain</th></tr></thead>
-        <tbody><tr><td>analyst_trend</td><td>14</td><td>0.0000</td><td>45103</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>14</td><td>0.0000</td><td>12412</td><td>21%</td></tr><tr><td>analyst_macro</td><td>14</td><td>0.0000</td><td>7113</td><td>64%</td></tr><tr><td>redteam</td><td>14</td><td>0.0000</td><td>5217</td><td>64%</td></tr><tr><td>judge</td><td>14</td><td>0.0000</td><td>18547</td><td>0%</td></tr></tbody>
+        <tbody><tr><td>analyst_trend</td><td>15</td><td>0.0000</td><td>45420</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>15</td><td>0.0000</td><td>12746</td><td>20%</td></tr><tr><td>analyst_macro</td><td>15</td><td>0.0000</td><td>6639</td><td>67%</td></tr><tr><td>redteam</td><td>15</td><td>0.0000</td><td>4869</td><td>67%</td></tr><tr><td>judge</td><td>15</td><td>0.0000</td><td>18681</td><td>0%</td></tr></tbody>
       </table>
     </div>
     
   
     <div class="card">
       <h2>ภาพรวม Analyst (เห็นตรงกับ judge บ่อยแค่ไหน)</h2>
-      <p class="hint">* วัดจาก 15 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
+      <p class="hint">* วัดจาก 16 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
       <table>
         <thead><tr><th>Role</th><th>จำนวนที่เทียบได้</th><th>% เห็นตรงกับ judge</th></tr></thead>
         <tbody><tr><td>analyst_trend</td><td>6</td><td>83%</td></tr><tr><td>analyst_positioning</td><td>4</td><td>25%</td></tr><tr><td>analyst_macro</td><td>3</td><td>67%</td></tr><tr><td>redteam</td><td>0</td><td>0%</td></tr></tbody>
@@ -89,8 +89,39 @@
     
   
     <div class="card">
-      <h2>Log การตัดสินใจแบบเต็ม (ล่าสุด 16 วัน — คลิกเพื่อกาง)</h2>
+      <h2>Log การตัดสินใจแบบเต็ม (ล่าสุด 17 วัน — คลิกเพื่อกาง)</h2>
       
+            <details class="decision-entry">
+              <summary>2026-08-26 — llm — flat N/A
+                 (degrade level 0)</summary>
+              <div class="decision-body">
+            <p><strong>Shortlist วันนั้น:</strong></p>
+            <ul><li>PUMP — composite 0.91</li><li>ZEC — composite 0.74</li><li>ENA — composite 0.71</li><li>PAXG — composite 0.39 (pinned/always_include)</li></ul>
+            <p class='hint'>ตัวอื่นในพูล: AAVE (0.65), LIT (0.64), FARTCOIN (0.54), HYPE (0.53), ZRO (0.53), XRP (0.53), BTC (0.49), DOGE (0.45), ETH (0.44), SOL (0.43), CASHCAT (0.40), SUI (0.35), TRUMP (0.32), NEAR (0.30)</p>
+            <hr>
+            
+    <p><strong>analyst_trend (dashscope/qwen3.7-max):</strong>
+       cost=0.0000 USD, latency=49868ms</p>
+    <ul class='candidate-list'><li><strong>PUMP long</strong> (confidence 68.0) — ADX 59.88 ยืนยันเทรนด์ขาขึ้นรุนแรง Donchian=1.0 OI เพิ่ม 9.64% เงินใหม่ยังไหลเข้า EMA stack สมบูรณ์ แม้ราคาห่าง 200EMA ถึง 102% แต่โมเมนตัม parabolic ยังไม่แตก <em>[invalidation: ราคาปิดต่ำกว่า EMA9 (gap 8.37%) หรือ ADX หดต่ำกว่า 45 แสดงว่า parabolic move จบ]</em></li><li><strong>ZEC flat</strong> (confidence 55.0) — เทรนด์ขึ้นมีอยู่จริง (ADX 35, Donchian 0.83) แต่ OI หาย -17.73% ใน 24h และ volume spike ต่ำ 0.24 ชี้ว่าเชื้อเพลิงหมด แรงซื้อใหม่ไม่สนับสนุน continuation <em>[invalidation: OI กลับเป็นบวกและ volume spike สูงกว่า 1.0 จะเปลี่ยนเป็น long ได้]</em></li><li><strong>ENA flat</strong> (confidence 52.0) — โครงสร้างเทรนด์ดี (ADX 41, Donchian 0.94) แต่ OI ลด -16.44% และ volume spike เพียง 0.04 ต่ำมาก แสดงว่าแรงซื้อใหม่หมดแล้ว ราคา 1d เริ่มติดลบ -0.56% สัญญาณ continuation อ่อน <em>[invalidation: OI กลับเป็นบวกพร้อม volume spike &gt;1.0 และราคา breakout เหนือ high เดิม]</em></li><li><strong>PAXG flat</strong> (confidence 65.0) — ADX 44.49 ดูดีแต่ Donchian เพียง 0.278 ราคาไม่ได้ใกล้น้ำสูงของ range จริง Momentum sub-score 0.056 ต่ำมาก EMA gap แคบ Returns 30d แค่ 14% ไม่มี breakout หรือโมเมนตัมเพียงพอ <em>[invalidation: Donchian ขยับเหนือ 0.8 และ EMA9 เริ่มห่างจาก EMA21 ชัดเจน]</em></li></ul>
+    
+    <p><strong>analyst_positioning (claude-sonnet-5):</strong>
+       cost=0.0000 USD, latency=17424ms</p>
+    <ul class='candidate-list'><li><strong>PUMP short</strong> (confidence 76.0) — Funding sub-score=1.000 (สุดโต่ง) กับ OI 24h +9.64% แสดง long เข้าเพิ่ม leverage ขณะราคาห่าง EMA200 +102.72% และ Donchian=1.0 คือจุดสุดขั้ว 30 วัน เสี่ยง long squeeze สูงหากโมเมนตัมชะลอ ATR% สูง 9.66 เพิ่มความรุนแรงของการปรับฐาน <em>[invalidation: หาก funding ลดลงชัดเจนและ OI ไม่พองต่อ พร้อมราคาทำ higher high ยืนเหนือ Donchian high ใหม่]</em></li><li><strong>ZEC flat</strong> (confidence 40.0) — Funding sub-score กลาง (0.556) ไม่สุดโต่ง OI 24h ลดลง -17.73% แสดง de-leveraging ไม่ใช่ squeeze setup ชัดเจน RSI สูง 71.97 แต่ vol percentile ต่ำ (0.315) บ่งชี้ยังไม่ extreme พอสำหรับ mean-reversion trade เด่นชัด <em>[invalidation: หาก OI กลับมาพองตัวเร็วพร้อม funding พุ่งสูงข้างเดียว จะเปลี่ยนเป็นสัญญาณ squeeze risk ชัดเจนขึ้น]</em></li><li><strong>ENA short</strong> (confidence 58.0) — Vol percentile 1y สูงมาก 0.876 กับ Donchian=0.944 ใกล้จุดสุดขั้ว ขณะ OI 24h หด -16.44% สวนทางราคาที่ยัง momentum แรง (RSI 69.78) ความไม่สอดคล้องนี้ชี้ว่าราคาวิ่งจาก short covering มากกว่า fresh long เสี่ยง mean-revert เมื่อโมเมนตัมหมด <em>[invalidation: หาก OI กลับมาเพิ่มพร้อมราคาทำ new high ต่อเนื่อง แสดงว่าเป็น fresh trend ไม่ใช่ short-covering]</em></li><li><strong>PAXG flat</strong> (confidence 30.0) — Funding sub-score ปานกลาง (0.556) ไม่สุดโต่ง trend sub-score ต่ำ (0.278) และ Donchian position เพียง 0.278 ไม่ใกล้ extreme ATR% ต่ำมาก (1.54) บ่งชี้ตลาดนิ่ง ไม่มีสัญญาณ positioning สุดขั้วให้เทรดฝั่งใด <em>[invalidation: หาก funding เอียงสุดโต่งข้างใดข้างหนึ่งพร้อม OI พองตัวชัดเจนจะเปิดโอกาส trade positioning]</em></li></ul>
+    <p><strong>analyst_macro (dashscope/deepseek-v4-pro):</strong> abstain — parse/validate ไม่ผ่านหลัง retry 2 ครั้ง: Expecting value: line 1 column 1 (char 0)</p>
+            <hr>
+            <p><strong>redteam (GPT 5.2):</strong> abstain — เรียกไม่ผ่านทุก key: litellm.APIError: APIError: OpenAIException - team not allowed to access model. This team can only access models=[&#x27;Cohere-rerank-v3-5&#x27;, &#x27;text-embedding-3-large&#x27;, &#x27;text-embedding-3-small&#x27;, &#x27;Claude Haiku 4.5&#x27;, &#x27;Nano Banana&#x27;, &#x27;Gemini 2.5 pro&#x27;, &#x27;Gemini 3.0 pro&#x27;, &#x27;Gemini 3.0 flash&#x27;, &#x27;Gemini 2.5 flash&#x27;, &#x27;Gemini 2.5 flash lite&#x27;, &#x27;Gemini Deep Research Pro&#x27;, &#x27;gpt-4o-mini-transcribe&#x27;, &#x27;gpt-4o-transcribe&#x27;, &#x27;Perplexity Deep Research&#x27;, &#x27;gpt-5.5&#x27;, &#x27;gemini-3.1-flash-tts-preview&#x27;, &#x27;gemini-3.5-flash&#x27;, &#x27;Claude Sonnet 4.6&#x27;, &#x27;dashscope/qwen3.7-max&#x27;, &#x27;claude-sonnet-5&#x27;, &#x27;gpt-5.6-terra&#x27;, &#x27;dashscope/deepseek-v4-flash&#x27;, &#x27;dashscope/deepseek-v4-pro&#x27;, &#x27;dashscope/qwen3.8-max&#x27;, &#x27;glm-5.2&#x27;, &#x27;gpt-5.6-luna&#x27;, &#x27;Nano Banana 2&#x27;, &#x27;gpt-image-2&#x27;, &#x27;gemini-3.1-flash-lite-preview&#x27;, &#x27;dashscope/qwen3.7-plus&#x27;, &#x27;claude-opus-4-8&#x27;]. Tried to access GPT 5.2</p>
+            <hr>
+            
+                <p><strong>Judge:</strong> flat N/A
+                   confidence=55.0
+                   stop=0.00% tp=0.00%</p>
+                <p class="hint">เหตุผล: สัญญาณผู้เข้าชิงขัดแย้งกันเอง: PUMP มี trend analyst เชียร์ long (68) แต่ positioning analyst เตือน long-squeeze risk (76) เนื่องจากราคาห่าง EMA200 +102%, Donchian=1.0, funding สุดโต่ง, OI พองต่อ — เป็น setup parabolic ปลายทางที่เสี่ยงมาก ไม่ควร long ตาม trend เฉยๆ ZEC/ENA มี OI หด -17%/-16% สวนราคา บ่งชี้ de-leveraging/short-covering ไม่ใช่ fresh trend, volume spike ต่ำมาก (0.24/0.04) PAXG momentum sub-score เพียง 0.056 ไม่มี edge macro analyst abstain และ red team abstain ทำให้ขาด check ที่สำคัญ ในสภาวะ F&amp;G=65 (Greed) พุ่งจาก 7 วันก่อน +19 การไล่ยอดตอนนี้เสี่ยงสูง FLAT ปลอดภัยที่สุด</p>
+                <p class="hint">ทำไมเลือกตัวนี้แทนตัวอื่น: ไม่เลือกตัวใดเพราะทุกตัวมีข้อบกพร่องชัดเจน: PUMP=squeeze risk, ZEC/ENA=OI หดสวนราคา, PAXG=momentum อ่อน analyst ไม่มี consensus long ที่แข็งพอในตัวใดตัวหนึ่ง</p>
+                <p class="hint">ตอบข้อค้านของ redteam: red team abstain (API access denied) จึงขาด adversarial check สำคัญ ยิ่งเป็นเหตุผลให้ conservative → FLAT</p>
+                
+            </div>
+            </details>
+            
             <details class="decision-entry">
               <summary>2026-08-25 — llm — flat N/A
                  (degrade level 0)</summary>
@@ -654,6 +685,6 @@ ImportError: Google Cloud SDK not found. Install it with: pip install &#x27;lite
     </div>
     
   <p>ยังไม่มี lessons.md (reflector ยังไม่เคยรัน หรือยังไม่พบบทเรียนใหม่)</p>
-  <p class="footer">อัปเดตล่าสุด: 2026-08-25T02:00:59.151895+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
+  <p class="footer">อัปเดตล่าสุด: 2026-08-26T02:06:40.675056+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
 </body>
 </html>
