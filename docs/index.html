@@ -37,12 +37,12 @@
     
   
     <div class="card">
-      <h2>กราฟ Equity (32 จุด)</h2>
+      <h2>กราฟ Equity (33 จุด)</h2>
       <svg viewBox="0 0 760 180" width="100%" height="180" role="img" aria-label="กราฟ equity">
-        <polyline points="20.0,136.3 43.2,136.3 66.5,136.3 89.7,136.3 112.9,160.0 136.1,160.0 159.4,160.0 182.6,160.0 205.8,160.0 229.0,160.0 252.3,160.0 275.5,160.0 298.7,160.0 321.9,160.0 345.2,160.0 368.4,129.7 391.6,129.7 414.8,129.7 438.1,129.7 461.3,129.7 484.5,129.7 507.7,129.7 531.0,20.0 554.2,20.0 577.4,20.0 600.6,20.0 623.9,20.0 647.1,20.0 670.3,20.0 693.5,20.0 716.8,20.0 740.0,20.0" fill="none" stroke="#15803d" stroke-width="2" />
+        <polyline points="20.0,136.3 42.5,136.3 65.0,136.3 87.5,136.3 110.0,160.0 132.5,160.0 155.0,160.0 177.5,160.0 200.0,160.0 222.5,160.0 245.0,160.0 267.5,160.0 290.0,160.0 312.5,160.0 335.0,160.0 357.5,129.7 380.0,129.7 402.5,129.7 425.0,129.7 447.5,129.7 470.0,129.7 492.5,129.7 515.0,20.0 537.5,20.0 560.0,20.0 582.5,20.0 605.0,20.0 627.5,20.0 650.0,20.0 672.5,20.0 695.0,20.0 717.5,20.0 740.0,20.0" fill="none" stroke="#15803d" stroke-width="2" />
         <circle cx="740.0" cy="20.0" r="3.5" fill="#15803d" />
         <text x="20" y="176" font-size="11" fill="#6b7280">2026-07-29</text>
-        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-08-29</text>
+        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-08-30</text>
         <text x="20" y="14" font-size="11" fill="#6b7280">29.17</text>
         <text x="20" y="164" font-size="11" fill="#6b7280">27.76</text>
       </svg>
@@ -73,14 +73,14 @@
         
       <table>
         <thead><tr><th>Role</th><th>เรียกกี่ครั้ง</th><th>ต้นทุนรวม (USD)</th><th>latency เฉลี่ย (ms)</th><th>อัตรา abstain</th></tr></thead>
-        <tbody><tr><td>analyst_trend</td><td>17</td><td>0.0000</td><td>45084</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>17</td><td>0.0000</td><td>12330</td><td>24%</td></tr><tr><td>analyst_macro</td><td>17</td><td>0.0000</td><td>5858</td><td>71%</td></tr><tr><td>redteam</td><td>17</td><td>0.0000</td><td>4296</td><td>71%</td></tr><tr><td>judge</td><td>17</td><td>0.0000</td><td>18980</td><td>0%</td></tr></tbody>
+        <tbody><tr><td>analyst_trend</td><td>18</td><td>0.0000</td><td>45098</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>18</td><td>0.0000</td><td>12658</td><td>22%</td></tr><tr><td>analyst_macro</td><td>18</td><td>0.0000</td><td>7398</td><td>67%</td></tr><tr><td>redteam</td><td>18</td><td>0.0000</td><td>4057</td><td>72%</td></tr><tr><td>judge</td><td>18</td><td>0.0000</td><td>19057</td><td>0%</td></tr></tbody>
       </table>
     </div>
     
   
     <div class="card">
       <h2>ภาพรวม Analyst (เห็นตรงกับ judge บ่อยแค่ไหน)</h2>
-      <p class="hint">* วัดจาก 18 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
+      <p class="hint">* วัดจาก 19 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
       <table>
         <thead><tr><th>Role</th><th>จำนวนที่เทียบได้</th><th>% เห็นตรงกับ judge</th></tr></thead>
         <tbody><tr><td>analyst_trend</td><td>7</td><td>86%</td></tr><tr><td>analyst_positioning</td><td>4</td><td>25%</td></tr><tr><td>analyst_macro</td><td>3</td><td>67%</td></tr><tr><td>redteam</td><td>0</td><td>0%</td></tr></tbody>
@@ -89,8 +89,43 @@
     
   
     <div class="card">
-      <h2>Log การตัดสินใจแบบเต็ม (ล่าสุด 19 วัน — คลิกเพื่อกาง)</h2>
+      <h2>Log การตัดสินใจแบบเต็ม (ล่าสุด 20 วัน — คลิกเพื่อกาง)</h2>
       
+            <details class="decision-entry">
+              <summary>2026-08-30 — llm — flat N/A
+                 (degrade level 0)</summary>
+              <div class="decision-body">
+            <p><strong>Shortlist วันนั้น:</strong></p>
+            <ul><li>PUMP — composite 0.80</li><li>ZEC — composite 0.69</li><li>SOL — composite 0.60</li><li>PAXG — composite 0.49 (pinned/always_include)</li></ul>
+            <p class='hint'>ตัวอื่นในพูล: ENA (0.60), HYPE (0.51), XRP (0.50), ETH (0.44), BTC (0.41), TRUMP (0.40)</p>
+            <hr>
+            
+    <p><strong>analyst_trend (dashscope/qwen3.7-max):</strong>
+       cost=0.0000 USD, latency=45341ms</p>
+    <ul class='candidate-list'><li><strong>PUMP long</strong> (confidence 68.0) — ADX 62.52 สูงสุดในกลุ่ม เทรนด์แข็งแรงมาก EMA เรียงตัวสมบูรณ์ทุกชั้น Donchian 1.000 ยืนยัน breakout จุดสูงสุด การย่อตัว 7d -6.10% เป็น healthy pullback ใน uptrend ที่ยังมีโมเมนตัมสูง <em>[invalidation: RSI หลุด 55 หรือราคาปิดใต้ EMA 21 (gap 22.86%) แสดงว่า pullback กลายเป็น reversal]</em></li><li><strong>ZEC long</strong> (confidence 58.0) — ADX 42.47 ยืนยันเทรนด์ขาขึ้น EMA เรียง bullish ทุกชั้น Donchian 0.800 ยังอยู่ในโซนบน แต่ volume percentile ต่ำเพียง 0.318 ทำให้ขาด conviction สำหรับ breakout ต่อ <em>[invalidation: ADX หลุด 35 หรือ Donchian position หลุด 0.5 แสดงว่าเทรนด์หมดแรง]</em></li><li><strong>SOL long</strong> (confidence 65.0) — Momentum sub-score 1.000 สูงสุด OI 7d พุ่ง +33.12% สูงสุดในกลุ่ม ADX 48.51 ยืนยันเทรนด์แข็งแรง Return 7d +9.92% แสดง short-term momentum ยังพุ่งต่อ แม้ Donchian 0.500 จะยังไม่ breakout <em>[invalidation: RSI หลุด 60 หรือ OI หดตัวเกิน 10% ใน 24h แสดงว่า long positioning ถูก unwind]</em></li><li><strong>PAXG flat</strong> (confidence 75.0) — Trend sub-score 0.100 ต่ำมาก ราคาอยู่ใต้ EMA 9 และ 21 RSI 52.67 เป็นกลาง Donchian 0.100 อยู่ก้น range แต่ ATR% 1.63 ต่ำมาก = ไม่มีแรงจะ breakout ไม่มีสัญญาณเทรนด์ชัดเจน <em>[invalidation: ADX พุ่งเกิน 45 และราคาปิดเหนือ EMA 50 (gap 2.54%) จะเปลี่ยนเป็น bullish breakout]</em></li></ul>
+    
+    <p><strong>analyst_positioning (claude-sonnet-5):</strong>
+       cost=0.0000 USD, latency=18235ms</p>
+    <ul class='candidate-list'><li><strong>PUMP short</strong> (confidence 68.0) — เทรนด์ยืดสุดขั้ว (EMA200 gap 108%, 30d +137%) แต่ราคาลง 1d/7d ขณะ OI ยังพุ่งขึ้น +10.45%/+27.82% แสดงคนเข้า long เพิ่มขณะราคาอ่อนแรง เสี่ยง long squeeze เมื่อโมเมนตัมหมดแรง <em>[invalidation: ราคา breakout ทำ high ใหม่พร้อม OI ลดลง หรือ funding พลิกลบแรง]</em></li><li><strong>ZEC short</strong> (confidence 55.0) — เทรนด์แรง RSI 71.7 overbought, ราคาลดลง 1d/7d ขณะ OI 24h +11% เพิ่มเข้ามาช้ากว่าราคา สะท้อน late long positioning เสี่ยง mean-revert แม้ vol percentile ต่ำ <em>[invalidation: ราคาทะลุ high 30 วันใหม่พร้อม OI คงที่หรือลดลง]</em></li><li><strong>SOL flat</strong> (confidence 30.0) — โมเมนตัมแรง (momentum score 1.0) แต่ funding score ต่ำมาก 0.10 ไม่บ่งชี้ squeeze risk ชัดเจน OI โต +33% 7d เร็วแต่ยังไม่สุดขั้วพอเทียบ vol percentile 0.388 ต่ำ ไม่เข้าเกณฑ์เทรด <em>[invalidation: funding พุ่งสูงผิดปกติฝั่งใดฝั่งหนึ่งหรือ OI พองตัวเกิน 50% ใน 24h]</em></li><li><strong>PAXG flat</strong> (confidence 25.0) — Trend score ต่ำ 0.1, RSI กลาง 52.67, OI หดตัว (-0.36%/-4.16%) แสดง positioning เบาบาง ไม่มีสัญญาณ squeeze หรือ extreme ใดๆ ให้เทรดฝั่งใดฝั่งหนึ่ง <em>[invalidation: OI กลับมาเพิ่มแรงพร้อม funding เอียงข้างใดข้างหนึ่งชัดเจน]</em></li></ul>
+    
+    <p><strong>analyst_macro (dashscope/deepseek-v4-pro):</strong>
+       cost=0.0000 USD, latency=33585ms</p>
+    <ul class='candidate-list'><li><strong>PUMP flat</strong> (confidence 20.0) — PUMP ไม่มีความสัมพันธ์กับมหภาคชัดเจน เป็น micro-cap เก็งกำไร ไม่มีปัจจัย DXY/SPX/US10Y ใดที่ส่งผลโดยตรง ราคา +137% ใน 30 วันสะท้อนแรงเก็งกำไรล้วนๆ ข่าว crypto ล่าสุดไม่มีข่าวเจาะจงถึง PUMP <em>[invalidation: หากมีข่าว regulatory หรือ exchange listing ที่กระทบ micro-cap โดยรวม]</em></li><li><strong>ZEC flat</strong> (confidence 25.0) — ZEC เป็น privacy coin ไม่มีปัจจัยมหภาคเฉพาะเจาะจง DXY อ่อนค่าเป็นบวกต่อ crypto โดยรวม แต่ไม่มี catalyst ตรงจากข่าว Fear &amp; Greed ที่ 69 (Greed) สนับสนุน sentiment บวก แต่ไม่แรงพอให้ conviction <em>[invalidation: DXY กลับตัวแข็งค่าทะลุ 100.5 หรือข่าว regulatory ลบต่อ privacy coin]</em></li><li><strong>SOL flat</strong> (confidence 30.0) — SOL มี sentiment หนุนจาก Fear &amp; Greed 69 (Greed) และ DXY อ่อนค่าที่ 99.70 แต่ SPX ลบ -0.25% ส่งสัญญาณ risk-off เล็กน้อย ข่าว Deribit ย้าย asset ไป Coinbase อาจกระทบ trust ใน CEX แต่ไม่เฉพาะเจาะจง SOL <em>[invalidation: SPX ร่วง &gt;1% ในวันนี้ หรือข่าวเฉพาะเจาะจงกับ Solana ecosystem]</em></li><li><strong>PAXG short</strong> (confidence 35.0) — PAXG ควรเคลื่อนไหวผกผันกับ DXY DXY ที่ 99.70 อ่อนค่าเล็กน้อยแต่ US10Y พุ่ง +1.03% เป็นแรงกดดันทองคำสปอต PAXG มี EMA9=-1.28% และ -3.34% ใน 7 วัน สะท้อนแรงขาย Risk-on จาก Greed 69 กดดัน safe-haven <em>[invalidation: DXY ร่วงต่ำกว่า 99 หรือ US10Y กลับตัวลงแรง หรือข่าวภูมิรัฐศาสตร์ที่กระตุ้น safe-haven]</em></li></ul>
+    
+            <hr>
+            <p><strong>redteam (GPT 5.2):</strong> abstain — เรียกไม่ผ่านทุก key: litellm.APIError: APIError: OpenAIException - team not allowed to access model. This team can only access models=[&#x27;Cohere-rerank-v3-5&#x27;, &#x27;text-embedding-3-large&#x27;, &#x27;text-embedding-3-small&#x27;, &#x27;Claude Haiku 4.5&#x27;, &#x27;Nano Banana&#x27;, &#x27;Gemini 2.5 pro&#x27;, &#x27;Gemini 3.0 pro&#x27;, &#x27;Gemini 3.0 flash&#x27;, &#x27;Gemini 2.5 flash&#x27;, &#x27;Gemini 2.5 flash lite&#x27;, &#x27;Gemini Deep Research Pro&#x27;, &#x27;gpt-4o-mini-transcribe&#x27;, &#x27;gpt-4o-transcribe&#x27;, &#x27;Perplexity Deep Research&#x27;, &#x27;gpt-5.5&#x27;, &#x27;gemini-3.1-flash-tts-preview&#x27;, &#x27;gemini-3.5-flash&#x27;, &#x27;Claude Sonnet 4.6&#x27;, &#x27;dashscope/qwen3.7-max&#x27;, &#x27;claude-sonnet-5&#x27;, &#x27;gpt-5.6-terra&#x27;, &#x27;dashscope/deepseek-v4-flash&#x27;, &#x27;dashscope/deepseek-v4-pro&#x27;, &#x27;dashscope/qwen3.8-max&#x27;, &#x27;glm-5.2&#x27;, &#x27;gpt-5.6-luna&#x27;, &#x27;Nano Banana 2&#x27;, &#x27;gpt-image-2&#x27;, &#x27;gemini-3.1-flash-lite-preview&#x27;, &#x27;dashscope/qwen3.7-plus&#x27;, &#x27;claude-opus-4-8&#x27;]. Tried to access GPT 5.2</p>
+            <hr>
+            
+                <p><strong>Judge:</strong> flat N/A
+                   confidence=55.0
+                   stop=0.00% tp=0.00%</p>
+                <p class="hint">เหตุผล: Analysts มีความเห็นแตกกันชัดเจนในทุกตัว: PUMP (trend long vs positioning short vs macro flat), ZEC (trend long vs positioning short), SOL (trend long vs positioning/macro flat), PAXG (trend flat vs macro short). PUMP ยืดตัวสุดขั้ว EMA200 gap 108%, +137% 30d พร้อม OI พุ่ง +27.82% ขณะราคาอ่อนตัว = late long positioning เสี่ยง squeeze แม้ trend แข็ง ZEC RSI 71.7 overbought volume ต่ำขาด conviction SOL Donchian แค่ 0.5 ยังไม่ breakout PAXG trend score 0.1 ไม่มีทิศทาง Fear &amp; Greed 69 (Greed) สูง + ข่าว Deribit/hack เป็นบรรยากาศเสี่ยง risk-off กะทันหัน Red team abstain ทำให้ขาด check ที่สำคัญ ไม่มี setup ไหนที่ทั้ง 3 analysts เห็นตรงกันฝั่งเดียว การไม่เทรดคือคำตอบที่มีค่าเท่ากับเทรดถูก</p>
+                <p class="hint">ทำไมเลือกตัวนี้แทนตัวอื่น: ไม่มีผู้เข้าชิงตัวใดมี conviction เพียงพอ — ทุกตัวมี analyst อย่างน้อยหนึ่งคนค้านหรือ flat และ red team ไม่ทำงานทำให้ขาดการตรวจสอบ</p>
+                <p class="hint">ตอบข้อค้านของ redteam: red team abstain (API error) จึงเพิ่มความระมัดระวังโดยเลือก FLAT แทนที่จะเทรดโดยไม่มี devil&#x27;s advocate</p>
+                
+            </div>
+            </details>
+            
             <details class="decision-entry">
               <summary>2026-08-29 — llm — long PUMP
                  (degrade level 0)</summary>
@@ -743,6 +778,6 @@ ImportError: Google Cloud SDK not found. Install it with: pip install &#x27;lite
     </div>
     
   <p>ยังไม่มี lessons.md (reflector ยังไม่เคยรัน หรือยังไม่พบบทเรียนใหม่)</p>
-  <p class="footer">อัปเดตล่าสุด: 2026-08-29T07:13:28.080893+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
+  <p class="footer">อัปเดตล่าสุด: 2026-08-30T05:32:32.671965+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
 </body>
 </html>

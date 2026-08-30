@@ -1,4 +1,12 @@
 {
   "equity_usd": 28.08288420190156,
-  "open_position": null
+  "open_position": {
+    "asset": "SOL",
+    "side": "short",
+    "notional_usd": 10.0,
+    "entry_price": 104.93270740000001,
+    "stop_price": 111.22866984400002,
+    "take_profit_price": 92.34078251200002,
+    "opened_at_ts": 1788067853.7457523
+  }
 }
