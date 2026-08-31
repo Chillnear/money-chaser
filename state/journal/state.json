@@ -1,7 +1,15 @@
 {
   "equity_usd": 29.171736431920856,
   "peak_equity_usd": 29.171736431920856,
-  "open_position": null,
+  "open_position": {
+    "asset": "LIT",
+    "side": "long",
+    "notional_usd": 10.0,
+    "entry_price": 3.6516249,
+    "stop_price": 3.4325274059999997,
+    "take_profit_price": 4.089819888,
+    "opened_at_ts": 1788154608.9581425
+  },
   "breaker": {
     "consecutive_losses": 0,
     "halving_remaining": 0,
