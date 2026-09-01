@@ -32,3 +32,4 @@
 {"ts": 1787987490.0825825, "date": "2026-08-29", "equity_usd": 29.171736431920856, "peak_equity_usd": 29.171736431920856, "action": "flat", "has_open_position": false}
 {"ts": 1788067853.7447069, "date": "2026-08-30", "equity_usd": 29.171736431920856, "peak_equity_usd": 29.171736431920856, "action": "flat", "has_open_position": false}
 {"ts": 1788154873.5773802, "date": "2026-08-31", "equity_usd": 29.171736431920856, "peak_equity_usd": 29.171736431920856, "action": "opened_long", "has_open_position": true}
+{"ts": 1788239428.791065, "date": "2026-09-01", "equity_usd": 29.171736431920856, "peak_equity_usd": 29.171736431920856, "action": "held_position", "has_open_position": true}
