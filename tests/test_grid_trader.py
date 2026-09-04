@@ -5,6 +5,8 @@ Unit tests for GridTradingAgent logic.
 import pytest
 
 from src.agents.grid_trader import (
+    apply_intraday_grid_candles,
+    close_grid_position,
     GridDecision,
     GridOrder,
     GridOrderSide,
@@ -12,6 +14,8 @@ from src.agents.grid_trader import (
     GridTradingAgent,
     estimate_grid_return,
     generate_grid_orders,
+    initialize_grid_position,
+    mark_grid_to_market,
 )
 
 
@@ -231,3 +235,36 @@ def test_risk_multiplier_reduces_grid_capital():
     # Reduced risk should use less capital
     assert decision_reduced.total_capital_usd < decision_normal.total_capital_usd
     assert decision_reduced.action == "open"  # Still opens, just smaller
+
+
+def test_intraday_engine_tracks_inventory_cash_fees_and_mtm():
+    position = initialize_grid_position("BTC", 100.0, 10.0, 2, 100.0, "0", last_processed_ts=0)
+    before = mark_grid_to_market(position, 100.0)
+    fills = apply_intraday_grid_candles(
+        position,
+        [{"t": 1, "T": 2, "o": 100, "h": 106, "l": 94, "c": 100}],
+        fee_per_leg_pct=0.1,
+    )
+
+    assert before == pytest.approx(100.0)
+    assert {f["side"] for f in fills} == {"buy", "sell"}
+    assert position.filled_volume_usd > 0
+    assert sum(f["fee_usd"] for f in fills) > 0
+    assert position.accumulated_pnl == pytest.approx(mark_grid_to_market(position, 100.0) - 100.0)
+
+
+def test_new_counterpart_order_cannot_fill_in_same_candle():
+    position = initialize_grid_position("BTC", 100.0, 10.0, 1, 100.0, "0")
+    fills = apply_intraday_grid_candles(
+        position,
+        [{"t": 1, "T": 2, "o": 100, "h": 111, "l": 89, "c": 100}],
+        fee_per_leg_pct=0.1,
+    )
+    assert len(fills) == 2  # only the two orders active when the candle opened
+
+
+def test_close_grid_liquidates_base_and_deducts_cost():
+    position = initialize_grid_position("BTC", 100.0, 10.0, 2, 100.0, "0")
+    cash = close_grid_position(position, 100.0, fee_per_leg_pct=0.1)
+    assert cash == pytest.approx(99.95)
+    assert position.base_qty == 0.0

@@ -64,6 +64,10 @@ class GridPosition:
     filled_volume_usd: float = 0.0  # how much has been executed
     accumulated_pnl: float = 0.0  # profit from completed buy-sell cycles
     entry_time: str = ""  # ISO 8601
+    quote_cash_usd: float = 0.0
+    base_qty: float = 0.0
+    last_price: float = 0.0
+    last_processed_ts: int = 0
 
 
 @dataclass
@@ -215,55 +219,142 @@ class GridTradingAgent:
         )
 
 
-def apply_daily_grid_pnl(
+def initialize_grid_position(
+    symbol: str,
+    center_price: float,
+    grid_width_pct: float,
+    num_levels: int,
+    total_capital_usd: float,
+    entry_time: str,
+    last_processed_ts: int = 0,
+) -> GridPosition:
+    """เปิด spot grid แบบ fully-funded: ครึ่งหนึ่งเป็น quote cash และอีกครึ่งเป็น base inventory."""
+    if center_price <= 0 or total_capital_usd <= 0:
+        raise ValueError("center_price และ total_capital_usd ต้องมากกว่า 0")
+    orders = generate_grid_orders(center_price, grid_width_pct, num_levels, total_capital_usd)
+    # กัน quote/base ไว้จ่าย execution cost ไม่ให้ fully-funded grid ติดเพราะ order สุดท้ายขาด fee ไม่กี่เซนต์
+    for order in orders:
+        order.size_usd *= 0.99
+    return GridPosition(
+        symbol=symbol,
+        center_price=center_price,
+        grid_width_pct=grid_width_pct,
+        num_levels=num_levels,
+        total_capital=total_capital_usd,
+        orders=orders,
+        entry_time=entry_time,
+        quote_cash_usd=total_capital_usd / 2,
+        base_qty=(total_capital_usd / 2) / center_price,
+        last_price=center_price,
+        last_processed_ts=last_processed_ts,
+    )
+
+
+def grid_position_from_dict(raw: dict) -> GridPosition:
+    """Deserialize state โดยแปลง order dict กลับเป็น dataclass/enum ให้ครบ."""
+    payload = dict(raw)
+    payload["orders"] = [
+        GridOrder(
+            price=float(o["price"]),
+            size_usd=float(o["size_usd"]),
+            side=GridOrderSide(o["side"]),
+            filled=bool(o.get("filled", False)),
+        )
+        for o in payload.get("orders", [])
+    ]
+    return GridPosition(**payload)
+
+
+def mark_grid_to_market(position: GridPosition, price: float) -> float:
+    return position.quote_cash_usd + position.base_qty * price
+
+
+def close_grid_position(position: GridPosition, price: float, fee_per_leg_pct: float) -> float:
+    """Liquidate base inventory ที่ราคาปัจจุบันและคืน cash หลังต้นทุน execution."""
+    base_notional = position.base_qty * price
+    liquidation_cost = base_notional * fee_per_leg_pct / 100
+    cash = position.quote_cash_usd + base_notional - liquidation_cost
+    position.quote_cash_usd = cash
+    position.base_qty = 0.0
+    position.last_price = price
+    position.accumulated_pnl = cash - position.total_capital
+    return cash
+
+
+def apply_intraday_grid_candles(
     position: GridPosition,
-    day_high: float,
-    day_low: float,
-    current_price: float,
-    closes: list[float],
+    candles: list[dict],
     fee_per_leg_pct: float,
-    realized_pnl_usd: float,
-) -> float:
-    """คำนวณ P&L ของ grid position ใน 1 วัน แล้วอัปเดต position.accumulated_pnl ในที่ (in-place) คืนค่า
-    realized_pnl_usd สะสมใหม่ (ต้องเก็บสถานะนี้แยกจาก position.accumulated_pnl เพราะ accumulated_pnl =
-    realized - unrealized ไม่ใช่ realized เพียวๆ — ใครเรียกต้องเก็บ realized_pnl_usd ไว้ข้ามวันเอง แล้วรีเซ็ต
-    เป็น 0 ทุกครั้งที่เปิด/ปิด position ใหม่)
+) -> list[dict]:
+    """จำลอง limit fills จากแท่ง intraday ที่ปิดแล้ว โดยไม่เดาลำดับราคาในแท่ง.
 
-    ใช้ร่วมกันทั้ง backtest (scripts/backtest_grid_farming.py) และ shadow tracker (src/shadow_grid.py)
-    โดยตั้งใจ — เพื่อไม่ให้ตรรกะเพี้ยนไปคนละทางจนเทียบผล backtest กับ live shadow กันไม่ได้จริง
-
-    บั๊กที่เจอและแก้แล้ว (2026-08-17, ดู docstring บนสุดของ scripts/backtest_grid_farming.py): เดิมนับ
-    "cycle กำไร" จากแค่ช่วง high-low ของวันเทียบกรอบ grid โดยไม่สนทิศทาง ทำให้วันที่ราคาวิ่งทางเดียวยาวๆ
-    (ไม่ได้ไป-กลับจริง) ก็นับเป็นกำไรเต็มเหมือนวันที่แกว่งไป-กลับจริง เลยไม่มีทางขาดทุนเลย (win rate 100%
-    ทุกเหรียญ ทั้งที่เป็นไปไม่ได้จริง) แก้โดย (1) นับ cycle ได้เฉพาะวันที่ราคา "กลับทิศ" จากเมื่อวานจริง
-    (ไม่ใช่วิ่งทางเดียวต่อเนื่อง) และ (2) mark-to-market ขาดทุนที่ยังไม่ realize เมื่อราคาหลุดขอบล่างของ grid
-    ไปเรื่อยๆ ไม่กลับมา (ของที่ถืออยู่มีมูลค่าลดลงจริง ไม่ใช่แค่ประมาณการเฉยๆ)
+    Order ที่มีอยู่ตอนเปิดแท่งและถูกช่วง low-high คร่อมจะ fill ได้ครั้งเดียว ส่วน order ฝั่งตรงข้าม
+    ที่สร้างหลัง fill จะเริ่ม active ในแท่งถัดไปเท่านั้น จึงไม่สร้างกำไรหลายรอบจาก OHLC แท่งเดียว.
     """
-    lower = position.center_price * (1 - position.grid_width_pct / 100)
-    upper = position.center_price * (1 + position.grid_width_pct / 100)
-    overlap = max(0.0, min(day_high, upper) - max(day_low, lower))
-    one_way_width = position.center_price * position.grid_width_pct / 100
-    raw_cycles_today = min(overlap / (one_way_width * 2), 3.0) if one_way_width > 0 else 0.0
+    fills: list[dict] = []
+    step = position.center_price * position.grid_width_pct / 100 / position.num_levels
+    tolerance = max(position.center_price, 1.0) * 1e-10
 
-    is_reversal_day = True  # ข้อมูลไม่พอเทียบ (แท่งแรกๆ) -> fail-open ตามพฤติกรรมเดิม
-    if len(closes) >= 3:
-        change_today = closes[-1] - closes[-2]
-        change_yesterday = closes[-2] - closes[-3]
-        if change_yesterday != 0 and change_today != 0:
-            is_reversal_day = (change_today > 0) != (change_yesterday > 0)
-    cycles_today = raw_cycles_today if is_reversal_day else 0.0
+    for candle in sorted(candles, key=lambda c: int(c.get("t", c.get("T", 0)))):
+        candle_ts = int(candle.get("T", candle.get("t", 0)) or 0)
+        if candle_ts <= position.last_processed_ts:
+            continue
+        low, high, close = float(candle["l"]), float(candle["h"]), float(candle["c"])
+        active_at_open = [o for o in position.orders if not o.filled]
+        new_orders: list[GridOrder] = []
 
-    fee_per_cycle_pct = fee_per_leg_pct * 2  # เข้า 1 ครั้ง ออก 1 ครั้งต่อ cycle
-    pnl_pct_today = cycles_today * (position.grid_width_pct * 2 - fee_per_cycle_pct)
-    new_realized_pnl_usd = realized_pnl_usd + pnl_pct_today / 100 * position.total_capital
+        for order in active_at_open:
+            if not (low <= order.price <= high):
+                continue
+            fee_usd = order.size_usd * fee_per_leg_pct / 100
+            if order.side == GridOrderSide.BUY:
+                total_cost = order.size_usd + fee_usd
+                if position.quote_cash_usd + tolerance < total_cost:
+                    continue
+                position.quote_cash_usd -= total_cost
+                position.base_qty += order.size_usd / order.price
+                counterpart_side = GridOrderSide.SELL
+                counterpart_price = order.price + step
+            else:
+                qty = order.size_usd / order.price
+                if position.base_qty + tolerance < qty:
+                    continue
+                position.base_qty -= qty
+                position.quote_cash_usd += order.size_usd - fee_usd
+                counterpart_side = GridOrderSide.BUY
+                counterpart_price = order.price - step
 
-    unrealized_loss_usd = 0.0
-    if current_price < lower:
-        drawdown_pct = (lower - current_price) / lower * 100
-        unrealized_loss_usd = drawdown_pct * 0.5 / 100 * position.total_capital
+            order.filled = True
+            position.filled_volume_usd += order.size_usd
+            fills.append(
+                {
+                    "ts": candle_ts,
+                    "side": order.side.value,
+                    "price": order.price,
+                    "size_usd": order.size_usd,
+                    "fee_usd": fee_usd,
+                }
+            )
+            lower = position.center_price * (1 - position.grid_width_pct / 100)
+            upper = position.center_price * (1 + position.grid_width_pct / 100)
+            if lower - tolerance <= counterpart_price <= upper + tolerance:
+                duplicate = any(
+                    not existing.filled
+                    and existing.side == counterpart_side
+                    and abs(existing.price - counterpart_price) <= tolerance
+                    for existing in position.orders + new_orders
+                )
+                if not duplicate:
+                    new_orders.append(
+                        GridOrder(counterpart_price, order.size_usd, counterpart_side, filled=False)
+                    )
 
-    position.accumulated_pnl = new_realized_pnl_usd - unrealized_loss_usd
-    return new_realized_pnl_usd
+        position.orders = [o for o in position.orders if not o.filled] + new_orders
+        position.last_price = close
+        position.last_processed_ts = candle_ts
+        position.accumulated_pnl = mark_grid_to_market(position, close) - position.total_capital
+
+    return fills
 
 
 def generate_grid_orders(
@@ -294,10 +385,9 @@ def generate_grid_orders(
     lower_price = center_price * (1 - grid_width_pct / 100)
     upper_price = center_price * (1 + grid_width_pct / 100)
 
-    # Generate buy orders (ascending price, from lower bound up to center — must stay <= center,
-    # bug found: เดิม interpolate ไปถึง upper_price ทำให้ order สุดท้ายทะลุขึ้นไปเหนือ center)
+    # Buy ต่ำกว่า center และ sell สูงกว่า center อย่างละ num_levels; ทุนครึ่งต่อฝั่ง
     for i in range(num_levels):
-        price = lower_price + (center_price - lower_price) * (i / (num_levels - 1)) if num_levels > 1 else center_price
+        price = lower_price + (center_price - lower_price) * (i / num_levels)
         orders.append(GridOrder(price=price, size_usd=size_per_order, side=GridOrderSide.BUY, filled=False))
 
     # Generate sell orders (ascending price, starting above center)

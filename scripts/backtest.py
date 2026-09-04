@@ -50,24 +50,32 @@ class HistoricalHyperliquidClient:
     bias — ไม่งั้น backtest จะดูเก่งเกินจริงเพราะ agent เห็นอนาคตที่ยังไม่เกิดขึ้น
     """
 
-    def __init__(self, candles_by_coin: dict[str, list[dict]], funding_by_coin: dict[str, list[dict]]):
+    def __init__(
+        self,
+        candles_by_coin: dict[str, list[dict]],
+        funding_by_coin: dict[str, list[dict]],
+        candles_by_interval: dict[str, dict[str, list[dict]]] | None = None,
+    ):
         self._candles_by_coin = candles_by_coin
         self._funding_by_coin = funding_by_coin
+        self._candles_by_interval = candles_by_interval or {"1d": candles_by_coin}
         self.as_of_ms: int | None = None
 
     def set_as_of(self, as_of_ms: int) -> None:
         self.as_of_ms = as_of_ms
 
-    def _visible_candles(self, coin: str) -> list[dict]:
+    def _visible_candles(self, coin: str, interval: str = "1d") -> list[dict]:
         if self.as_of_ms is None:
             raise ValueError("ต้องเรียก set_as_of() ก่อนใช้งาน HistoricalHyperliquidClient")
-        candles = self._candles_by_coin.get(coin, [])
+        candles = self._candles_by_interval.get(interval, {}).get(coin, [])
         # ใช้ "T" (เวลาปิดแท่ง) <= as_of_ms — แท่งที่ยังไม่ปิดจริง ณ วันที่จำลอง ต้องไม่เห็น
         return [c for c in candles if c.get("T", 0) <= self.as_of_ms]
 
     def get_candles(self, coin: str, interval: str = "1d", lookback_days: int = 400) -> list[dict]:
-        visible = self._visible_candles(coin)
-        return visible[-lookback_days:] if lookback_days else visible
+        visible = self._visible_candles(coin, interval)
+        bars_per_day = 24 if interval == "1h" else 1
+        limit = lookback_days * bars_per_day
+        return visible[-limit:] if lookback_days else visible
 
     def _latest_funding_rate(self, coin: str) -> float:
         history = self._funding_by_coin.get(coin, [])
@@ -79,7 +87,7 @@ class HistoricalHyperliquidClient:
     def get_universe_snapshot(self) -> list[dict]:
         snapshot = []
         for coin in self._candles_by_coin:
-            visible = self._visible_candles(coin)
+            visible = self._visible_candles(coin, "1d")
             if len(visible) < 2:
                 continue  # ยังไม่มีข้อมูลพอ (เช่นวันแรกๆของ backtest ก่อนพ้น warm-up)
             last, prev = visible[-1], visible[-2]

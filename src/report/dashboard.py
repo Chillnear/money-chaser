@@ -435,6 +435,69 @@ def render_decision_log_html(decisions: list[dict]) -> str:
     """
 
 
+def render_decision_outcomes_html(outcomes: list[dict] | None) -> str:
+    if not outcomes:
+        return "<p>ยังไม่มี decision outcome หลัง risk gate บันทึกไว้</p>"
+    rows = []
+    for item in outcomes[-MAX_ROWS:][::-1]:
+        status = "ผ่าน" if item.get("passed") else "VETO"
+        rows.append(
+            "<tr>"
+            f"<td>{_esc(item.get('date'))}</td><td>{_esc(item.get('proposed_action'))} {_esc(item.get('proposed_asset'))}</td>"
+            f"<td>{_esc(item.get('final_action'))}</td><td>{_esc(item.get('stage'))}</td>"
+            f"<td>{status}</td><td>{_esc(item.get('failed_gate') or '-')}</td><td>{_esc(item.get('reason'))}</td>"
+            "</tr>"
+        )
+    return f"""
+    <div class="card">
+      <h2>ผลหลัง Risk Gate / Sizing</h2>
+      <table><thead><tr><th>วันที่</th><th>เสนอ</th><th>ผลจริง</th><th>ขั้น</th><th>สถานะ</th><th>Gate</th><th>เหตุผล</th></tr></thead>
+      <tbody>{''.join(rows)}</tbody></table>
+    </div>
+    """
+
+
+def render_model_health_html(model_health: dict | None) -> str:
+    if not model_health:
+        return '<div class="card"><h2>Model Health</h2><p>ยังไม่มี model health report — รอบจริงจะ fallback baseline</p></div>'
+    rows = []
+    for item in model_health.get("results", []):
+        status = "OK" if item.get("healthy") else "FAIL"
+        rows.append(
+            f"<tr><td>{_esc(item.get('role'))}</td><td>{_esc(item.get('model'))}</td>"
+            f"<td>{status}</td><td>{_fmt_num(item.get('latency_ms'), 0)} ms</td><td>{_esc(item.get('error') or '-')}</td></tr>"
+        )
+    overall = "พร้อมใช้ครบ" if model_health.get("healthy") else "ไม่ครบ — รอบนี้ต้อง fallback baseline"
+    return f"""
+    <div class="card"><h2>Model Health</h2><p><strong>{overall}</strong></p>
+    <table><thead><tr><th>Role</th><th>Model</th><th>สถานะ</th><th>Latency</th><th>Error</th></tr></thead>
+    <tbody>{''.join(rows)}</tbody></table></div>
+    """
+
+
+def render_promotion_readiness_html(
+    trades: list[dict], model_health: dict | None, grid_backtest_summary: dict | None
+) -> str:
+    closed_count = len(trades)
+    sample_ready = closed_count >= 30
+    model_ready = bool(model_health and model_health.get("healthy"))
+    grid_wf = ((grid_backtest_summary or {}).get("grid_walk_forward") or {}).get("BTC") or {}
+    grid_folds = len(grid_wf.get("folds", []))
+    grid_oos_pnl = grid_wf.get("total_pnl_usd")
+    grid_ready = grid_folds >= 3 and grid_oos_pnl is not None and grid_oos_pnl > 0
+    overall = sample_ready and model_ready
+    status = "พร้อมพิจารณาขั้นถัดไป" if overall else "ยังไม่พร้อมเพิ่มทุน/เปิดเงินจริง"
+    return f"""
+    <div class="card"><h2>Promotion Readiness</h2><p><strong>{status}</strong></p>
+      <ul>
+        <li>Directional paper sample: {closed_count}/30 ไม้ขั้นต่ำ (เป้าหมายที่มั่นใจกว่า 50 ไม้) — {'ผ่าน' if sample_ready else 'ยังไม่ผ่าน'}</li>
+        <li>Model team health: {'ผ่าน' if model_ready else 'ยังไม่ผ่าน/ไม่มีผลล่าสุด'}</li>
+        <li>Grid walk-forward: {grid_folds} folds, OOS PnL {_fmt_num(grid_oos_pnl)} USD — {'ผ่าน' if grid_ready else 'ไม่ผ่าน จึงคงไว้เฉพาะ shadow'}</li>
+      </ul>
+    </div>
+    """
+
+
 def render_lessons_html(lessons_text: str) -> str:
     if not lessons_text.strip():
         return "<p>ยังไม่มี lessons.md (reflector ยังไม่เคยรัน หรือยังไม่พบบทเรียนใหม่)</p>"
@@ -455,6 +518,9 @@ def render_dashboard_html(
     llm_cost_records: list[dict] | None = None,
     llm_budget_cfg: dict | None = None,
     lessons_text: str = "",
+    decision_outcomes: list[dict] | None = None,
+    model_health: dict | None = None,
+    grid_backtest_summary: dict | None = None,
 ) -> str:
     """ประกอบทุก section เป็นหน้า HTML เดียวแบบ self-contained (inline CSS/SVG ไม่พึ่ง CDN — เปิดได้แน่นอน
     แบบไฟล์ในเครื่อง ไม่ต้องต่อเน็ต, ไม่ต้องเสียเงิน GitHub Pages) พารามิเตอร์ใหม่ทั้งหมด optional เพื่อให้
@@ -492,7 +558,10 @@ def render_dashboard_html(
   {render_equity_curve_html(equity_history)}
   {render_performance_stats_html(trades)}
   {render_llm_budget_html(llm_cost_records, llm_budget_cfg)}
+  {render_model_health_html(model_health).strip()}
+  {render_promotion_readiness_html(trades, model_health, grid_backtest_summary).strip()}
   {render_agent_scorecard_html(decisions)}
+  {render_decision_outcomes_html(decision_outcomes).strip()}
   {render_decision_log_html(decisions)}
   {render_trades_table_html(trades)}
   {render_lessons_html(lessons_text)}
@@ -514,6 +583,9 @@ def main() -> None:  # pragma: no cover - เรียกจริงบน GitH
     decisions = load_jsonl(journal_dir / "decisions.jsonl")
     equity_history = load_jsonl(journal_dir / "equity.jsonl")
     llm_cost_records = load_jsonl(journal_dir / "llm_cost.jsonl")
+    decision_outcomes = load_jsonl(journal_dir / "decision_outcomes.jsonl")
+    model_health = load_json(STATE_DIR / "model_health.json", default=None)
+    grid_backtest_summary = load_json(STATE_DIR / "grid_farming_backtest" / "summary.json", default=None)
 
     lessons_text = ""
     lessons_path = REPO_ROOT / "state" / "lessons.md"
@@ -535,6 +607,9 @@ def main() -> None:  # pragma: no cover - เรียกจริงบน GitH
         llm_cost_records=llm_cost_records,
         llm_budget_cfg=llm_budget_cfg,
         lessons_text=lessons_text,
+        decision_outcomes=decision_outcomes,
+        model_health=model_health,
+        grid_backtest_summary=grid_backtest_summary,
     )
 
     output_dir = REPO_ROOT / "docs"

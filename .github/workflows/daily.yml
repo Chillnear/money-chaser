@@ -34,6 +34,13 @@ jobs:
       - name: Run pytest (ต้องผ่านทั้งหมดก่อนเทรดจริง — BUILD-SPEC.md §6 live safety gate ข้อ 1)
         run: MODE=paper python -m pytest -q
 
+      - name: Check configured LLM role health (fallback to baseline if unhealthy)
+        env:
+          LITELLM_BASE_URL: ${{ secrets.LITELLM_BASE_URL }}
+          LITELLM_KEY_1: ${{ secrets.LITELLM_KEY_1 }}
+          LITELLM_KEY_2: ${{ secrets.LITELLM_KEY_2 }}
+        run: python scripts/check_role_health.py
+
       - name: Run daily pipeline
         env:
           MODE: ${{ vars.MODE || 'paper' }}

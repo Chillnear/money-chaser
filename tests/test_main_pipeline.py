@@ -164,6 +164,9 @@ def test_run_daily_pipeline_opens_long_position_on_bullish_consensus(tmp_path, s
     saved_state = json.loads((tmp_path / "journal" / "state.json").read_text(encoding="utf-8"))
     assert saved_state["open_position"]["asset"] == "BTC"
     assert saved_state["open_position"]["side"] == "long"
+    outcome = json.loads((tmp_path / "journal" / "decision_outcomes.jsonl").read_text().splitlines()[-1])
+    assert outcome["stage"] == "execution"
+    assert outcome["passed"] is True
 
 
 def test_run_daily_pipeline_records_oi_snapshot_for_tomorrow(tmp_path, settings, hl_client):
@@ -427,6 +430,30 @@ def test_run_daily_pipeline_uses_baseline_without_any_llm_call_when_budget_exhau
 
     decisions_log = (tmp_path / "journal" / "decisions.jsonl").read_text(encoding="utf-8")
     assert '"source": "baseline"' in decisions_log
+
+
+def test_model_health_failure_forces_baseline_and_surfaces_reason(tmp_path, settings, hl_client):
+    llm_client = _make_llm_client([])
+    broker = PaperBroker(starting_equity_usd=28.0, taker_fee_pct=0.045, slippage_pct=0.05)
+    reason = "model health ไม่ผ่าน (redteam) — fallback baseline"
+    result = run_daily_pipeline(
+        settings=settings,
+        hl_client=hl_client,
+        llm_client=llm_client,
+        broker=broker,
+        model_registry=REGISTRY,
+        today_date="2026-07-27",
+        now_ts=time.time(),
+        journal_dir=tmp_path / "journal",
+        kill_path=tmp_path / "KILL",
+        last_run_path=tmp_path / "last_run.json",
+        force_baseline_reason=reason,
+    )
+    assert result.action_taken == "opened_long"
+    assert reason in result.reason
+    llm_client._completion_fn.assert_not_called()
+    decision = json.loads((tmp_path / "journal" / "decisions.jsonl").read_text().splitlines()[-1])
+    assert decision["fallback_reason"] == reason
 
 
 def test_manage_existing_position_closes_on_stop_loss_and_clears_open_position(tmp_path, settings, hl_client):

@@ -146,12 +146,15 @@ def fetch_groq_models(api_key: str) -> list[dict]:
 
 
 def test_model_smoke(base_url: str, api_key: str, model_id: str, is_groq: bool = False) -> dict:
-    """ยิง completion สั้นๆ 1 ครั้งเพื่อวัด latency และดูว่าเรียกได้จริง (ไม่ใช่แค่ list เฉยๆ)"""
+    """ยิง structured JSON สั้นๆ เพื่อยืนยันทั้ง entitlement และความสามารถที่ pipeline ต้องใช้จริง."""
     url = "https://api.groq.com/openai/v1/chat/completions" if is_groq else f"{base_url.rstrip('/')}/v1/chat/completions"
     payload = {
         "model": model_id,
-        "messages": [{"role": "user", "content": "ตอบคำเดียว: OK"}],
-        "max_tokens": 10,
+        "messages": [
+            {"role": "system", "content": "Return valid JSON only."},
+            {"role": "user", "content": 'Return exactly {"ok":true}.'},
+        ],
+        "max_tokens": 30,
     }
     start = time.time()
     try:
@@ -162,9 +165,23 @@ def test_model_smoke(base_url: str, api_key: str, model_id: str, is_groq: bool =
             timeout=30,
         )
         latency_ms = round((time.time() - start) * 1000, 1)
-        ok = resp.status_code == 200
-        usage = resp.json().get("usage", {}) if ok else {}
-        return {"ok": ok, "status_code": resp.status_code, "latency_ms": latency_ms, "usage": usage}
+        http_ok = resp.status_code == 200
+        body = resp.json() if http_ok else {}
+        usage = body.get("usage", {}) if http_ok else {}
+        content = (((body.get("choices") or [{}])[0].get("message") or {}).get("content") or "") if http_ok else ""
+        cleaned = re.sub(r"^```(?:json)?\s*|\s*```$", "", content.strip(), flags=re.IGNORECASE)
+        try:
+            schema_ok = json.loads(cleaned) == {"ok": True}
+        except (json.JSONDecodeError, TypeError):
+            schema_ok = False
+        return {
+            "ok": http_ok and schema_ok,
+            "http_ok": http_ok,
+            "schema_ok": schema_ok,
+            "status_code": resp.status_code,
+            "latency_ms": latency_ms,
+            "usage": usage,
+        }
     except requests.RequestException as exc:
         return {"ok": False, "error": str(exc), "latency_ms": None}
 

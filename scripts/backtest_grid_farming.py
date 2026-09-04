@@ -14,16 +14,13 @@ PaperBroker เดิมได้ตรงๆ):
 ข้อจำกัดที่ต้องรู้ (fail-safe โดยตั้งใจ ไม่ใช่บั๊ก — ต่างจาก backtest_multi_strategy.py เดิมที่ไม่บอกข้อจำกัด):
   - ไม่มีข้อมูล spot price แยกจาก perp ย้อนหลังฟรี -> สมมติ spot_price = perp close ราคาเดียวกัน (basis
     ~0%) ผล backtest ของ funding farmer จึงเป็น "best case" ที่ไม่มี basis risk จริง อาจดีกว่าของจริงได้
-  - ไม่มี tick-level data ให้จำลอง grid fill ทีละออเดอร์จริง -> ประมาณจาก daily high-low range เทียบกับ
-    ขอบเขต grid แทน (ยิ่งวันไหน range กว้างครอบคลุมทั้ง 2 ฝั่งของ grid มาก ยิ่งนับว่าเก็บ cycle ได้มาก)
+  - Grid engine v2 ใช้แท่ง 1h และจำลอง pending orders + cash/base inventory ทีละแท่ง ลด bias จาก daily
+    high-low ลงมาก แต่ยังไม่ใช่ tick/order-book replay; order ที่สร้างจาก fill จะ active แท่งถัดไปเท่านั้น
   - liquidity ประมาณจาก daily volume ของแท่งเทียน (v * close) ไม่ใช่ order book depth จริง — ใช้แค่ log
     warning ใน agent ไม่ได้ hard-block อยู่แล้ว จึงไม่กระทบผลลัพธ์มากนัก
 
-บั๊กที่เจอและแก้แล้ว (รันครั้งแรก 2026-08-17): grid backtest ให้ win_rate 100% ทุกเหรียญที่ทดสอบ (8/8) พร้อม
-กำไรเกินจริงมาก (เช่น PUMP $28 -> $7,655 ใน 180 วัน) ซึ่งเป็นไปไม่ได้ในชีวิตจริง — สาเหตุคือสูตรนับ cycle
-เดิมบวกกำไรได้อย่างเดียว ไม่มีทางลบเลย (ไม่ว่าราคาจะวิ่งทางไหน) จึงชนะทุกไม้เสมอ 100% แล้วยิ่ง compound ทบต้น
-ผ่านทุนที่โตขึ้นเรื่อยๆ ยิ่งดูเกินจริงหนักขึ้น แก้โดยเพิ่ม mark-to-market ขาดทุนที่ยังไม่ realize เวลาราคาหลุด
-ขอบล่างของ grid โดยไม่กลับมา (ดูคอมเมนต์ในโค้ด run_grid_backtest) ตอนนี้ผลลัพธ์ควรมีทั้งไม้ชนะและไม้แพ้แล้ว
+ผล engine daily-OHLC รุ่นก่อนหน้าถูกยกเลิกทั้งหมด เพราะสูตรยังสร้างกำไรเกินจริงแม้แก้เบื้องต้นแล้ว
+ผลที่ใช้พิจารณาต่อได้ต้องมาจาก engine_version=2 และ out-of-sample walk-forward เท่านั้น
 """
 from __future__ import annotations
 
@@ -37,7 +34,15 @@ sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(SCRIPTS_DIR))
 
 from src.agents.funding_farmer import FarmingPosition, FundingFarmingAgent, FundingRate  # noqa: E402
-from src.agents.grid_trader import GridPosition, GridTradingAgent, apply_daily_grid_pnl  # noqa: E402
+from src.agents.grid_trader import (  # noqa: E402
+    GridPosition,
+    GridTradingAgent,
+    apply_intraday_grid_candles,
+    close_grid_position,
+    initialize_grid_position,
+    mark_grid_to_market,
+)
+from src.data.hl_market import HyperliquidClient  # noqa: E402
 from src.data.market_volatility import compute_volatility_24h  # noqa: E402
 from src.settings import load_settings  # noqa: E402
 from src.util.io import save_json  # noqa: E402
@@ -49,18 +54,29 @@ WARMUP_DAYS = 10  # ต้องมีแท่งเทียนย้อนห
 
 
 def run_grid_backtest(
-    settings, hist_client: HistoricalHyperliquidClient, coin: str, start_date: str, end_date: str, starting_equity_usd: float,
+    settings,
+    hist_client: HistoricalHyperliquidClient,
+    coin: str,
+    start_date: str,
+    end_date: str,
+    starting_equity_usd: float,
+    *,
+    grid_width_pct: float = 5.0,
+    min_volatility_open: float = 1.5,
+    num_levels: int = 5,
 ) -> dict:
-    """จำลอง GridTradingAgent วันต่อวันด้วยราคาจริง — ประมาณ cycle ที่เก็บได้จาก daily high-low range
-    เทียบกับขอบเขต grid จริง (ไม่ใช่สุ่ม) ดู docstring บนสุดของไฟล์สำหรับข้อจำกัดของการประมาณนี้
-    """
-    agent = GridTradingAgent()
+    """จำลอง fully-funded spot grid ด้วยแท่ง 1h, inventory, pending orders และ mark-to-market."""
+    agent = GridTradingAgent(
+        grid_width_pct=grid_width_pct,
+        min_volatility_open=min_volatility_open,
+        num_levels=num_levels,
+    )
     fee_per_leg_pct = settings.risk.costs.taker_fee_pct + settings.risk.costs.assumed_slippage_pct
 
     cash = starting_equity_usd
     position: GridPosition | None = None
-    realized_pnl_usd = 0.0  # กำไรจาก cycle ที่ "เกิดจริง" สะสมตลอดชีวิตของ position ปัจจุบัน (monotonic)
     trades: list[dict] = []
+    fills: list[dict] = []
     equity_curve: list[dict] = []
 
     for date_str in date_range(start_date, end_date):
@@ -71,15 +87,12 @@ def run_grid_backtest(
 
         closes = [float(c["c"]) for c in candles]
         current_price = closes[-1]
-        day_high, day_low = float(candles[-1]["h"]), float(candles[-1]["l"])
         vol_24h = compute_volatility_24h(closes, lookback=7)
 
         if position is not None:
-            # ตรรกะคำนวณ P&L รายวัน (รวม fix ของบั๊ก win_rate 100%) อยู่ใน apply_daily_grid_pnl() ใช้
-            # ร่วมกับ src/shadow_grid.py เพื่อไม่ให้ backtest กับ live shadow ตรรกะเพี้ยนไปคนละทาง
-            realized_pnl_usd = apply_daily_grid_pnl(
-                position, day_high, day_low, current_price, closes, fee_per_leg_pct, realized_pnl_usd,
-            )
+            fills.extend(apply_intraday_grid_candles(
+                position, hist_client.get_candles(coin, interval="1h", lookback_days=3), fee_per_leg_pct,
+            ))
 
         decision = agent.decide(
             current_position=position, current_price=current_price, volatility_24h=vol_24h,
@@ -87,24 +100,25 @@ def run_grid_backtest(
         )
 
         if decision.action == "close" and position is not None:
-            realized = position.total_capital + position.accumulated_pnl
-            cash += realized
+            liquidated = close_grid_position(position, current_price, fee_per_leg_pct)
+            cash += liquidated
             trades.append({
                 "date": date_str, "action": "close", "reason": decision.reason,
                 "pnl_usd": position.accumulated_pnl, "deployed_capital_usd": position.total_capital,
             })
             position = None
-            realized_pnl_usd = 0.0
         elif decision.action == "open" and position is None:
-            position = GridPosition(
+            hourly = hist_client.get_candles(coin, interval="1h", lookback_days=1)
+            latest_hour_ts = int(hourly[-1].get("T", hourly[-1].get("t", 0))) if hourly else 0
+            position = initialize_grid_position(
                 symbol=coin, center_price=current_price, grid_width_pct=decision.grid_width_pct,
-                num_levels=decision.num_levels, total_capital=decision.total_capital_usd, entry_time=date_str,
+                num_levels=decision.num_levels, total_capital_usd=decision.total_capital_usd,
+                entry_time=date_str, last_processed_ts=latest_hour_ts,
             )
             cash -= decision.total_capital_usd
-            realized_pnl_usd = 0.0
             trades.append({"date": date_str, "action": "open", "reason": decision.reason, "deployed_capital_usd": decision.total_capital_usd})
 
-        equity_today = cash + (position.total_capital + position.accumulated_pnl if position else 0.0)
+        equity_today = cash + (mark_grid_to_market(position, current_price) if position else 0.0)
         equity_curve.append({"date": date_str, "equity_usd": equity_today})
 
     final_equity = equity_curve[-1]["equity_usd"] if equity_curve else starting_equity_usd
@@ -118,7 +132,59 @@ def run_grid_backtest(
         "win_rate_pct": round(len(wins) / len(closes_only) * 100, 1) if closes_only else 0.0,
         "starting_equity_usd": starting_equity_usd, "final_equity_usd": round(final_equity, 2),
         "total_pnl_usd": round(final_equity - starting_equity_usd, 2),
-        "trade_list": trades, "equity_curve": equity_curve,
+        "fills_count": len(fills),
+        "fill_volume_usd": round(sum(f["size_usd"] for f in fills), 2),
+        "execution_cost_usd": round(sum(f["fee_usd"] for f in fills), 4),
+        "trade_list": trades, "fill_list": fills, "equity_curve": equity_curve,
+    }
+
+
+def run_grid_walk_forward(
+    settings,
+    hist_client: HistoricalHyperliquidClient,
+    coin: str,
+    start_date: str,
+    end_date: str,
+    starting_equity_usd: float,
+    train_days: int = 60,
+    test_days: int = 30,
+) -> dict:
+    """เลือก parameter บน train window แล้ววัดเฉพาะ test window ถัดไปแบบ rolling."""
+    import datetime as dt
+
+    start = dt.date.fromisoformat(start_date)
+    end = dt.date.fromisoformat(end_date)
+    candidates = [(2.0, 1.0), (3.0, 1.5), (5.0, 1.5), (5.0, 2.5)]
+    folds = []
+    equity = starting_equity_usd
+    cursor = start
+    while cursor + dt.timedelta(days=train_days + test_days - 1) <= end:
+        train_end = cursor + dt.timedelta(days=train_days - 1)
+        test_start = train_end + dt.timedelta(days=1)
+        test_end = test_start + dt.timedelta(days=test_days - 1)
+        scored = []
+        for width, min_vol in candidates:
+            result = run_grid_backtest(
+                settings, hist_client, coin, cursor.isoformat(), train_end.isoformat(), starting_equity_usd,
+                grid_width_pct=width, min_volatility_open=min_vol,
+            )
+            scored.append((result["final_equity_usd"], width, min_vol))
+        _, width, min_vol = max(scored)
+        test_result = run_grid_backtest(
+            settings, hist_client, coin, test_start.isoformat(), test_end.isoformat(), equity,
+            grid_width_pct=width, min_volatility_open=min_vol,
+        )
+        equity = test_result["final_equity_usd"]
+        folds.append({
+            "train_start": cursor.isoformat(), "train_end": train_end.isoformat(),
+            "test_start": test_start.isoformat(), "test_end": test_end.isoformat(),
+            "selected": {"grid_width_pct": width, "min_volatility_open": min_vol},
+            "test_pnl_usd": test_result["total_pnl_usd"], "test_final_equity_usd": equity,
+        })
+        cursor += dt.timedelta(days=test_days)
+    return {
+        "coin": coin, "folds": folds, "starting_equity_usd": starting_equity_usd,
+        "final_equity_usd": equity, "total_pnl_usd": round(equity - starting_equity_usd, 2),
     }
 
 
@@ -208,6 +274,7 @@ def main() -> int:
     parser.add_argument("--coins", default=",".join(DEFAULT_COINS), help='รายชื่อเหรียญคั่นด้วย comma หรือ "auto" เพื่อดึงพูล liquid จริงจาก Hyperliquid')
     parser.add_argument("--days", type=int, default=180)
     parser.add_argument("--starting-equity-usd", type=float, default=28.0)
+    parser.add_argument("--walk-forward", action="store_true", help="รัน rolling 60d train / 30d out-of-sample")
     args = parser.parse_args()
 
     settings = load_settings()
@@ -224,7 +291,14 @@ def main() -> int:
     lookback_needed = args.days + WARMUP_DAYS
     print(f"กำลังดึงข้อมูลราคา/funding ย้อนหลัง {lookback_needed} วันสำหรับ {coins} (ฟรี ไม่เสีย AI)...")
     candles_by_coin, funding_by_coin = fetch_backtest_history(coins, lookback_needed)
-    hist_client = HistoricalHyperliquidClient(candles_by_coin, funding_by_coin)
+    live_client = HyperliquidClient()
+    hourly_by_coin = {
+        coin: live_client.get_candles(coin, interval="1h", lookback_days=lookback_needed)
+        for coin in coins
+    }
+    hist_client = HistoricalHyperliquidClient(
+        candles_by_coin, funding_by_coin, candles_by_interval={"1d": candles_by_coin, "1h": hourly_by_coin}
+    )
 
     import datetime as dt
 
@@ -234,7 +308,7 @@ def main() -> int:
     out_dir = REPO_ROOT / "state" / "grid_farming_backtest"
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    all_results: dict[str, dict] = {"grid": {}, "funding_farmer": {}}
+    all_results: dict[str, dict] = {"grid": {}, "funding_farmer": {}, "grid_walk_forward": {}}
     for coin in coins:
         print(f"--- grid: {coin} ---")
         grid_result = run_grid_backtest(settings, hist_client, coin, start.isoformat(), end.isoformat(), args.starting_equity_usd)
@@ -248,9 +322,23 @@ def main() -> int:
         save_json(out_dir / f"funding_farmer_{coin}_trades.json", farmer_result["trade_list"])
         print(f"  positions opened={farmer_result['positions_opened']} closed={farmer_result['positions_closed']} win_rate={farmer_result['win_rate_pct']}% pnl={farmer_result['total_pnl_usd']}")
 
+        if args.walk_forward:
+            wf_result = run_grid_walk_forward(
+                settings, hist_client, coin, start.isoformat(), end.isoformat(), args.starting_equity_usd
+            )
+            all_results["grid_walk_forward"][coin] = wf_result
+            print(f"  walk-forward folds={len(wf_result['folds'])} out-of-sample pnl={wf_result['total_pnl_usd']}")
+
     summary = {
-        strategy: {coin: {k: v for k, v in r.items() if k not in ("trade_list", "equity_curve")} for coin, r in per_coin.items()}
+        strategy: {coin: {k: v for k, v in r.items() if k not in ("trade_list", "fill_list", "equity_curve")} for coin, r in per_coin.items()}
         for strategy, per_coin in all_results.items()
+    }
+    summary["_meta"] = {
+        "grid_engine_version": 2,
+        "fill_interval": "1h",
+        "inventory_accounting": True,
+        "fees_and_slippage_included": True,
+        "walk_forward": bool(args.walk_forward),
     }
     save_json(out_dir / "summary.json", summary)
     print(f"\nเขียนสรุปผลลง {out_dir / 'summary.json'}")

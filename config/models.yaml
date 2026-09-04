@@ -10,16 +10,15 @@ roles:
     provider: anthropic
     source: litellm
   analyst_macro:
-    model: dashscope/deepseek-v4-pro
-    tier: mid
-    provider: deepseek
+    # deepseek-v4-pro parse/validate ล้มซ้ำ 14/23 decision days; ใช้ provider Google เพื่อคง diversity
+    model: Gemini 2.5 pro
+    tier: frontier
+    provider: google
     source: litellm
   redteam:
-    # เปลี่ยนจาก "Grok 4.1 Fast Reasoning" (2026-07-28): เจอจริงตอนรัน backtest ว่าทีมนี้ไม่มีสิทธิ์เข้าถึง
-    # โมเดลนี้เลย ("team not allowed to access model") ทั้งที่ตอน bake-off ก่อนหน้าผ่าน 100% — สิทธิ์บัญชี
-    # LiteLLM อาจเปลี่ยนไปหลังจากนั้น เลือก GPT 5.2 แทนเพราะยืนยันแล้วว่าอยู่ในลิสต์ที่ทีมนี้เข้าถึงได้จริง
-    # (ดู error message เดิม) และให้ provider ต่างจาก analyst_trend/positioning/macro ทั้ง 3 ตัว (คง diversity)
-    model: GPT 5.2
+    # GPT 5.2 ถูกถอดจาก entitlement จริงเมื่อ 2026-09-04; เปลี่ยนเป็น gpt-5.5 ที่อยู่ใน allowed list
+    # และ daily.yml จะ probe structured JSON ทุก role ก่อนรัน ถ้าสิทธิ์เปลี่ยนอีกจะ fallback baseline อัตโนมัติ
+    model: gpt-5.5
     tier: frontier
     provider: openai
     source: litellm

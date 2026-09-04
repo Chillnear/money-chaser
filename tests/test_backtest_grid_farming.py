@@ -57,6 +57,27 @@ def _make_calendar_candles(start_date: str, n_days: int, start_price: float = 10
     return candles
 
 
+def _make_hourly_from_daily(daily: list[dict]) -> list[dict]:
+    hourly = []
+    for day in daily:
+        start = int(day["t"])
+        open_price, close_price = float(day["o"]), float(day["c"])
+        for hour in range(24):
+            frac0, frac1 = hour / 24, (hour + 1) / 24
+            o = open_price + (close_price - open_price) * frac0
+            c = open_price + (close_price - open_price) * frac1
+            hourly.append({
+                "t": start + hour * 3_600_000,
+                "T": start + (hour + 1) * 3_600_000 - 1,
+                "o": o,
+                "h": max(o, c) * 1.01,
+                "l": min(o, c) * 0.99,
+                "c": c,
+                "v": 1000,
+            })
+    return hourly
+
+
 def _settings():
     from src.settings import AppConfig, RiskConfig, Secrets, Settings
     return Settings(
@@ -68,13 +89,17 @@ def _settings():
 def test_grid_backtest_opens_and_tracks_equity_on_volatile_market(bt, gf):
     settings = _settings()
     candles = _make_calendar_candles("2025-01-01", n_days=50, daily_pcts=[8.0, -8.0])  # สลับขึ้นลงแรงทุกวัน
-    hist_client = bt.HistoricalHyperliquidClient({"BTC": candles}, {"BTC": []})
+    hourly = _make_hourly_from_daily(candles)
+    hist_client = bt.HistoricalHyperliquidClient(
+        {"BTC": candles}, {"BTC": []}, candles_by_interval={"1d": {"BTC": candles}, "1h": {"BTC": hourly}}
+    )
 
     result = gf.run_grid_backtest(settings, hist_client, "BTC", "2025-01-15", "2025-02-10", starting_equity_usd=28.0)
 
     assert result["grids_opened"] > 0  # volatility สูงพอควรเปิด grid อย่างน้อยครั้งนึง
     assert len(result["equity_curve"]) > 0
     assert result["final_equity_usd"] > 0
+    assert result["fills_count"] > 0
 
 
 def test_grid_backtest_can_lose_money_on_persistent_downtrend(bt, gf):

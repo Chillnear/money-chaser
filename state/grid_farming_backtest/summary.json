@@ -2,98 +2,122 @@
   "grid": {
     "BTC": {
       "coin": "BTC",
-      "start_date": "2026-02-19",
-      "end_date": "2026-08-17",
-      "grids_opened": 7,
-      "grids_closed": 6,
-      "win_rate_pct": 100.0,
+      "start_date": "2026-03-08",
+      "end_date": "2026-09-03",
+      "grids_opened": 5,
+      "grids_closed": 4,
+      "win_rate_pct": 75.0,
       "starting_equity_usd": 28.0,
-      "final_equity_usd": 98.93,
-      "total_pnl_usd": 70.93
+      "final_equity_usd": 29.69,
+      "total_pnl_usd": 1.69,
+      "fills_count": 426,
+      "fill_volume_usd": 1057.84,
+      "execution_cost_usd": 1.0049
     },
     "ETH": {
       "coin": "ETH",
-      "start_date": "2026-02-19",
-      "end_date": "2026-08-17",
-      "grids_opened": 14,
-      "grids_closed": 13,
-      "win_rate_pct": 84.6,
+      "start_date": "2026-03-08",
+      "end_date": "2026-09-03",
+      "grids_opened": 12,
+      "grids_closed": 11,
+      "win_rate_pct": 54.5,
       "starting_equity_usd": 28.0,
-      "final_equity_usd": 157.3,
-      "total_pnl_usd": 129.3
+      "final_equity_usd": 23.61,
+      "total_pnl_usd": -4.39,
+      "fills_count": 577,
+      "fill_volume_usd": 1309.7,
+      "execution_cost_usd": 1.2442
     },
     "SOL": {
       "coin": "SOL",
-      "start_date": "2026-02-19",
-      "end_date": "2026-08-17",
-      "grids_opened": 12,
-      "grids_closed": 12,
-      "win_rate_pct": 83.3,
+      "start_date": "2026-03-08",
+      "end_date": "2026-09-03",
+      "grids_opened": 14,
+      "grids_closed": 13,
+      "win_rate_pct": 53.8,
       "starting_equity_usd": 28.0,
-      "final_equity_usd": 223.69,
-      "total_pnl_usd": 195.69
+      "final_equity_usd": 25.22,
+      "total_pnl_usd": -2.78,
+      "fills_count": 800,
+      "fill_volume_usd": 1741.78,
+      "execution_cost_usd": 1.6547
     },
     "XRP": {
       "coin": "XRP",
-      "start_date": "2026-02-19",
-      "end_date": "2026-08-17",
-      "grids_opened": 10,
-      "grids_closed": 9,
-      "win_rate_pct": 88.9,
+      "start_date": "2026-03-08",
+      "end_date": "2026-09-03",
+      "grids_opened": 9,
+      "grids_closed": 8,
+      "win_rate_pct": 50.0,
       "starting_equity_usd": 28.0,
-      "final_equity_usd": 131.52,
-      "total_pnl_usd": 103.52
+      "final_equity_usd": 24.85,
+      "total_pnl_usd": -3.15,
+      "fills_count": 701,
+      "fill_volume_usd": 1617.06,
+      "execution_cost_usd": 1.5362
     },
     "HYPE": {
       "coin": "HYPE",
-      "start_date": "2026-02-19",
-      "end_date": "2026-08-17",
-      "grids_opened": 20,
-      "grids_closed": 19,
-      "win_rate_pct": 94.7,
+      "start_date": "2026-03-08",
+      "end_date": "2026-09-03",
+      "grids_opened": 19,
+      "grids_closed": 18,
+      "win_rate_pct": 66.7,
       "starting_equity_usd": 28.0,
-      "final_equity_usd": 448.04,
-      "total_pnl_usd": 420.04
+      "final_equity_usd": 35.67,
+      "total_pnl_usd": 7.67,
+      "fills_count": 1541,
+      "fill_volume_usd": 4204.71,
+      "execution_cost_usd": 3.9945
     },
     "PUMP": {
       "coin": "PUMP",
-      "start_date": "2026-02-19",
-      "end_date": "2026-08-17",
-      "grids_opened": 25,
-      "grids_closed": 24,
-      "win_rate_pct": 87.5,
+      "start_date": "2026-03-08",
+      "end_date": "2026-09-03",
+      "grids_opened": 28,
+      "grids_closed": 27,
+      "win_rate_pct": 59.3,
       "starting_equity_usd": 28.0,
-      "final_equity_usd": 434.61,
-      "total_pnl_usd": 406.61
+      "final_equity_usd": 32.28,
+      "total_pnl_usd": 4.28,
+      "fills_count": 2123,
+      "fill_volume_usd": 4845.59,
+      "execution_cost_usd": 4.6033
     },
     "ZEC": {
       "coin": "ZEC",
-      "start_date": "2026-02-19",
-      "end_date": "2026-08-17",
-      "grids_opened": 33,
-      "grids_closed": 32,
-      "win_rate_pct": 75.0,
+      "start_date": "2026-03-08",
+      "end_date": "2026-09-03",
+      "grids_opened": 30,
+      "grids_closed": 29,
+      "win_rate_pct": 62.1,
       "starting_equity_usd": 28.0,
-      "final_equity_usd": 236.18,
-      "total_pnl_usd": 208.18
+      "final_equity_usd": 26.03,
+      "total_pnl_usd": -1.97,
+      "fills_count": 1958,
+      "fill_volume_usd": 4724.61,
+      "execution_cost_usd": 4.4884
     },
     "PAXG": {
       "coin": "PAXG",
-      "start_date": "2026-02-19",
-      "end_date": "2026-08-17",
-      "grids_opened": 4,
+      "start_date": "2026-03-08",
+      "end_date": "2026-09-03",
+      "grids_opened": 3,
       "grids_closed": 3,
-      "win_rate_pct": 100.0,
+      "win_rate_pct": 33.3,
       "starting_equity_usd": 28.0,
-      "final_equity_usd": 58.79,
-      "total_pnl_usd": 30.79
+      "final_equity_usd": 26.16,
+      "total_pnl_usd": -1.84,
+      "fills_count": 230,
+      "fill_volume_usd": 527.97,
+      "execution_cost_usd": 0.5016
     }
   },
   "funding_farmer": {
     "BTC": {
       "coin": "BTC",
-      "start_date": "2026-02-19",
-      "end_date": "2026-08-17",
+      "start_date": "2026-03-08",
+      "end_date": "2026-09-03",
       "positions_opened": 0,
       "positions_closed": 0,
       "win_rate_pct": 0.0,
@@ -103,8 +127,8 @@
     },
     "ETH": {
       "coin": "ETH",
-      "start_date": "2026-02-19",
-      "end_date": "2026-08-17",
+      "start_date": "2026-03-08",
+      "end_date": "2026-09-03",
       "positions_opened": 0,
       "positions_closed": 0,
       "win_rate_pct": 0.0,
@@ -114,8 +138,8 @@
     },
     "SOL": {
       "coin": "SOL",
-      "start_date": "2026-02-19",
-      "end_date": "2026-08-17",
+      "start_date": "2026-03-08",
+      "end_date": "2026-09-03",
       "positions_opened": 0,
       "positions_closed": 0,
       "win_rate_pct": 0.0,
@@ -125,8 +149,8 @@
     },
     "XRP": {
       "coin": "XRP",
-      "start_date": "2026-02-19",
-      "end_date": "2026-08-17",
+      "start_date": "2026-03-08",
+      "end_date": "2026-09-03",
       "positions_opened": 0,
       "positions_closed": 0,
       "win_rate_pct": 0.0,
@@ -136,8 +160,8 @@
     },
     "HYPE": {
       "coin": "HYPE",
-      "start_date": "2026-02-19",
-      "end_date": "2026-08-17",
+      "start_date": "2026-03-08",
+      "end_date": "2026-09-03",
       "positions_opened": 0,
       "positions_closed": 0,
       "win_rate_pct": 0.0,
@@ -147,8 +171,8 @@
     },
     "PUMP": {
       "coin": "PUMP",
-      "start_date": "2026-02-19",
-      "end_date": "2026-08-17",
+      "start_date": "2026-03-08",
+      "end_date": "2026-09-03",
       "positions_opened": 0,
       "positions_closed": 0,
       "win_rate_pct": 0.0,
@@ -158,8 +182,8 @@
     },
     "ZEC": {
       "coin": "ZEC",
-      "start_date": "2026-02-19",
-      "end_date": "2026-08-17",
+      "start_date": "2026-03-08",
+      "end_date": "2026-09-03",
       "positions_opened": 0,
       "positions_closed": 0,
       "win_rate_pct": 0.0,
@@ -169,8 +193,8 @@
     },
     "PAXG": {
       "coin": "PAXG",
-      "start_date": "2026-02-19",
-      "end_date": "2026-08-17",
+      "start_date": "2026-03-08",
+      "end_date": "2026-09-03",
       "positions_opened": 0,
       "positions_closed": 0,
       "win_rate_pct": 0.0,
@@ -178,5 +202,462 @@
       "final_equity_usd": 28.0,
       "total_pnl_usd": 0.0
     }
+  },
+  "grid_walk_forward": {
+    "BTC": {
+      "coin": "BTC",
+      "folds": [
+        {
+          "train_start": "2026-03-08",
+          "train_end": "2026-05-06",
+          "test_start": "2026-05-07",
+          "test_end": "2026-06-05",
+          "selected": {
+            "grid_width_pct": 3.0,
+            "min_volatility_open": 1.5
+          },
+          "test_pnl_usd": -2.62,
+          "test_final_equity_usd": 25.38
+        },
+        {
+          "train_start": "2026-04-07",
+          "train_end": "2026-06-05",
+          "test_start": "2026-06-06",
+          "test_end": "2026-07-05",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 2.5
+          },
+          "test_pnl_usd": 0.63,
+          "test_final_equity_usd": 26.01
+        },
+        {
+          "train_start": "2026-05-07",
+          "train_end": "2026-07-05",
+          "test_start": "2026-07-06",
+          "test_end": "2026-08-04",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 2.5
+          },
+          "test_pnl_usd": 0.0,
+          "test_final_equity_usd": 26.01
+        },
+        {
+          "train_start": "2026-06-06",
+          "train_end": "2026-08-04",
+          "test_start": "2026-08-05",
+          "test_end": "2026-09-03",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 1.5
+          },
+          "test_pnl_usd": 0.87,
+          "test_final_equity_usd": 26.88
+        }
+      ],
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 26.88,
+      "total_pnl_usd": -1.12
+    },
+    "ETH": {
+      "coin": "ETH",
+      "folds": [
+        {
+          "train_start": "2026-03-08",
+          "train_end": "2026-05-06",
+          "test_start": "2026-05-07",
+          "test_end": "2026-06-05",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 1.5
+          },
+          "test_pnl_usd": -4.18,
+          "test_final_equity_usd": 23.82
+        },
+        {
+          "train_start": "2026-04-07",
+          "train_end": "2026-06-05",
+          "test_start": "2026-06-06",
+          "test_end": "2026-07-05",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 2.5
+          },
+          "test_pnl_usd": 1.23,
+          "test_final_equity_usd": 25.05
+        },
+        {
+          "train_start": "2026-05-07",
+          "train_end": "2026-07-05",
+          "test_start": "2026-07-06",
+          "test_end": "2026-08-04",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 2.5
+          },
+          "test_pnl_usd": 1.09,
+          "test_final_equity_usd": 26.14
+        },
+        {
+          "train_start": "2026-06-06",
+          "train_end": "2026-08-04",
+          "test_start": "2026-08-05",
+          "test_end": "2026-09-03",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 2.5
+          },
+          "test_pnl_usd": 0.99,
+          "test_final_equity_usd": 27.13
+        }
+      ],
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 27.13,
+      "total_pnl_usd": -0.87
+    },
+    "SOL": {
+      "coin": "SOL",
+      "folds": [
+        {
+          "train_start": "2026-03-08",
+          "train_end": "2026-05-06",
+          "test_start": "2026-05-07",
+          "test_end": "2026-06-05",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 2.5
+          },
+          "test_pnl_usd": -3.39,
+          "test_final_equity_usd": 24.61
+        },
+        {
+          "train_start": "2026-04-07",
+          "train_end": "2026-06-05",
+          "test_start": "2026-06-06",
+          "test_end": "2026-07-05",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 2.5
+          },
+          "test_pnl_usd": 3.29,
+          "test_final_equity_usd": 27.9
+        },
+        {
+          "train_start": "2026-05-07",
+          "train_end": "2026-07-05",
+          "test_start": "2026-07-06",
+          "test_end": "2026-08-04",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 1.5
+          },
+          "test_pnl_usd": -1.74,
+          "test_final_equity_usd": 26.16
+        },
+        {
+          "train_start": "2026-06-06",
+          "train_end": "2026-08-04",
+          "test_start": "2026-08-05",
+          "test_end": "2026-09-03",
+          "selected": {
+            "grid_width_pct": 3.0,
+            "min_volatility_open": 1.5
+          },
+          "test_pnl_usd": 2.1,
+          "test_final_equity_usd": 28.26
+        }
+      ],
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 28.26,
+      "total_pnl_usd": 0.26
+    },
+    "XRP": {
+      "coin": "XRP",
+      "folds": [
+        {
+          "train_start": "2026-03-08",
+          "train_end": "2026-05-06",
+          "test_start": "2026-05-07",
+          "test_end": "2026-06-05",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 1.5
+          },
+          "test_pnl_usd": -2.84,
+          "test_final_equity_usd": 25.16
+        },
+        {
+          "train_start": "2026-04-07",
+          "train_end": "2026-06-05",
+          "test_start": "2026-06-06",
+          "test_end": "2026-07-05",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 1.5
+          },
+          "test_pnl_usd": -0.2,
+          "test_final_equity_usd": 24.96
+        },
+        {
+          "train_start": "2026-05-07",
+          "train_end": "2026-07-05",
+          "test_start": "2026-07-06",
+          "test_end": "2026-08-04",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 1.5
+          },
+          "test_pnl_usd": -0.89,
+          "test_final_equity_usd": 24.07
+        },
+        {
+          "train_start": "2026-06-06",
+          "train_end": "2026-08-04",
+          "test_start": "2026-08-05",
+          "test_end": "2026-09-03",
+          "selected": {
+            "grid_width_pct": 3.0,
+            "min_volatility_open": 1.5
+          },
+          "test_pnl_usd": 1.32,
+          "test_final_equity_usd": 25.39
+        }
+      ],
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 25.39,
+      "total_pnl_usd": -2.61
+    },
+    "HYPE": {
+      "coin": "HYPE",
+      "folds": [
+        {
+          "train_start": "2026-03-08",
+          "train_end": "2026-05-06",
+          "test_start": "2026-05-07",
+          "test_end": "2026-06-05",
+          "selected": {
+            "grid_width_pct": 3.0,
+            "min_volatility_open": 1.5
+          },
+          "test_pnl_usd": 2.92,
+          "test_final_equity_usd": 30.92
+        },
+        {
+          "train_start": "2026-04-07",
+          "train_end": "2026-06-05",
+          "test_start": "2026-06-06",
+          "test_end": "2026-07-05",
+          "selected": {
+            "grid_width_pct": 3.0,
+            "min_volatility_open": 1.5
+          },
+          "test_pnl_usd": 0.19,
+          "test_final_equity_usd": 31.11
+        },
+        {
+          "train_start": "2026-05-07",
+          "train_end": "2026-07-05",
+          "test_start": "2026-07-06",
+          "test_end": "2026-08-04",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 2.5
+          },
+          "test_pnl_usd": -4.99,
+          "test_final_equity_usd": 26.12
+        },
+        {
+          "train_start": "2026-06-06",
+          "train_end": "2026-08-04",
+          "test_start": "2026-08-05",
+          "test_end": "2026-09-03",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 2.5
+          },
+          "test_pnl_usd": 4.15,
+          "test_final_equity_usd": 30.27
+        }
+      ],
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 30.27,
+      "total_pnl_usd": 2.27
+    },
+    "PUMP": {
+      "coin": "PUMP",
+      "folds": [
+        {
+          "train_start": "2026-03-08",
+          "train_end": "2026-05-06",
+          "test_start": "2026-05-07",
+          "test_end": "2026-06-05",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 2.5
+          },
+          "test_pnl_usd": -2.65,
+          "test_final_equity_usd": 25.35
+        },
+        {
+          "train_start": "2026-04-07",
+          "train_end": "2026-06-05",
+          "test_start": "2026-06-06",
+          "test_end": "2026-07-05",
+          "selected": {
+            "grid_width_pct": 2.0,
+            "min_volatility_open": 1.0
+          },
+          "test_pnl_usd": -2.02,
+          "test_final_equity_usd": 23.33
+        },
+        {
+          "train_start": "2026-05-07",
+          "train_end": "2026-07-05",
+          "test_start": "2026-07-06",
+          "test_end": "2026-08-04",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 1.5
+          },
+          "test_pnl_usd": 1.48,
+          "test_final_equity_usd": 24.81
+        },
+        {
+          "train_start": "2026-06-06",
+          "train_end": "2026-08-04",
+          "test_start": "2026-08-05",
+          "test_end": "2026-09-03",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 2.5
+          },
+          "test_pnl_usd": 4.86,
+          "test_final_equity_usd": 29.67
+        }
+      ],
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 29.67,
+      "total_pnl_usd": 1.67
+    },
+    "ZEC": {
+      "coin": "ZEC",
+      "folds": [
+        {
+          "train_start": "2026-03-08",
+          "train_end": "2026-05-06",
+          "test_start": "2026-05-07",
+          "test_end": "2026-06-05",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 1.5
+          },
+          "test_pnl_usd": -6.0,
+          "test_final_equity_usd": 22.0
+        },
+        {
+          "train_start": "2026-04-07",
+          "train_end": "2026-06-05",
+          "test_start": "2026-06-06",
+          "test_end": "2026-07-05",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 1.5
+          },
+          "test_pnl_usd": -1.56,
+          "test_final_equity_usd": 20.44
+        },
+        {
+          "train_start": "2026-05-07",
+          "train_end": "2026-07-05",
+          "test_start": "2026-07-06",
+          "test_end": "2026-08-04",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 2.5
+          },
+          "test_pnl_usd": -1.09,
+          "test_final_equity_usd": 19.35
+        },
+        {
+          "train_start": "2026-06-06",
+          "train_end": "2026-08-04",
+          "test_start": "2026-08-05",
+          "test_end": "2026-09-03",
+          "selected": {
+            "grid_width_pct": 3.0,
+            "min_volatility_open": 1.5
+          },
+          "test_pnl_usd": 3.37,
+          "test_final_equity_usd": 22.72
+        }
+      ],
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 22.72,
+      "total_pnl_usd": -5.28
+    },
+    "PAXG": {
+      "coin": "PAXG",
+      "folds": [
+        {
+          "train_start": "2026-03-08",
+          "train_end": "2026-05-06",
+          "test_start": "2026-05-07",
+          "test_end": "2026-06-05",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 2.5
+          },
+          "test_pnl_usd": 0.0,
+          "test_final_equity_usd": 28.0
+        },
+        {
+          "train_start": "2026-04-07",
+          "train_end": "2026-06-05",
+          "test_start": "2026-06-06",
+          "test_end": "2026-07-05",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 2.5
+          },
+          "test_pnl_usd": -0.32,
+          "test_final_equity_usd": 27.68
+        },
+        {
+          "train_start": "2026-05-07",
+          "train_end": "2026-07-05",
+          "test_start": "2026-07-06",
+          "test_end": "2026-08-04",
+          "selected": {
+            "grid_width_pct": 5.0,
+            "min_volatility_open": 1.5
+          },
+          "test_pnl_usd": 0.0,
+          "test_final_equity_usd": 27.68
+        },
+        {
+          "train_start": "2026-06-06",
+          "train_end": "2026-08-04",
+          "test_start": "2026-08-05",
+          "test_end": "2026-09-03",
+          "selected": {
+            "grid_width_pct": 3.0,
+            "min_volatility_open": 1.5
+          },
+          "test_pnl_usd": 0.4,
+          "test_final_equity_usd": 28.08
+        }
+      ],
+      "starting_equity_usd": 28.0,
+      "final_equity_usd": 28.08,
+      "total_pnl_usd": 0.08
+    }
+  },
+  "_meta": {
+    "grid_engine_version": 2,
+    "fill_interval": "1h",
+    "inventory_accounting": true,
+    "fees_and_slippage_included": true,
+    "walk_forward": true
   }
 }

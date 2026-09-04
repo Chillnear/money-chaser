@@ -1,13 +1,11 @@
 """
 Shadow tracker — คำนวณกลยุทธ์ grid trading (GridTradingAgent) คู่กับ AI จริงทุกวันแบบ deterministic
 (ไม่ใช้ AI/LLM เลย) เก็บ equity เสมือนแยกจากบัญชีจริง/paper หลัก 100% ไม่กระทบเงินจริงหรืองบ AI เด็ดขาด
-เหมือน src/shadow.py (funding_carry shadow) แต่คนละไฟล์เพราะ grid position ไม่มี "exit price" เดียว
-(เปิดหลายระดับพร้อมกัน) ใช้ apply_daily_grid_pnl() ร่วมกับ scripts/backtest_grid_farming.py
+เหมือน src/shadow.py (funding_carry shadow) แต่ใช้ engine v2: แท่ง 1h, pending order, cash/base inventory,
+fee/slippage และ mark-to-market ร่วมกับ scripts/backtest_grid_farming.py
 
-ที่มา: backtest จริง (state/grid_farming_backtest/, ดู scripts/backtest_grid_farming.py docstring) หลังแก้
-บั๊ก win_rate 100% แล้ว ให้ผลบวกทุกเหรียญที่ทดสอบ (8/8) ในช่วง 2026-02-19 ถึง 2026-08-17 แต่ backtest ใช้
-daily OHLC ประมาณการ fill ไม่ใช่ tick data จริง ยังมี bias ทางบวกหลงเหลืออยู่บ้าง — ต้องยืนยันด้วยข้อมูลจริง
-วันต่อวัน (shadow) ก่อนตัดสินใจเปลี่ยนแปลงเงินจริงใดๆ เหมือนที่เคยทำกับ funding_carry มาก่อน
+ผลจาก engine daily-OHLC รุ่นเก่าถูกยกเลิกเพราะ positive bias สูงเกินจริง เมื่อพบ state รุ่นเก่าจะ reset
+shadow เป็น $28 ใหม่โดยอัตโนมัติ และยังห้ามเชื่อมเงินจริงจน walk-forward กับ paper sample ผ่านเกณฑ์
 
 เลือก BTC เป็นเหรียญ shadow (ไม่ใช้ shortlist เหมือน funding_carry) เพราะ:
   - เป็นเหรียญ default ดั้งเดิมของระบบ (DEFAULT_COINS ใน scripts/backtest.py = ["BTC", "PAXG"])
@@ -22,7 +20,17 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from src.agents.grid_trader import GridPosition, GridTradingAgent, apply_daily_grid_pnl
+from dataclasses import asdict
+
+from src.agents.grid_trader import (
+    GridPosition,
+    GridTradingAgent,
+    apply_intraday_grid_candles,
+    close_grid_position,
+    grid_position_from_dict,
+    initialize_grid_position,
+    mark_grid_to_market,
+)
 from src.data.market_volatility import compute_volatility_24h
 from src.util.io import append_jsonl, load_json, save_json
 
@@ -34,12 +42,23 @@ def _state_path(journal_dir: Path) -> Path:
     return journal_dir / "shadow_grid_state.json"
 
 
+GRID_ENGINE_VERSION = 2
+
+
 def _default_state() -> dict:
-    return {"cash_usd": SHADOW_GRID_STARTING_EQUITY_USD, "open_position": None, "realized_pnl_usd": 0.0}
+    return {
+        "engine_version": GRID_ENGINE_VERSION,
+        "cash_usd": SHADOW_GRID_STARTING_EQUITY_USD,
+        "open_position": None,
+        "low_volatility_days_count": 0,
+    }
 
 
-def _load_state(journal_dir: Path) -> dict:
-    return load_json(_state_path(journal_dir), default=_default_state())
+def _load_state(journal_dir: Path) -> tuple[dict, bool]:
+    raw = load_json(_state_path(journal_dir), default=None)
+    if not raw or raw.get("engine_version") != GRID_ENGINE_VERSION:
+        return _default_state(), raw is not None
+    return raw, False
 
 
 def _save_state(journal_dir: Path, state: dict) -> None:
@@ -55,9 +74,17 @@ def run_grid_shadow_day(
 ) -> dict:
     """รันกลยุทธ์ grid trading แบบ deterministic คู่กับ AI จริง 1 วัน คืน dict สรุปสำหรับ LINE report"""
     try:
-        state = _load_state(journal_dir)
+        state, reset_from_legacy = _load_state(journal_dir)
         agent = GridTradingAgent()
+        agent.low_volatility_days_count = int(state.get("low_volatility_days_count", 0))
         fee_per_leg_pct = settings.risk.costs.taker_fee_pct + settings.risk.costs.assumed_slippage_pct
+        if reset_from_legacy:
+            append_jsonl(journal_dir / "shadow_grid_trades.jsonl", {
+                "date_ts": now_ts,
+                "action": "engine_reset",
+                "reason": "reset legacy daily-OHLC grid state; engine v2 starts fresh at $28",
+                "engine_version": GRID_ENGINE_VERSION,
+            })
 
         candles = hl_client.get_candles(coin, interval="1d", lookback_days=30)
         if len(candles) < 8:
@@ -68,19 +95,18 @@ def run_grid_shadow_day(
             )
             return {"action": "waiting_for_data", "equity_usd": round(equity_now, 4), "open_position": state.get("open_position")}
 
+        hourly_candles = hl_client.get_candles(coin, interval="1h", lookback_days=3)
         closes = [float(c["c"]) for c in candles]
         current_price = closes[-1]
-        day_high, day_low = float(candles[-1]["h"]), float(candles[-1]["l"])
         vol_24h = compute_volatility_24h(closes, lookback=7)
 
-        position: GridPosition | None = GridPosition(**state["open_position"]) if state.get("open_position") else None
-        realized_pnl_usd = state.get("realized_pnl_usd", 0.0)
-        action_taken = "held_position" if position else "flat"
+        position: GridPosition | None = grid_position_from_dict(state["open_position"]) if state.get("open_position") else None
+        action_taken = "reset_engine_v2" if reset_from_legacy else ("held_position" if position else "flat")
 
         if position is not None:
-            realized_pnl_usd = apply_daily_grid_pnl(
-                position, day_high, day_low, current_price, closes, fee_per_leg_pct, realized_pnl_usd,
-            )
+            fills = apply_intraday_grid_candles(position, hourly_candles, fee_per_leg_pct)
+            if fills:
+                append_jsonl(journal_dir / "shadow_grid_fills.jsonl", {"date_ts": now_ts, "fills": fills})
 
         decision = agent.decide(
             current_position=position, current_price=current_price, volatility_24h=vol_24h,
@@ -88,35 +114,32 @@ def run_grid_shadow_day(
         )
 
         if decision.action == "close" and position is not None:
-            state["cash_usd"] += position.total_capital + position.accumulated_pnl
+            liquidated_cash = close_grid_position(position, current_price, fee_per_leg_pct)
+            state["cash_usd"] += liquidated_cash
             action_taken = f"closed_{'profit' if position.accumulated_pnl >= 0 else 'loss'}"
             append_jsonl(journal_dir / "shadow_grid_trades.jsonl", {
                 "date_ts": now_ts, "action": "close", "reason": decision.reason,
                 "pnl_usd": round(position.accumulated_pnl, 4), "deployed_capital_usd": round(position.total_capital, 4),
             })
             position = None
-            realized_pnl_usd = 0.0
         elif decision.action == "open" and position is None:
-            position = GridPosition(
+            latest_hour_ts = int(hourly_candles[-1].get("T", hourly_candles[-1].get("t", 0))) if hourly_candles else 0
+            position = initialize_grid_position(
                 symbol=coin, center_price=current_price, grid_width_pct=decision.grid_width_pct,
-                num_levels=decision.num_levels, total_capital=decision.total_capital_usd, entry_time=str(now_ts),
+                num_levels=decision.num_levels, total_capital_usd=decision.total_capital_usd,
+                entry_time=str(now_ts), last_processed_ts=latest_hour_ts,
             )
             state["cash_usd"] -= decision.total_capital_usd
-            realized_pnl_usd = 0.0
             action_taken = "opened"
             append_jsonl(journal_dir / "shadow_grid_trades.jsonl", {
                 "date_ts": now_ts, "action": "open", "reason": decision.reason,
                 "deployed_capital_usd": round(decision.total_capital_usd, 4),
             })
 
-        state["open_position"] = {
-            "symbol": position.symbol, "center_price": position.center_price,
-            "grid_width_pct": position.grid_width_pct, "num_levels": position.num_levels,
-            "total_capital": position.total_capital, "orders": [], "filled_volume_usd": position.filled_volume_usd,
-            "accumulated_pnl": position.accumulated_pnl, "entry_time": position.entry_time,
-        } if position else None
-        state["realized_pnl_usd"] = realized_pnl_usd
-        equity_now = state["cash_usd"] + (position.total_capital + position.accumulated_pnl if position else 0.0)
+        state["engine_version"] = GRID_ENGINE_VERSION
+        state["low_volatility_days_count"] = agent.low_volatility_days_count
+        state["open_position"] = asdict(position) if position else None
+        equity_now = state["cash_usd"] + (mark_grid_to_market(position, current_price) if position else 0.0)
         _save_state(journal_dir, state)
         append_jsonl(journal_dir / "shadow_grid_equity.jsonl", {"ts": now_ts, "equity_usd": round(equity_now, 4)})
 

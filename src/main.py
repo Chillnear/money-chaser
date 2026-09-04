@@ -198,6 +198,36 @@ def _finish(
     )
 
 
+def _log_decision_outcome(
+    journal_dir: Path,
+    today_date: str,
+    now_ts: float,
+    *,
+    proposed_action: str,
+    proposed_asset: str | None,
+    final_action: str,
+    stage: str,
+    passed: bool,
+    reason: str,
+    failed_gate: str | None = None,
+) -> None:
+    """บันทึกผลหลัง judge/baseline แยกจาก decision payload เพื่อ audit ว่าถูก veto ตรงไหน."""
+    append_jsonl(
+        journal_dir / "decision_outcomes.jsonl",
+        {
+            "date": today_date,
+            "ts": now_ts,
+            "proposed_action": proposed_action,
+            "proposed_asset": proposed_asset,
+            "final_action": final_action,
+            "stage": stage,
+            "passed": passed,
+            "failed_gate": failed_gate,
+            "reason": reason,
+        },
+    )
+
+
 def manage_existing_position(
     settings: Settings,
     hl_client: HyperliquidClient,
@@ -292,6 +322,7 @@ def _run_daily_pipeline_core(
     llm_cost_records: list[dict] | None = None,
     lessons_text: str = "",
     hit_rate_by_role: dict | None = None,
+    force_baseline_reason: str | None = None,
 ) -> DailyRunResult:
     now_ts = now_ts if now_ts is not None else time.time()
 
@@ -423,6 +454,8 @@ def _run_daily_pipeline_core(
     degrade_level = get_degradation_level(
         daily_spend, monthly_spend, settings.risk.llm_budget.daily_soft_cap_usd, settings.risk.llm_budget.hard_stop_usd
     )
+    if force_baseline_reason:
+        degrade_level = DEGRADE_LLM_OFF
 
     require_analyst_agreement = True
 
@@ -452,6 +485,7 @@ def _run_daily_pipeline_core(
                 "pinned_extra": shortlist_result.get("pinned_extra"),
                 "baseline_decision": asdict(baseline_decision),
                 "degrade_level": degrade_level,
+                "fallback_reason": force_baseline_reason,
             },
         )
     else:
@@ -559,9 +593,23 @@ def _run_daily_pipeline_core(
     )
 
     if final_action == "flat":
-        return _finish(journal_dir, last_run_path, journal_state, today_date, "flat", "ตัดสินใจ FLAT")
+        flat_reason = (
+            f"{force_baseline_reason}; baseline ตัดสินใจ FLAT"
+            if force_baseline_reason else "ตัดสินใจ FLAT"
+        )
+        _log_decision_outcome(
+            journal_dir, today_date, now_ts, proposed_action=final_action, proposed_asset=final_asset,
+            final_action="flat", stage="decision", passed=True,
+            reason=flat_reason,
+        )
+        return _finish(journal_dir, last_run_path, journal_state, today_date, "flat", flat_reason)
 
     if not gate_result.passed:
+        _log_decision_outcome(
+            journal_dir, today_date, now_ts, proposed_action=final_action, proposed_asset=final_asset,
+            final_action="flat", stage="risk_gate", passed=False, reason=gate_result.reason,
+            failed_gate=gate_result.failed_gate,
+        )
         return _finish(journal_dir, last_run_path, journal_state, today_date, "flat", gate_result.reason)
 
     # 10. execute — sizing + เปิดไม้ผ่าน broker adapter (paper ตาม MODE ปัจจุบัน; live รอ broker_hl.py ที่ P6)
@@ -585,10 +633,20 @@ def _run_daily_pipeline_core(
     )
 
     if sizing_result.decision == "FLAT":
+        _log_decision_outcome(
+            journal_dir, today_date, now_ts, proposed_action=final_action, proposed_asset=final_asset,
+            final_action="flat", stage="sizing", passed=False, reason=sizing_result.reason,
+            failed_gate="sizing",
+        )
         return _finish(journal_dir, last_run_path, journal_state, today_date, "flat", sizing_result.reason)
 
     mid_price = next((e["mark_px"] for e in universe_snapshot if e["coin"] == final_asset), None)
     if not mid_price:
+        _log_decision_outcome(
+            journal_dir, today_date, now_ts, proposed_action=final_action, proposed_asset=final_asset,
+            final_action="flat", stage="market_data", passed=False,
+            reason=f"ไม่พบ mark price ของ {final_asset}", failed_gate="mark_price",
+        )
         return _finish(
             journal_dir, last_run_path, journal_state, today_date, "flat",
             f"ไม่พบ mark price ของ {final_asset} ใน universe snapshot — fail-closed เป็น FLAT",
@@ -606,9 +664,16 @@ def _run_daily_pipeline_core(
 
     journal_state.open_position = asdict(position)
 
+    _log_decision_outcome(
+        journal_dir, today_date, now_ts, proposed_action=final_action, proposed_asset=final_asset,
+        final_action=f"opened_{final_action}", stage="execution", passed=True,
+        reason="ผ่าน risk gate และ sizing แล้ว",
+    )
+
     return _finish(
         journal_dir, last_run_path, journal_state, today_date, f"opened_{final_action}",
-        f"เปิดไม้ {final_asset} {final_action} notional={sizing_result.notional_usd:.2f} USD "
+        (f"{force_baseline_reason}; " if force_baseline_reason else "")
+        + f"เปิดไม้ {final_asset} {final_action} notional={sizing_result.notional_usd:.2f} USD "
         f"stop={sizing_result.stop_pct:.2f}% tp={sizing_result.take_profit_pct:.2f}%",
     )
 
@@ -632,6 +697,7 @@ def run_daily_pipeline(
     llm_cost_records: list[dict] | None = None,
     lessons_text: str = "",
     hit_rate_by_role: dict | None = None,
+    force_baseline_reason: str | None = None,
 ) -> DailyRunResult:
     """Wrapper รอบ _run_daily_pipeline_core() (P5.9) — เพิ่ม shadow tracker (funding_carry, ดู
     src/shadow.py) ที่รันคู่กับ AI จริงทุกวัน ไม่ใช้ AI เลย ไม่กระทบเงินจริง/งบ LLM เด็ดขาด แยกจาก core
@@ -646,6 +712,7 @@ def run_daily_pipeline(
         macro_snapshot=macro_snapshot, macro_veto_status=macro_veto_status, sentiment=sentiment,
         news_headline_titles=news_headline_titles, llm_cost_records=llm_cost_records,
         lessons_text=lessons_text, hit_rate_by_role=hit_rate_by_role,
+        force_baseline_reason=force_baseline_reason,
     )
 
     if result.action_taken in ("skipped_killed", "skipped_already_ran"):
@@ -779,6 +846,16 @@ def _cli_main() -> None:  # pragma: no cover - เรียกจริงบน
 
     today_date = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
 
+    model_health = load_json(STATE_DIR / "model_health.json", default=None)
+    force_baseline_reason = None
+    if not model_health:
+        force_baseline_reason = "ไม่พบ model health report ของรอบนี้ — fallback baseline"
+    elif time.time() - float(model_health.get("checked_at_ts", 0)) > 6 * 3600:
+        force_baseline_reason = "model health report เก่าเกิน 6 ชั่วโมง — fallback baseline"
+    elif not model_health.get("healthy", False):
+        failed_roles = ", ".join(model_health.get("unhealthy_roles", []))
+        force_baseline_reason = f"model health ไม่ผ่าน ({failed_roles}) — fallback baseline"
+
     result = run_daily_pipeline(
         settings=settings,
         hl_client=hl_client,
@@ -792,6 +869,7 @@ def _cli_main() -> None:  # pragma: no cover - เรียกจริงบน
         macro_veto_status=macro_veto_status,
         sentiment=sentiment,
         news_headline_titles=news_headline_titles,
+        force_baseline_reason=force_baseline_reason,
     )
 
     print(f"[main] {result.date} action={result.action_taken} reason={result.reason} equity={result.equity_usd:.2f}")
