@@ -37,12 +37,12 @@
     
   
     <div class="card">
-      <h2>กราฟ Equity (37 จุด)</h2>
+      <h2>กราฟ Equity (38 จุด)</h2>
       <svg viewBox="0 0 760 180" width="100%" height="180" role="img" aria-label="กราฟ equity">
-        <polyline points="20.0,136.3 40.0,136.3 60.0,136.3 80.0,136.3 100.0,160.0 120.0,160.0 140.0,160.0 160.0,160.0 180.0,160.0 200.0,160.0 220.0,160.0 240.0,160.0 260.0,160.0 280.0,160.0 300.0,160.0 320.0,129.7 340.0,129.7 360.0,129.7 380.0,129.7 400.0,129.7 420.0,129.7 440.0,129.7 460.0,20.0 480.0,20.0 500.0,20.0 520.0,20.0 540.0,20.0 560.0,20.0 580.0,20.0 600.0,20.0 620.0,20.0 640.0,20.0 660.0,20.0 680.0,20.0 700.0,20.0 720.0,80.9 740.0,80.9" fill="none" stroke="#15803d" stroke-width="2" />
+        <polyline points="20.0,136.3 39.5,136.3 58.9,136.3 78.4,136.3 97.8,160.0 117.3,160.0 136.8,160.0 156.2,160.0 175.7,160.0 195.1,160.0 214.6,160.0 234.1,160.0 253.5,160.0 273.0,160.0 292.4,160.0 311.9,129.7 331.4,129.7 350.8,129.7 370.3,129.7 389.7,129.7 409.2,129.7 428.6,129.7 448.1,20.0 467.6,20.0 487.0,20.0 506.5,20.0 525.9,20.0 545.4,20.0 564.9,20.0 584.3,20.0 603.8,20.0 623.2,20.0 642.7,20.0 662.2,20.0 681.6,20.0 701.1,80.9 720.5,80.9 740.0,80.9" fill="none" stroke="#15803d" stroke-width="2" />
         <circle cx="740.0" cy="80.9" r="3.5" fill="#15803d" />
         <text x="20" y="176" font-size="11" fill="#6b7280">2026-07-29</text>
-        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-09-03</text>
+        <text x="740" y="176" font-size="11" fill="#6b7280" text-anchor="end">2026-09-04</text>
         <text x="20" y="14" font-size="11" fill="#6b7280">29.17</text>
         <text x="20" y="164" font-size="11" fill="#6b7280">27.76</text>
       </svg>
@@ -73,14 +73,14 @@
         
       <table>
         <thead><tr><th>Role</th><th>เรียกกี่ครั้ง</th><th>ต้นทุนรวม (USD)</th><th>latency เฉลี่ย (ms)</th><th>อัตรา abstain</th></tr></thead>
-        <tbody><tr><td>analyst_trend</td><td>20</td><td>0.0000</td><td>44407</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>20</td><td>0.0000</td><td>13046</td><td>20%</td></tr><tr><td>analyst_macro</td><td>20</td><td>0.0000</td><td>7477</td><td>65%</td></tr><tr><td>redteam</td><td>20</td><td>0.0000</td><td>3652</td><td>75%</td></tr><tr><td>judge</td><td>20</td><td>0.0000</td><td>19061</td><td>0%</td></tr></tbody>
+        <tbody><tr><td>analyst_trend</td><td>21</td><td>0.0000</td><td>44593</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>21</td><td>0.0000</td><td>13291</td><td>19%</td></tr><tr><td>analyst_macro</td><td>21</td><td>0.0000</td><td>7121</td><td>67%</td></tr><tr><td>redteam</td><td>21</td><td>0.0000</td><td>3478</td><td>76%</td></tr><tr><td>judge</td><td>21</td><td>0.0000</td><td>18987</td><td>0%</td></tr></tbody>
       </table>
     </div>
     
   
     <div class="card">
       <h2>ภาพรวม Analyst (เห็นตรงกับ judge บ่อยแค่ไหน)</h2>
-      <p class="hint">* วัดจาก 21 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
+      <p class="hint">* วัดจาก 22 decision ที่มีอยู่ — ยิ่งข้อมูลน้อย ยิ่งไม่ควรเชื่อเลขนี้มาก</p>
       <table>
         <thead><tr><th>Role</th><th>จำนวนที่เทียบได้</th><th>% เห็นตรงกับ judge</th></tr></thead>
         <tbody><tr><td>analyst_trend</td><td>9</td><td>89%</td></tr><tr><td>analyst_positioning</td><td>6</td><td>33%</td></tr><tr><td>analyst_macro</td><td>4</td><td>50%</td></tr><tr><td>redteam</td><td>0</td><td>0%</td></tr></tbody>
@@ -91,6 +91,37 @@
     <div class="card">
       <h2>Log การตัดสินใจแบบเต็ม (ล่าสุด 20 วัน — คลิกเพื่อกาง)</h2>
       
+            <details class="decision-entry">
+              <summary>2026-09-04 — llm — flat N/A
+                 (degrade level 0)</summary>
+              <div class="decision-body">
+            <p><strong>Shortlist วันนั้น:</strong></p>
+            <ul><li>ZEC — composite 0.79</li><li>UNI — composite 0.72</li><li>PUMP — composite 0.68</li><li>PAXG — composite 0.31 (pinned/always_include)</li></ul>
+            <p class='hint'>ตัวอื่นในพูล: LIT (0.67), HYPE (0.64), CASHCAT (0.60), XMR (0.58), ARB (0.56), ENA (0.53), SOL (0.51), ETH (0.48), NEAR (0.43), DOGE (0.43), kPEPE (0.42), XPL (0.42), BTC (0.41), XRP (0.40)</p>
+            <hr>
+            
+    <p><strong>analyst_trend (dashscope/qwen3.7-max):</strong>
+       cost=0.0000 USD, latency=48301ms</p>
+    <ul class='candidate-list'><li><strong>ZEC long</strong> (confidence 85.0) — ZEC shows explosive trend strength with massive EMA gaps and ADX near 48. Surging OI confirms aggressive positioning. Despite a micro-pause, the structural breakout and momentum remain heavily bullish. <em>[invalidation: Break below EMA 9 or ADX dropping below 25]</em></li><li><strong>UNI long</strong> (confidence 80.0) — UNI exhibits exceptional trend velocity with ADX above 51 and wide EMA fanning. High volume regime and massive 7-day OI expansion validate the sustained upward breakout. <em>[invalidation: Close below EMA 21 or sharp volume dry-up]</em></li><li><strong>PUMP flat</strong> (confidence 60.0) — Despite high ADX, PUMP is in a pullback phase with price below EMA9, negative 7-day returns, and declining OI. The immediate trend structure is broken, warranting a flat stance. <em>[invalidation: Reclaiming EMA9 with expanding OI]</em></li><li><strong>PAXG flat</strong> (confidence 90.0) — PAXG lacks trend momentum, evidenced by minimal EMA gaps, weak ADX, and neutral RSI. Price is hovering near the lower Donchian band without any directional breakout catalyst. <em>[invalidation: ADX breaking above 40 with price clearing EMA 50]</em></li></ul>
+    
+    <p><strong>analyst_positioning (claude-sonnet-5):</strong>
+       cost=0.0000 USD, latency=18205ms</p>
+    <ul class='candidate-list'><li><strong>ZEC short</strong> (confidence 62.0) — RSI 76.65 สุดโต่ง, OI พองตัว +39%/24h,+37%/7d ขณะราคานิ่ง -0.14%/1d บ่งชี้เลเวอเรจ long สะสมเกินตัว แต่ volume spike ต่ำ 0.11 ไม่ยืนยันแรงซื้อจริง เสี่ยง long squeeze mean-revert จากระดับสูงสุด 30 วัน <em>[invalidation: OI ลดลงพร้อมราคาทำ high ใหม่ด้วยวอลุ่มสูงขึ้น]</em></li><li><strong>UNI short</strong> (confidence 58.0) — RSI 81.48 สุดโต่งมาก, momentum sub-score 0.944 พีคสุด, OI 7d +74.62% พองตัวหนักสวนทาง volume spike เพียง 0.29 ชี้ leverage ไล่ตามราคาโดยไม่มีสภาพคล่องรองรับ เสี่ยง reversal/squeeze <em>[invalidation: OI ยังเพิ่มต่อเนื่องพร้อม volume spike สูงขึ้นและราคาทำ high ใหม่]</em></li><li><strong>PUMP flat</strong> (confidence 40.0) — OI ลดลงทั้ง 24h(-1.13%) และ 7d(-18.22%) สวนทางราคาขึ้นแรง 30d+80% บ่งชี้ short covering มากกว่า new long เสี่ยงต่ำกว่าตัวอื่น แต่ momentum อ่อนลง (return7d -6.37%) ไม่ชัดพอสำหรับ contrarian trade <em>[invalidation: OI กลับมาพองตัวพร้อม RSI/momentum เร่งขึ้นชัดเจน]</em></li><li><strong>PAXG flat</strong> (confidence 30.0) — Positioning ไม่สุดโต่ง RSI 53.39 กลาง ADX 28.8 อ่อน OI 7d -13.36% ลดลงเล็กน้อยไม่มีสัญญาณ squeeze ชัดเจน funding sub-score ต่ำ 0.111 บ่งชี้ไม่มีแรงกดดันฝั่งใดฝั่งหนึ่ง เหมาะเป็น FLAT <em>[invalidation: เกิด extreme funding หรือ OI spike ผิดปกติในทิศทางใดทิศทางหนึ่ง]</em></li></ul>
+    <p><strong>analyst_macro (dashscope/deepseek-v4-pro):</strong> abstain — parse/validate ไม่ผ่านหลัง retry 2 ครั้ง: Expecting value: line 1 column 1 (char 0)</p>
+            <hr>
+            <p><strong>redteam (GPT 5.2):</strong> abstain — เรียกไม่ผ่านทุก key: litellm.APIError: APIError: OpenAIException - team not allowed to access model. This team can only access models=[&#x27;Cohere-rerank-v3-5&#x27;, &#x27;text-embedding-3-large&#x27;, &#x27;text-embedding-3-small&#x27;, &#x27;Claude Haiku 4.5&#x27;, &#x27;Nano Banana&#x27;, &#x27;Gemini 2.5 pro&#x27;, &#x27;Gemini 3.0 pro&#x27;, &#x27;Gemini 3.0 flash&#x27;, &#x27;Gemini 2.5 flash&#x27;, &#x27;Gemini 2.5 flash lite&#x27;, &#x27;Gemini Deep Research Pro&#x27;, &#x27;gpt-4o-mini-transcribe&#x27;, &#x27;gpt-4o-transcribe&#x27;, &#x27;Perplexity Deep Research&#x27;, &#x27;gpt-5.5&#x27;, &#x27;gemini-3.1-flash-tts-preview&#x27;, &#x27;gemini-3.5-flash&#x27;, &#x27;Claude Sonnet 4.6&#x27;, &#x27;dashscope/qwen3.7-max&#x27;, &#x27;claude-sonnet-5&#x27;, &#x27;gpt-5.6-terra&#x27;, &#x27;dashscope/deepseek-v4-flash&#x27;, &#x27;dashscope/deepseek-v4-pro&#x27;, &#x27;dashscope/qwen3.8-max&#x27;, &#x27;glm-5.2&#x27;, &#x27;gpt-5.6-luna&#x27;, &#x27;Nano Banana 2&#x27;, &#x27;gpt-image-2&#x27;, &#x27;gemini-3.1-flash-lite-preview&#x27;, &#x27;dashscope/qwen3.7-plus&#x27;, &#x27;claude-opus-4-8&#x27;]. Tried to access GPT 5.2</p>
+            <hr>
+            
+                <p><strong>Judge:</strong> flat N/A
+                   confidence=65.0
+                   stop=0.00% tp=0.00%</p>
+                <p class="hint">เหตุผล: ZEC/UNI มี trend แรงจริง (ADX 47-51, EMA fanning กว้าง) แต่ RSI สุดโต่ง 76-81 และ OI พองตัวหนัก (+37-74%) สวนทาง volume spike ต่ำ (0.11-0.29) บ่งชี้ leverage-driven rally ไร้ spot demand — เสี่ยง long squeeze ที่ปลายเทรนด์ Trend analyst เชียร์ long แต่ positioning analyst ชี้ short บนพื้นฐานเดียวกัน (RSI+OI extreme) ความขัดแย้งนี้ + Fear&amp;Greed 74 (greed) + macro analyst abstain + redteam abstain ทำให้ conviction ไม่พอ PUMP momentum อ่อน (return 7d -6.37%) และ PAXG ไม่มี trend (ADX 28, EMA gap ~0). FLAT เป็นทางเลือกที่ถูกต้องเมื่อ risk/reward ไม่ชัด — ไม่ควรไล่ราคาที่จุดสุดโต่งด้วยทุนจริง</p>
+                <p class="hint">ทำไมเลือกตัวนี้แทนตัวอื่น: เลือก FLAT เพราะทุกตัวมีปัญหา: ZEC/UNI overheated + leverage extreme, PUMP momentum พัง, PAXG ไม่มี edge</p>
+                <p class="hint">ตอบข้อค้านของ redteam: Redteam abstain จึงพึ่ง positioning analyst แทน ซึ่งชี้ความเสี่ยง squeeze ชัดเจน</p>
+                
+            </div>
+            </details>
+            
             <details class="decision-entry">
               <summary>2026-09-03 — llm — long UNI
                  (degrade level 0)</summary>
@@ -708,41 +739,6 @@
             </div>
             </details>
             
-            <details class="decision-entry">
-              <summary>2026-08-03 — llm — flat N/A
-                 (degrade level 0)</summary>
-              <div class="decision-body">
-            <p><strong>Shortlist วันนั้น:</strong></p>
-            <ul><li>KAITO — composite 0.80</li><li>HYPE — composite 0.65</li><li>PAXG — composite 0.53</li></ul>
-            <p class='hint'>ตัวอื่นในพูล: BTC (0.47), ETH (0.47), ZEC (0.28), SOL (0.27)</p>
-            <hr>
-            
-    <p><strong>analyst_trend (dashscope/qwen3.7-max):</strong>
-       cost=0.0000 USD, latency=30753ms</p>
-    <ul class='candidate-list'><li><strong>KAITO long</strong> (confidence 68.0) — ADX 54.51 บ่งชี้เทรนด์ขาขึ้นยังแข็งแรงมาก แม้ pullback -21% ใน 7 วัน แต่ราคายังอยู่ขอบบน Donchian (1.00) และห่าง EMA50/200 สูง เป็น buy-the-dip ใน uptrend <em>[invalidation: ราคาหลุด EMA50 หรือ ADX ลดต่ำกว่า 40 พร้อม breakdown จาก range ปัจจุบัน]</em></li><li><strong>HYPE flat</strong> (confidence 55.0) — ADX 22.87 ต่ำ บวก regime chop_vol_low ไม่มีเทรนด์ชัดเจน ราคาอยู่ใต้ EMA สั้นทุกเส้นแต่ Donchian ยัง 0.86 สัญญาณขัดแย้งกัน เทรนด์ไม่แข็งแรงพอเข้าเทรด <em>[invalidation: ADX ขึ้นเหนือ 30 พร้อม breakout เหนือ EMA21 หรือ breakdown ต่ำกว่า Donchian low]</em></li><li><strong>PAXG flat</strong> (confidence 52.0) — ADX 20.81 ต่ำมาก ATR% 1.46 บ่งชี้การเคลื่อนไหวน้อย ไม่มี breakout จาก range EMA ทุกเส้นเกาะกลุ่มใกล้ราคา regime chop_vol_low ไม่มี momentum เทรนด์ <em>[invalidation: breakout เหนือ/ใต้ range 3% พร้อม ADX ขึ้นเหนือ 25 และ volume spike]</em></li></ul>
-    
-    <p><strong>analyst_positioning (claude-sonnet-5):</strong>
-       cost=0.0000 USD, latency=12565ms</p>
-    <ul class='candidate-list'><li><strong>KAITO short</strong> (confidence 68.0) — Donchian=1.0, vol percentile 0.997, funding sub-score maxed ที่ 1.0 บ่งชี้ positioning ฝั่ง long แน่นมาก ราคาห่างจากจุดต่ำสุด 30วัน +73% และร่วง -20.9% ใน 7วัน สะท้อน squeeze ฝั่ง long เริ่มเกิด mean-revert หลังพุ่งสุดโต่ง <em>[invalidation: หาก reclaim EMA9 พร้อม RSI&gt;65 และ funding เริ่มปรับสมดุล แสดงว่า trend ยังไปต่อไม่ mean-revert]</em></li><li><strong>HYPE long</strong> (confidence 40.0) — ราคาใกล้จุดต่ำสุด 30วัน (+2.38%) RSI=34.5 โซน oversold ADX อ่อน(22.9)ไม่ใช่ trend แรง volume spike ต่ำมาก(0.08) แรงขายเริ่มหมด แต่ funding ไม่สุดโต่ง(0.643) จึงเป็นเพียง mean-revert เบาๆ ไม่ใช่ squeeze ชัดเจน <em>[invalidation: หากราคาหลุด low 30 วันใหม่พร้อม volume spike เพิ่ม แสดงว่าแรงขายยังไม่หมดและ mean-revert ผิด]</em></li><li><strong>PAXG flat</strong> (confidence 25.0) — Positioning ไม่สุดโต่ง ADX อ่อน(20.8) RSI กลาง(48.8) vol percentile ต่ำ(0.286) funding ปานกลาง(0.643) ไม่มี OI ยืนยัน squeeze risk ราคาอยู่กลาง range ไม่มี edge ชัดเจนให้เทรด positioning-based <em>[invalidation: หาก funding หรือ OI เปลี่ยนแปลงสุดโต่งไปทางใดทางหนึ่งพร้อม vol percentile พุ่งขึ้น จะเปิดโอกาส positioning trade ชัดเจนขึ้น]</em></li></ul>
-    <p><strong>analyst_macro (dashscope/deepseek-v4-pro):</strong> abstain — parse/validate ไม่ผ่านหลัง retry 2 ครั้ง: Expecting value: line 1 column 1 (char 0)</p>
-            <hr>
-            
-    <p><strong>redteam (GPT 5.2):</strong>
-       cost=0.0000 USD, latency=14301ms</p>
-    <ul class='candidate-list'><li><strong>KAITO flat</strong> (confidence 61.0) — ค้านทั้ง trend(long) และ positioning(short): สัญญาณ trend แข็ง (ADX 54.51, Donchian 1.00) แต่ vol_fit แทบศูนย์ (0.005) + vol percentile 0.997 บอกสภาวะพุ่งผิดปกติ เสี่ยง whipsaw/false breakout หลัง -20.89%/7d และยังอยู่ใต้ EMA9 (-5.98). Edge ไม่ชัดพอเลือกข้าง <em>[invalidation: หากราคายืนเหนือ EMA9/EMA21 ต่อเนื่องพร้อม RSI&gt;65 และความผันผวนคลาย (vol percentile ลดลง) จะกลับมาเอนเอียง long; หรือหากหลุด EMA50/Donchian mid พร้อมโมเมนตัมลงชัด จะเอนเอียง short]</em></li><li><strong>HYPE flat</strong> (confidence 58.0) — ค้าน positioning(long): RSI 34.54 ใกล้ oversold แต่ไม่มีสัญญาณ capitulation/จบขาย เพราะ volume spike ratio ต่ำมาก (0.08) และ regime chop_vol_low + ADX 22.87 ทำให้ mean-revert มักเด้งสั้น/หลอกได้ แถมอยู่ใต้ EMA9/21/50 มาก (-3.67/-8.94/-12.44) ยังเป็น down-bias <em>[invalidation: หากเกิด breakout ยืนเหนือ EMA21 พร้อม ADX &gt;30 และ volume spike เพิ่มขึ้นชัด จะทำให้มุมมอง flat ผิดและเอนเอียง long]</em></li><li><strong>PAXG flat</strong> (confidence 67.0) — หาเหตุผลค้านแรงๆต่อ consensus(flat) แทบไม่ได้: ADX 20.81 + ATR% 1.46 + EMA gap ใกล้ศูนย์บ่งชี้ไร้โมเมนตัมจริง และ positioning ไม่สุดโต่ง (funding 0.643, vol percentile 0.286, volume spike 0.10) จึงไม่มี edge ชัดเจน <em>[invalidation: หากหลุด/ทะลุกรอบ 30D (ห่าง high/low เพียง ~3%) พร้อม ADX &gt;25 และ volume spike เพิ่ม จะทำให้ flat ผิดและมีทิศทางตาม breakout]</em></li></ul>
-    
-            <hr>
-            
-                <p><strong>Judge:</strong> flat N/A
-                   confidence=60.0
-                   stop=0.00% tp=0.00%</p>
-                <p class="hint">เหตุผล: ผู้เข้าชิงทั้ง 3 ตัวไม่มี edge ชัดเจนพอ: KAITO มีเทรนด์แรง (ADX 54.5) แต่ vol percentile 0.997 + vol_fit 0.005 + ร่วง -20.89%/7d บ่งชี้สภาวะพุ่งผิดปกติ เสี่ยง whipsaw ทั้งสองทาง — trend เชียร์ long, positioning เชียร์ short สวนกัน; HYPE regime chop_vol_low, ADX 22.87 ต่ำ, volume spike 0.08 ไม่มี capitulation ชัด mean-revert หลอกได้ง่าย; PAXG ไร้โมเมนตัม (ATR% 1.46, EMA เกาะกลุ่ม) ไม่มี edge. Macro analyst abstain ทำให้ข้อมูลไม่ครบ. Red team ให้ flat ทั้ง 3 ตัวด้วย confidence สูง. FLAT ปลอดภัยกว่าฝืนเทรด.</p>
-                <p class="hint">ทำไมเลือกตัวนี้แทนตัวอื่น: ไม่เลือกตัวใดเพราะ KAITO มีสัญญาณขัดแย้งระหว่าง trend/positioning และอยู่ในสภาวะ vol สุดโต่ง; HYPE/PAXG อยู่ใน chop regime ไร้ momentum</p>
-                <p class="hint">ตอบข้อค้านของ redteam: เห็นด้วยกับ redteam ทั้งหมด — KAITO vol สุดโต่ง+สัญญาณสวน, HYPE ไม่มี capitulation, PAXG ไร้ edge</p>
-                
-            </div>
-            </details>
-            
     </div>
     
   
@@ -755,6 +751,6 @@
     </div>
     
   <p>ยังไม่มี lessons.md (reflector ยังไม่เคยรัน หรือยังไม่พบบทเรียนใหม่)</p>
-  <p class="footer">อัปเดตล่าสุด: 2026-09-03T04:41:04.405294+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
+  <p class="footer">อัปเดตล่าสุด: 2026-09-04T04:41:55.858482+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
 </body>
 </html>
