@@ -1,0 +1,57 @@
+{
+  "checked_at_ts": 1788532057.436645,
+  "healthy": true,
+  "unhealthy_roles": [],
+  "results": [
+    {
+      "role": "analyst_trend",
+      "model": "dashscope/qwen3.7-max",
+      "provider": "alibaba",
+      "healthy": true,
+      "latency_ms": 6702.7,
+      "cost_usd": 0.0,
+      "attempts": 1,
+      "error": null
+    },
+    {
+      "role": "analyst_positioning",
+      "model": "claude-sonnet-5",
+      "provider": "anthropic",
+      "healthy": true,
+      "latency_ms": 2924.3,
+      "cost_usd": 0.0,
+      "attempts": 1,
+      "error": null
+    },
+    {
+      "role": "analyst_macro",
+      "model": "Gemini 2.5 pro",
+      "provider": "google",
+      "healthy": true,
+      "latency_ms": 2044.3,
+      "cost_usd": 0.0,
+      "attempts": 1,
+      "error": null
+    },
+    {
+      "role": "redteam",
+      "model": "gpt-5.5",
+      "provider": "openai",
+      "healthy": true,
+      "latency_ms": 3706.9,
+      "cost_usd": 0.0007750000000000001,
+      "attempts": 1,
+      "error": null
+    },
+    {
+      "role": "judge",
+      "model": "claude-opus-4-7",
+      "provider": "anthropic",
+      "healthy": true,
+      "latency_ms": 1751.7,
+      "cost_usd": 0.0,
+      "attempts": 1,
+      "error": null
+    }
+  ]
+}

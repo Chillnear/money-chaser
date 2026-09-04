@@ -64,24 +64,26 @@
     <div class="card">
       <h2>งบ LLM</h2>
       
-        <p><strong>ใช้ไปวันนี้ / soft cap รายวัน:</strong> 0.0000 / 0.50 USD (0%)</p>
-        <div class="bar-track"><div class="bar-fill" style="width:0.0%;background:#15803d"></div></div>
+        <p><strong>ใช้ไปวันนี้ / soft cap รายวัน:</strong> 0.0008 / 0.50 USD (0%)</p>
+        <div class="bar-track"><div class="bar-fill" style="width:0.2%;background:#15803d"></div></div>
         
       
-        <p><strong>ใช้ไปเดือนนี้ / hard stop รายเดือน:</strong> 0.0000 / 15.00 USD (0%)</p>
+        <p><strong>ใช้ไปเดือนนี้ / hard stop รายเดือน:</strong> 0.0008 / 15.00 USD (0%)</p>
         <div class="bar-track"><div class="bar-fill" style="width:0.0%;background:#15803d"></div></div>
         
       <table>
         <thead><tr><th>Role</th><th>เรียกกี่ครั้ง</th><th>ต้นทุนรวม (USD)</th><th>latency เฉลี่ย (ms)</th><th>อัตรา abstain</th></tr></thead>
-        <tbody><tr><td>analyst_trend</td><td>21</td><td>0.0000</td><td>44593</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>21</td><td>0.0000</td><td>13291</td><td>19%</td></tr><tr><td>analyst_macro</td><td>21</td><td>0.0000</td><td>7121</td><td>67%</td></tr><tr><td>redteam</td><td>21</td><td>0.0000</td><td>3478</td><td>76%</td></tr><tr><td>judge</td><td>21</td><td>0.0000</td><td>18987</td><td>0%</td></tr></tbody>
+        <tbody><tr><td>health:redteam</td><td>1</td><td>0.0008</td><td>3707</td><td>0%</td></tr><tr><td>analyst_trend</td><td>21</td><td>0.0000</td><td>44593</td><td>0%</td></tr><tr><td>analyst_positioning</td><td>21</td><td>0.0000</td><td>13291</td><td>19%</td></tr><tr><td>analyst_macro</td><td>21</td><td>0.0000</td><td>7121</td><td>67%</td></tr><tr><td>redteam</td><td>21</td><td>0.0000</td><td>3478</td><td>76%</td></tr><tr><td>judge</td><td>21</td><td>0.0000</td><td>18987</td><td>0%</td></tr><tr><td>health:analyst_trend</td><td>1</td><td>0.0000</td><td>6703</td><td>0%</td></tr><tr><td>health:analyst_positioning</td><td>1</td><td>0.0000</td><td>2924</td><td>0%</td></tr><tr><td>health:analyst_macro</td><td>1</td><td>0.0000</td><td>2044</td><td>0%</td></tr><tr><td>health:judge</td><td>1</td><td>0.0000</td><td>1752</td><td>0%</td></tr></tbody>
       </table>
     </div>
     
-  <div class="card"><h2>Model Health</h2><p>ยังไม่มี model health report — รอบจริงจะ fallback baseline</p></div>
+  <div class="card"><h2>Model Health</h2><p><strong>พร้อมใช้ครบ</strong></p>
+    <table><thead><tr><th>Role</th><th>Model</th><th>สถานะ</th><th>Latency</th><th>Error</th></tr></thead>
+    <tbody><tr><td>analyst_trend</td><td>dashscope/qwen3.7-max</td><td>OK</td><td>6703 ms</td><td>-</td></tr><tr><td>analyst_positioning</td><td>claude-sonnet-5</td><td>OK</td><td>2924 ms</td><td>-</td></tr><tr><td>analyst_macro</td><td>Gemini 2.5 pro</td><td>OK</td><td>2044 ms</td><td>-</td></tr><tr><td>redteam</td><td>gpt-5.5</td><td>OK</td><td>3707 ms</td><td>-</td></tr><tr><td>judge</td><td>claude-opus-4-7</td><td>OK</td><td>1752 ms</td><td>-</td></tr></tbody></table></div>
   <div class="card"><h2>Promotion Readiness</h2><p><strong>ยังไม่พร้อมเพิ่มทุน/เปิดเงินจริง</strong></p>
       <ul>
         <li>Directional paper sample: 4/30 ไม้ขั้นต่ำ (เป้าหมายที่มั่นใจกว่า 50 ไม้) — ยังไม่ผ่าน</li>
-        <li>Model team health: ยังไม่ผ่าน/ไม่มีผลล่าสุด</li>
+        <li>Model team health: ผ่าน</li>
         <li>Grid walk-forward: 4 folds, OOS PnL -1.12 USD — ไม่ผ่าน จึงคงไว้เฉพาะ shadow</li>
       </ul>
     </div>
@@ -760,6 +762,6 @@
     </div>
     
   <p>ยังไม่มี lessons.md (reflector ยังไม่เคยรัน หรือยังไม่พบบทเรียนใหม่)</p>
-  <p class="footer">อัปเดตล่าสุด: 2026-09-04T14:23:39.789888+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
+  <p class="footer">อัปเดตล่าสุด: 2026-09-04T14:27:43.044287+00:00 UTC — สร้างโดย src/report/dashboard.py — เปิดไฟล์นี้ในเครื่องได้เลย ไม่ต้องต่อเน็ต</p>
 </body>
 </html>
