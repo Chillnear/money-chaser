@@ -188,8 +188,9 @@ def test_model_smoke(base_url: str, api_key: str, model_id: str, is_groq: bool =
 
 def main() -> None:
     base_url = os.environ["LITELLM_BASE_URL"]
-    key1 = os.environ["LITELLM_KEY_1"]
-    key2 = os.environ["LITELLM_KEY_2"]
+    mimi_key = os.environ.get("MIMI_COACH_KEY", "")
+    key1 = mimi_key or os.environ["LITELLM_KEY_1"]
+    key2 = mimi_key or os.environ.get("LITELLM_KEY_2", key1)
     groq_key = os.environ.get("GROQ_API_KEY", "")
 
     print(f"Probe LiteLLM: {base_url}")
@@ -205,9 +206,9 @@ def main() -> None:
         print(f"  พบ {len(groq_model_ids)} โมเดลจาก Groq")
 
     results = []
-    keys_cycle = [key1, key2]
+    keys_cycle = [key1] if mimi_key else [key1, key2]
     for i, model_id in enumerate(litellm_model_ids):
-        api_key = keys_cycle[i % 2]
+        api_key = keys_cycle[i % len(keys_cycle)]
         smoke = test_model_smoke(base_url, api_key, model_id, is_groq=False)
         results.append(
             {

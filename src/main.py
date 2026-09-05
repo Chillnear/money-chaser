@@ -785,7 +785,7 @@ def _cli_main() -> None:  # pragma: no cover - เรียกจริงบน
     hl_client = HyperliquidClient()
     llm_client = LLMClient(
         base_url=settings.secrets.litellm_base_url,
-        api_keys=[k for k in [settings.secrets.litellm_key_1, settings.secrets.litellm_key_2] if k],
+        api_keys=settings.secrets.llm_api_keys(),
         input_token_cap=settings.app.raw.get("llm", {}).get("input_token_cap", 8000),
         output_token_cap=settings.app.raw.get("llm", {}).get("output_token_cap", 1500),
     )

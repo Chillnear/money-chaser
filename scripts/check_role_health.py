@@ -71,9 +71,12 @@ def main() -> int:
     args = parser.parse_args()
 
     registry = load_model_registry(CONFIG_DIR / "models.yaml")
-    keys = [k for k in [os.environ.get("LITELLM_KEY_1"), os.environ.get("LITELLM_KEY_2")] if k]
+    mimi_key = os.environ.get("MIMI_COACH_KEY")
+    keys = [mimi_key] if mimi_key else [
+        k for k in [os.environ.get("LITELLM_KEY_1"), os.environ.get("LITELLM_KEY_2")] if k
+    ]
     if not keys:
-        raise RuntimeError("ไม่พบ LITELLM_KEY_1/LITELLM_KEY_2 สำหรับ role health check")
+        raise RuntimeError("ไม่พบ MIMI_COACH_KEY หรือ LITELLM_KEY_1/LITELLM_KEY_2 สำหรับ role health check")
 
     client = LLMClient(
         base_url=os.environ["LITELLM_BASE_URL"],

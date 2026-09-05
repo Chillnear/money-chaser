@@ -174,7 +174,7 @@ def main() -> int:
 
     base_llm_client = LLMClient(
         base_url=settings.secrets.litellm_base_url,
-        api_keys=[k for k in [settings.secrets.litellm_key_1, settings.secrets.litellm_key_2] if k],
+        api_keys=settings.secrets.llm_api_keys(),
         input_token_cap=settings.app.raw.get("llm", {}).get("input_token_cap", 8000),
         output_token_cap=settings.app.raw.get("llm", {}).get("output_token_cap", 1500),
     )
@@ -182,7 +182,7 @@ def main() -> int:
     cached_cost = make_cached_cost_fn(base_llm_client._get_cost_fn())
     cached_llm_client = LLMClient(
         base_url=settings.secrets.litellm_base_url,
-        api_keys=[k for k in [settings.secrets.litellm_key_1, settings.secrets.litellm_key_2] if k],
+        api_keys=settings.secrets.llm_api_keys(),
         input_token_cap=settings.app.raw.get("llm", {}).get("input_token_cap", 8000),
         output_token_cap=settings.app.raw.get("llm", {}).get("output_token_cap", 1500),
         completion_fn=cached_completion,

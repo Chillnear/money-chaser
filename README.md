@@ -60,6 +60,7 @@ python -m src.settings         # smoke test โหลด config
 ไปที่หน้า repo บนเว็บ GitHub → **Settings → Secrets and variables → Actions → New repository secret** เพิ่มทีละตัว (ค่าจริงอยู่ในไฟล์ `.env` ของคุณ):
 
 - `LITELLM_BASE_URL`
+- `MIMI_COACH_KEY` (optional; ถ้าตั้งค่า ระบบจะใช้ key นี้เพียงตัวเดียวแทน `LITELLM_KEY_1/2`)
 - `LITELLM_KEY_1`
 - `LITELLM_KEY_2`
 - `GROQ_API_KEY`
