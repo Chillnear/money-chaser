@@ -4,11 +4,12 @@
 
 สูตร:
   stop_pct   = clamp(atr_multiple x ATR%, stop_floor_pct, stop_cap_pct)
-  raw_notional = (equity x risk_per_trade_pct%) / stop_pct%
+  expected_loss_pct = stop_pct + round_trip_cost_pct
+  raw_notional = (equity x risk_per_trade_pct%) / expected_loss_pct%
   hard_cap   = min(max_notional_usd, equity x max_notional_pct_of_equity%, equity x max_leverage)
   notional   = clamp(raw_notional, min_notional_usd, hard_cap)
-  ถ้าโดนดันขึ้นถึง min_notional_usd (ทั้งที่ raw ต่ำกว่า) แล้ว implied_risk > min_notional_override_max_risk_pct
-    -> FLAT (เสี่ยงเกินกว่าที่ตั้งใจ ดีกว่าฝืนเข้าไม้)
+  ถ้าโดนดันขึ้นถึง min_notional_usd (ทั้งที่ raw ต่ำกว่า) แล้วความเสียหายรวม stop/fee/slippage
+  เกิน risk budget จริง -> FLAT (เสี่ยงเกินกว่าที่ตั้งใจ ดีกว่าฝืนเข้าไม้)
   ถ้า hard_cap < min_notional_usd -> FLAT (ทุนเล็กเกินจะเปิดไม้ขั้นต่ำได้แม้จะ leverage เต็มแล้ว)
 """
 from __future__ import annotations
@@ -25,6 +26,7 @@ class SizingResult:
     notional_usd: float | None = None
     leverage: float | None = None
     implied_risk_pct: float | None = None
+    expected_loss_pct: float | None = None
 
 
 def _clamp(value: float, low: float, high: float) -> float:
@@ -44,6 +46,7 @@ def compute_position_size(
     stop_cap_pct: float,
     reward_risk_ratio: float,
     max_leverage: float,
+    round_trip_cost_pct: float = 0.0,
 ) -> SizingResult:
     if equity_usd <= 0:
         return SizingResult(decision="FLAT", reason=f"equity ไม่ถูกต้อง ({equity_usd})")
@@ -53,7 +56,11 @@ def compute_position_size(
     stop_pct = _clamp(atr_multiple * atr_pct, stop_floor_pct, stop_cap_pct)
     take_profit_pct = stop_pct * reward_risk_ratio
 
-    raw_notional = (equity_usd * risk_per_trade_pct / 100) / (stop_pct / 100)
+    if round_trip_cost_pct < 0:
+        return SizingResult(decision="FLAT", reason="round_trip_cost_pct ต้องไม่ติดลบ")
+
+    expected_loss_pct = stop_pct + round_trip_cost_pct
+    raw_notional = (equity_usd * risk_per_trade_pct / 100) / (expected_loss_pct / 100)
 
     equity_pct_cap = equity_usd * max_notional_pct_of_equity / 100
     leverage_cap = equity_usd * max_leverage
@@ -68,33 +75,37 @@ def compute_position_size(
             ),
             stop_pct=stop_pct,
             take_profit_pct=take_profit_pct,
+            expected_loss_pct=expected_loss_pct,
         )
 
     notional = _clamp(raw_notional, min_notional_usd, hard_cap)
     was_floored = raw_notional < min_notional_usd
-    implied_risk_pct = notional * stop_pct / 100 / equity_usd * 100
+    implied_risk_pct = notional * expected_loss_pct / 100 / equity_usd * 100
     leverage = notional / equity_usd
 
-    if was_floored and implied_risk_pct > min_notional_override_max_risk_pct:
+    risk_budget_pct = min(risk_per_trade_pct, min_notional_override_max_risk_pct)
+    if was_floored and implied_risk_pct > risk_budget_pct:
         return SizingResult(
             decision="FLAT",
             reason=(
                 f"ขนาดขั้นต่ำ ({min_notional_usd} USD) ดัน implied risk เป็น {implied_risk_pct:.2f}% "
-                f"เกิน override cap {min_notional_override_max_risk_pct}% — เสี่ยงเกินไปสำหรับทุนก้อนนี้"
+                f"เกิน risk budget {risk_budget_pct:.2f}% — เสี่ยงเกินไปสำหรับทุนก้อนนี้"
             ),
             stop_pct=stop_pct,
             take_profit_pct=take_profit_pct,
             notional_usd=notional,
             leverage=leverage,
             implied_risk_pct=implied_risk_pct,
+            expected_loss_pct=expected_loss_pct,
         )
 
     return SizingResult(
         decision="OK",
-        reason="ผ่านเกณฑ์ sizing ปกติ",
+        reason="ผ่านเกณฑ์ sizing รวม stop และต้นทุน execution",
         stop_pct=stop_pct,
         take_profit_pct=take_profit_pct,
         notional_usd=notional,
         leverage=leverage,
         implied_risk_pct=implied_risk_pct,
+        expected_loss_pct=expected_loss_pct,
     )

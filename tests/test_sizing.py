@@ -42,14 +42,24 @@ def test_low_atr_notional_hits_equity_not_min():
     assert result.implied_risk_pct == pytest.approx(2.0, abs=0.01)
 
 
-def test_high_atr_floored_to_min_notional_but_still_ok():
-    # atr=8 -> stop cap 6%, raw_notional=9.33 ต่ำกว่า min -> floor เป็น 10, risk=2.14% ยังไม่เกิน 4% -> OK
+def test_high_atr_floored_to_min_notional_forces_flat_when_over_budget():
+    # atr=8 -> stop cap 6%, raw_notional=9.33 ต่ำกว่า min -> floor เป็น 10, risk=2.14% เกิน budget 2% -> FLAT
     result = compute_position_size(equity_usd=28.0, atr_pct=8.0, **DEFAULTS)
 
-    assert result.decision == "OK"
+    assert result.decision == "FLAT"
     assert result.stop_pct == 6.0
     assert result.notional_usd == 10.0
     assert result.implied_risk_pct == pytest.approx(2.14, abs=0.01)
+
+
+def test_execution_costs_are_included_in_risk_budget():
+    result = compute_position_size(
+        equity_usd=28.56, atr_pct=8.0, round_trip_cost_pct=0.19, **DEFAULTS,
+    )
+
+    assert result.decision == "FLAT"
+    assert result.expected_loss_pct == pytest.approx(6.19)
+    assert result.implied_risk_pct == pytest.approx(2.17, abs=0.01)
 
 
 def test_small_equity_floored_notional_forces_flat():

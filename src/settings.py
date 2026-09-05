@@ -129,6 +129,7 @@ class Secrets(BaseModel):
     litellm_key_1: str
     litellm_key_2: str
     mimi_coach_key: str = ""
+    mimi_coach_base_url: str = ""
     hl_agent_private_key: str = ""
     hl_main_address: str = ""
     line_channel_access_token: str = ""
@@ -146,6 +147,14 @@ class Secrets(BaseModel):
         if self.mimi_coach_key:
             return [self.mimi_coach_key]
         return [key for key in (self.litellm_key_1, self.litellm_key_2) if key]
+
+    def llm_base_url(self) -> str:
+        """คืน endpoint ที่คู่กับ credential profile ที่เลือก โดยห้ามเดา endpoint ของ Mimi."""
+        if self.mimi_coach_key:
+            if not self.mimi_coach_base_url:
+                raise ValueError("ตั้ง MIMI_COACH_KEY แล้วต้องตั้ง MIMI_COACH_BASE_URL ด้วย")
+            return self.mimi_coach_base_url.rstrip("/")
+        return self.litellm_base_url
 
 
 class Settings(BaseModel):
@@ -180,6 +189,7 @@ def load_settings() -> Settings:
         litellm_key_1=os.getenv("LITELLM_KEY_1", ""),
         litellm_key_2=os.getenv("LITELLM_KEY_2", ""),
         mimi_coach_key=os.getenv("MIMI_COACH_KEY", ""),
+        mimi_coach_base_url=os.getenv("MIMI_COACH_BASE_URL", ""),
         hl_agent_private_key=os.getenv("HL_AGENT_PRIVATE_KEY", ""),
         hl_main_address=os.getenv("HL_MAIN_ADDRESS", ""),
         line_channel_access_token=os.getenv("LINE_CHANNEL_ACCESS_TOKEN", ""),

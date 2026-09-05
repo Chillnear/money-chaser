@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from src.settings import AppConfig, RiskConfig, Secrets, Settings
+from src.execution.broker_base import Position
 from src.shadow import run_funding_carry_shadow_day
-from src.util.io import load_json
+from src.util.io import load_json, save_json
 
 
 def _settings():
@@ -26,7 +27,7 @@ class FakeHlClient:
         return self.candles_by_asset[asset]
 
 
-def test_opens_short_on_extreme_positive_funding(tmp_path):
+def test_skips_extreme_funding_when_minimum_notional_exceeds_shadow_risk_budget(tmp_path):
     settings = _settings()
     shortlist = [{"coin": "BTC", "funding_score": 0.9}]
     universe_snapshot = [{"coin": "BTC", "funding": 0.001, "mark_px": 100.0}]
@@ -37,13 +38,12 @@ def test_opens_short_on_extreme_positive_funding(tmp_path):
         now_ts=1_800_000_000.0, journal_dir=tmp_path,
     )
 
-    assert result["action"] == "opened_short"
-    assert result["open_position"]["asset"] == "BTC"
-    assert result["open_position"]["side"] == "short"
+    assert result["action"] == "flat"
+    assert result["open_position"] is None
     assert result["equity_usd"] is not None
 
     saved_state = load_json(tmp_path / "shadow_funding_carry_state.json", default=None)
-    assert saved_state["open_position"]["asset"] == "BTC"
+    assert saved_state["open_position"] is None
 
 
 def test_flat_when_funding_not_extreme_and_no_position(tmp_path):
@@ -67,12 +67,12 @@ def test_holds_position_across_days_and_then_closes_on_stop_hit(tmp_path):
     universe_snapshot = [{"coin": "BTC", "funding": 0.001, "mark_px": 100.0}]
     price_features_by_coin = {"BTC": {"atr_pct": 2.0}}
 
-    day1 = run_funding_carry_shadow_day(
-        settings, FakeHlClient(), shortlist, {}, price_features_by_coin, universe_snapshot,
-        now_ts=1_800_000_000.0, journal_dir=tmp_path,
+    position = Position(
+        asset="BTC", side="short", notional_usd=10.0, entry_price=100.0,
+        stop_price=103.0, take_profit_price=94.0, opened_at_ts=1_800_000_000.0,
     )
-    assert day1["action"] == "opened_short"
-    stop_price = day1["open_position"]["stop_price"]
+    save_json(tmp_path / "shadow_funding_carry_state.json", {"equity_usd": 28.0, "open_position": position.__dict__})
+    stop_price = position.stop_price
 
     # แท่งเทียนวันถัดไปราคาพุ่งชน stop ของฝั่ง short (high >= stop_price)
     hl_client_day2 = FakeHlClient({"BTC": [{"h": stop_price * 1.05, "l": stop_price * 0.99, "c": stop_price * 1.02}]})
@@ -91,11 +91,11 @@ def test_fails_safe_and_never_raises_when_hl_client_errors(tmp_path):
     universe_snapshot = [{"coin": "BTC", "funding": 0.001, "mark_px": 100.0}]
     price_features_by_coin = {"BTC": {"atr_pct": 2.0}}
 
-    # เปิดไม้ไว้ก่อนแบบปลอมๆ ในสถานะ (ไม่ผ่าน API ปกติ) แล้วให้ hl_client วันถัดไป raise ตอนเช็ค exit
-    run_funding_carry_shadow_day(
-        settings, FakeHlClient(), shortlist, {}, price_features_by_coin, universe_snapshot,
-        now_ts=1_800_000_000.0, journal_dir=tmp_path,
+    position = Position(
+        asset="BTC", side="short", notional_usd=10.0, entry_price=100.0,
+        stop_price=103.0, take_profit_price=94.0, opened_at_ts=1_800_000_000.0,
     )
+    save_json(tmp_path / "shadow_funding_carry_state.json", {"equity_usd": 28.0, "open_position": position.__dict__})
 
     class BrokenHlClient:
         def get_candles(self, *args, **kwargs):

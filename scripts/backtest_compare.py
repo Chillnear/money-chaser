@@ -173,7 +173,7 @@ def main() -> int:
     cache_path = compare_root_dir / "llm_response_cache.json"
 
     base_llm_client = LLMClient(
-        base_url=settings.secrets.litellm_base_url,
+        base_url=settings.secrets.llm_base_url(),
         api_keys=settings.secrets.llm_api_keys(),
         input_token_cap=settings.app.raw.get("llm", {}).get("input_token_cap", 8000),
         output_token_cap=settings.app.raw.get("llm", {}).get("output_token_cap", 1500),
@@ -181,7 +181,7 @@ def main() -> int:
     cached_completion = CachedCompletionFn(base_llm_client._get_completion_fn(), cache_path)
     cached_cost = make_cached_cost_fn(base_llm_client._get_cost_fn())
     cached_llm_client = LLMClient(
-        base_url=settings.secrets.litellm_base_url,
+        base_url=settings.secrets.llm_base_url(),
         api_keys=settings.secrets.llm_api_keys(),
         input_token_cap=settings.app.raw.get("llm", {}).get("input_token_cap", 8000),
         output_token_cap=settings.app.raw.get("llm", {}).get("output_token_cap", 1500),

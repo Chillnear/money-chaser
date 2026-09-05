@@ -98,6 +98,9 @@ def run_funding_carry_shadow_day(
                     stop_cap_pct=settings.risk.stops.stop_cap_pct,
                     reward_risk_ratio=settings.risk.stops.reward_risk_ratio,
                     max_leverage=settings.risk.mode_defaults.max_leverage,
+                    round_trip_cost_pct=2 * (
+                        settings.risk.costs.taker_fee_pct + settings.risk.costs.assumed_slippage_pct
+                    ),
                 )
                 if sizing_result.decision == "OK":
                     mid_price = next((e["mark_px"] for e in universe_snapshot if e["coin"] == decision.asset), None)

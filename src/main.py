@@ -344,16 +344,6 @@ def _run_daily_pipeline_core(
             journal_state.breaker.pause_reason or "อยู่ในช่วงพัก breaker",
         )
 
-    # 1b. macro event veto — ห้ามเทรดวันมีข่าวมหภาคสำคัญ (P5.2, ตามที่ผู้ใช้เลือกรับจาก playbook)
-    # เช็คก่อนเริ่มเก็บข้อมูล/เรียก LLM เลย เพราะกฎคือ "ห้ามเทรดทั้งวัน" ไม่ใช่แค่ veto ไม้สุดท้าย —
-    # ประหยัดค่า LLM ด้วยในวันที่รู้อยู่แล้วว่าจะไม่เทรด
-    # fail-safe: macro_veto_status เป็น None หรือ vetoed=False (รวมถึงกรณีดึงข้อมูลไม่ได้) = ไม่บล็อก
-    if macro_veto_status and macro_veto_status.get("vetoed"):
-        return _finish(
-            journal_dir, last_run_path, journal_state, today_date, "skipped_macro_event",
-            macro_veto_status.get("reason", "วันนี้มีข่าวมหภาคสำคัญ — ข้ามการเทรดเพื่อความปลอดภัย"),
-        )
-
     # 2. reconcile — ในโหมด paper journal คือ source of truth เดียวกับ broker (ไม่มี state อิสระให้เทียบ)
     # เทียบได้แค่ equity; broker_hl.py (P6) จะเพิ่ม position reconcile จริงจาก clearinghouseState
     broker_equity = broker.get_account_equity()
@@ -368,6 +358,25 @@ def _run_daily_pipeline_core(
     if journal_state.open_position is not None:
         return manage_existing_position(
             settings, hl_client, broker, journal_state, journal_dir, last_run_path, today_date, now_ts, kill_path
+        )
+
+    # health/data failure ต้องไม่กลายเป็น deterministic entry. ดูแลไม้เดิมก่อนเสมอเพื่อให้ SL/TP ไม่ถูกละทิ้ง
+    if force_baseline_reason:
+        _log_decision_outcome(
+            journal_dir, today_date, now_ts, proposed_action="none", proposed_asset=None,
+            final_action="flat", stage="model_health", passed=False, reason=force_baseline_reason,
+            failed_gate="model_health",
+        )
+        return _finish(
+            journal_dir, last_run_path, journal_state, today_date, "flat",
+            f"{force_baseline_reason}; งดเปิดสถานะใหม่จนกว่า model health จะผ่าน",
+        )
+
+    # macro veto เป็น new-entry gate; ไม้เดิมถูกดูแลในขั้นก่อนหน้าแล้ว
+    if macro_veto_status and macro_veto_status.get("vetoed"):
+        return _finish(
+            journal_dir, last_run_path, journal_state, today_date, "skipped_macro_event",
+            macro_veto_status.get("reason", "วันนี้มีข่าวมหภาคสำคัญ — ข้ามการเทรดเพื่อความปลอดภัย"),
         )
 
     # 4-5. collect_data + build_features (ต่อทุกตลาดใน universe pool)
@@ -454,9 +463,6 @@ def _run_daily_pipeline_core(
     degrade_level = get_degradation_level(
         daily_spend, monthly_spend, settings.risk.llm_budget.daily_soft_cap_usd, settings.risk.llm_budget.hard_stop_usd
     )
-    if force_baseline_reason:
-        degrade_level = DEGRADE_LLM_OFF
-
     require_analyst_agreement = True
 
     if degrade_level >= DEGRADE_LLM_OFF:
@@ -630,6 +636,9 @@ def _run_daily_pipeline_core(
         stop_cap_pct=settings.risk.stops.stop_cap_pct,
         reward_risk_ratio=settings.risk.stops.reward_risk_ratio,
         max_leverage=settings.risk.mode_defaults.max_leverage,
+        round_trip_cost_pct=2 * (
+            settings.risk.costs.taker_fee_pct + settings.risk.costs.assumed_slippage_pct
+        ),
     )
 
     if sizing_result.decision == "FLAT":
@@ -784,7 +793,7 @@ def _cli_main() -> None:  # pragma: no cover - เรียกจริงบน
     model_registry = load_model_registry(CONFIG_DIR / "models.yaml")
     hl_client = HyperliquidClient()
     llm_client = LLMClient(
-        base_url=settings.secrets.litellm_base_url,
+        base_url=settings.secrets.llm_base_url(),
         api_keys=settings.secrets.llm_api_keys(),
         input_token_cap=settings.app.raw.get("llm", {}).get("input_token_cap", 8000),
         output_token_cap=settings.app.raw.get("llm", {}).get("output_token_cap", 1500),

@@ -78,13 +78,17 @@ def main() -> int:
     if not keys:
         raise RuntimeError("ไม่พบ MIMI_COACH_KEY หรือ LITELLM_KEY_1/LITELLM_KEY_2 สำหรับ role health check")
 
+    base_url = os.environ.get("MIMI_COACH_BASE_URL") if mimi_key else os.environ["LITELLM_BASE_URL"]
+    if mimi_key and not base_url:
+        raise RuntimeError("ตั้ง MIMI_COACH_KEY แล้วต้องตั้ง MIMI_COACH_BASE_URL ด้วย")
+
     client = LLMClient(
-        base_url=os.environ["LITELLM_BASE_URL"],
+        base_url=base_url,
         api_keys=keys,
         input_token_cap=500,
-        output_token_cap=50,
+        output_token_cap=256,
         timeout_sec=45,
-        max_validation_retries=0,
+        max_validation_retries=1,
     )
     roles = [r.strip() for r in args.roles.split(",") if r.strip()]
     report = probe_roles(client, registry, roles)

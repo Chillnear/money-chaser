@@ -187,8 +187,10 @@ def test_model_smoke(base_url: str, api_key: str, model_id: str, is_groq: bool =
 
 
 def main() -> None:
-    base_url = os.environ["LITELLM_BASE_URL"]
     mimi_key = os.environ.get("MIMI_COACH_KEY", "")
+    base_url = os.environ.get("MIMI_COACH_BASE_URL", "") if mimi_key else os.environ["LITELLM_BASE_URL"]
+    if mimi_key and not base_url:
+        raise RuntimeError("ตั้ง MIMI_COACH_KEY แล้วต้องตั้ง MIMI_COACH_BASE_URL ด้วย")
     key1 = mimi_key or os.environ["LITELLM_KEY_1"]
     key2 = mimi_key or os.environ.get("LITELLM_KEY_2", key1)
     groq_key = os.environ.get("GROQ_API_KEY", "")

@@ -37,6 +37,7 @@ jobs:
       - name: Check configured LLM role health (fallback to baseline if unhealthy)
         env:
           LITELLM_BASE_URL: ${{ secrets.LITELLM_BASE_URL }}
+          MIMI_COACH_BASE_URL: ${{ secrets.MIMI_COACH_BASE_URL }}
           MIMI_COACH_KEY: ${{ secrets.MIMI_COACH_KEY }}
           LITELLM_KEY_1: ${{ secrets.LITELLM_KEY_1 }}
           LITELLM_KEY_2: ${{ secrets.LITELLM_KEY_2 }}
@@ -46,6 +47,7 @@ jobs:
         env:
           MODE: ${{ vars.MODE || 'paper' }}
           LITELLM_BASE_URL: ${{ secrets.LITELLM_BASE_URL }}
+          MIMI_COACH_BASE_URL: ${{ secrets.MIMI_COACH_BASE_URL }}
           MIMI_COACH_KEY: ${{ secrets.MIMI_COACH_KEY }}
           LITELLM_KEY_1: ${{ secrets.LITELLM_KEY_1 }}
           LITELLM_KEY_2: ${{ secrets.LITELLM_KEY_2 }}

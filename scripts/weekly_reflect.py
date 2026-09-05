@@ -65,7 +65,7 @@ def main() -> int:
     settings = load_settings()
     model_registry = load_model_registry(CONFIG_DIR / "models.yaml")
     llm_client = LLMClient(
-        base_url=settings.secrets.litellm_base_url,
+        base_url=settings.secrets.llm_base_url(),
         api_keys=settings.secrets.llm_api_keys(),
         input_token_cap=settings.app.raw.get("llm", {}).get("input_token_cap", 8000),
         output_token_cap=settings.app.raw.get("llm", {}).get("output_token_cap", 1500),

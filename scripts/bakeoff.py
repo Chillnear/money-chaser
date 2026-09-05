@@ -28,23 +28,22 @@ from src.settings import STATE_DIR, load_settings  # noqa: E402
 
 # ผู้เข้าชิงแต่ละตำแหน่ง — แก้รายชื่อตรงนี้เวลาอยากเทียบตัวใหม่
 #
-# หมายเหตุ 2026-07-28: "Grok 4.1 Fast Reasoning" ผ่านบาก-ออฟรอบก่อน 100% แต่พอเอาไปใช้จริงตอน backtest
-# กลับเจอ error "team not allowed to access model" — แปลว่าผ่านบาก-ออฟไม่ได้แปลว่าใช้งานได้จริงเสมอไป ถ้า
-# สิทธิ์บัญชี LiteLLM เปลี่ยน ตัดออกจากลิสต์แล้ว แทนด้วยตัวที่ยืนยันจาก error message ว่าทีมนี้เข้าถึงได้จริง
+# รายการนี้เป็น candidate สำหรับ Mimi profile ณ 2026-09-05 เท่านั้น ก่อน run ต้องรัน probe_models.py ด้วย
+# credential/endpoint เดียวกับ CI และตัด ID ที่ไม่ผ่าน schema smoke ออกก่อนเสมอ เพราะสิทธิ์ gateway เปลี่ยนได้
 CANDIDATES = {
     "redteam": [
-        "GPT 5.2",
-        "Claude Sonnet 4.6",
-        "Claude Haiku 4.5",
-        "Gemini 3.0 pro",
-        "glm-5.2",
+        "gpt-5.5",
+        "gpt-5.6-terra",
+        "claude-opus-4-8",
+        "Gemini 3.1 pro",
+        "dashscope/qwen3.8-max",
     ],
     "judge": [
         "claude-opus-4-7",
-        "Claude Opus 4.5",
         "gpt-5.5",
-        "GPT 5.2",
-        "Claude Sonnet 4.6",
+        "gpt-5.6-terra",
+        "claude-opus-4-8",
+        "Gemini 3.1 pro",
     ],
 }
 
@@ -227,7 +226,7 @@ def print_summary_table(role: str, results: list[dict]) -> None:
 def main() -> int:
     settings = load_settings()
     llm_client = LLMClient(
-        base_url=settings.secrets.litellm_base_url,
+        base_url=settings.secrets.llm_base_url(),
         api_keys=settings.secrets.llm_api_keys(),
         input_token_cap=settings.app.raw.get("llm", {}).get("input_token_cap", 8000),
         output_token_cap=settings.app.raw.get("llm", {}).get("output_token_cap", 1500),

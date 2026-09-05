@@ -53,10 +53,11 @@ def check_hyperliquid() -> bool:
 
 def check_litellm() -> bool:
     print("\n=== 2. LiteLLM proxy ===")
-    base_url = os.environ.get("LITELLM_BASE_URL", "")
-    key1 = os.environ.get("MIMI_COACH_KEY", "") or os.environ.get("LITELLM_KEY_1", "")
+    mimi_key = os.environ.get("MIMI_COACH_KEY", "")
+    base_url = os.environ.get("MIMI_COACH_BASE_URL", "") if mimi_key else os.environ.get("LITELLM_BASE_URL", "")
+    key1 = mimi_key or os.environ.get("LITELLM_KEY_1", "")
     if not base_url or not key1:
-        print("  ⚠️  ไม่พบ LITELLM_BASE_URL และ MIMI_COACH_KEY/LITELLM_KEY_1 — ข้าม")
+        print("  ⚠️  ไม่พบ endpoint/key ของ credential profile ที่เลือก — ข้าม")
         return False
     import requests
 

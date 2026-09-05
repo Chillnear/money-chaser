@@ -432,7 +432,7 @@ def test_run_daily_pipeline_uses_baseline_without_any_llm_call_when_budget_exhau
     assert '"source": "baseline"' in decisions_log
 
 
-def test_model_health_failure_forces_baseline_and_surfaces_reason(tmp_path, settings, hl_client):
+def test_model_health_failure_blocks_new_entry_and_surfaces_reason(tmp_path, settings, hl_client):
     llm_client = _make_llm_client([])
     broker = PaperBroker(starting_equity_usd=28.0, taker_fee_pct=0.045, slippage_pct=0.05)
     reason = "model health ไม่ผ่าน (redteam) — fallback baseline"
@@ -449,11 +449,61 @@ def test_model_health_failure_forces_baseline_and_surfaces_reason(tmp_path, sett
         last_run_path=tmp_path / "last_run.json",
         force_baseline_reason=reason,
     )
-    assert result.action_taken == "opened_long"
+    assert result.action_taken == "flat"
     assert reason in result.reason
     llm_client._completion_fn.assert_not_called()
-    decision = json.loads((tmp_path / "journal" / "decisions.jsonl").read_text().splitlines()[-1])
-    assert decision["fallback_reason"] == reason
+    outcome = json.loads((tmp_path / "journal" / "decision_outcomes.jsonl").read_text().splitlines()[-1])
+    assert outcome["failed_gate"] == "model_health"
+
+
+def test_model_health_failure_still_manages_existing_position(tmp_path, settings, hl_client):
+    journal_dir = tmp_path / "journal"
+    now_ts = time.time()
+    broker = PaperBroker(starting_equity_usd=28.0, taker_fee_pct=0.045, slippage_pct=0.05)
+    position = broker.open_position(
+        asset="BTC", side="long", notional_usd=15.0, mid_price=100.0,
+        stop_pct=3.0, take_profit_pct=6.0, now_ts=now_ts - 86400,
+    )
+    save_journal_state(
+        journal_dir,
+        JournalState(
+            equity_usd=broker.get_account_equity(), peak_equity_usd=28.0,
+            open_position=asdict(position), breaker=BreakerState(),
+        ),
+    )
+    hl_client._candles_by_coin["BTC"][-1]["l"] = position.stop_price - 1
+    result = run_daily_pipeline(
+        settings=settings, hl_client=hl_client, llm_client=_make_llm_client([]), broker=broker,
+        model_registry=REGISTRY, today_date="2026-07-27", now_ts=now_ts,
+        journal_dir=journal_dir, kill_path=tmp_path / "KILL", last_run_path=tmp_path / "last_run.json",
+        force_baseline_reason="model health ไม่ผ่าน (macro)",
+    )
+    assert result.action_taken == "closed_position"
+
+
+def test_macro_veto_still_manages_existing_position(tmp_path, settings, hl_client):
+    journal_dir = tmp_path / "journal"
+    now_ts = time.time()
+    broker = PaperBroker(starting_equity_usd=28.0, taker_fee_pct=0.045, slippage_pct=0.05)
+    position = broker.open_position(
+        asset="BTC", side="long", notional_usd=15.0, mid_price=100.0,
+        stop_pct=3.0, take_profit_pct=6.0, now_ts=now_ts - 86400,
+    )
+    save_journal_state(
+        journal_dir,
+        JournalState(
+            equity_usd=broker.get_account_equity(), peak_equity_usd=28.0,
+            open_position=asdict(position), breaker=BreakerState(),
+        ),
+    )
+    hl_client._candles_by_coin["BTC"][-1]["l"] = position.stop_price - 1
+    result = run_daily_pipeline(
+        settings=settings, hl_client=hl_client, llm_client=_make_llm_client([]), broker=broker,
+        model_registry=REGISTRY, today_date="2026-07-27", now_ts=now_ts,
+        journal_dir=journal_dir, kill_path=tmp_path / "KILL", last_run_path=tmp_path / "last_run.json",
+        macro_veto_status={"vetoed": True, "reason": "FOMC"},
+    )
+    assert result.action_taken == "closed_position"
 
 
 def test_manage_existing_position_closes_on_stop_loss_and_clears_open_position(tmp_path, settings, hl_client):
