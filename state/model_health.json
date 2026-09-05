@@ -1,14 +1,16 @@
 {
-  "checked_at_ts": 1788532057.436645,
-  "healthy": true,
-  "unhealthy_roles": [],
+  "checked_at_ts": 1788582692.2735975,
+  "healthy": false,
+  "unhealthy_roles": [
+    "analyst_macro"
+  ],
   "results": [
     {
       "role": "analyst_trend",
       "model": "dashscope/qwen3.7-max",
       "provider": "alibaba",
       "healthy": true,
-      "latency_ms": 6702.7,
+      "latency_ms": 7413.7,
       "cost_usd": 0.0,
       "attempts": 1,
       "error": null
@@ -18,7 +20,7 @@
       "model": "claude-sonnet-5",
       "provider": "anthropic",
       "healthy": true,
-      "latency_ms": 2924.3,
+      "latency_ms": 2275.1,
       "cost_usd": 0.0,
       "attempts": 1,
       "error": null
@@ -27,18 +29,18 @@
       "role": "analyst_macro",
       "model": "Gemini 2.5 pro",
       "provider": "google",
-      "healthy": true,
-      "latency_ms": 2044.3,
+      "healthy": false,
+      "latency_ms": 0.0,
       "cost_usd": 0.0,
       "attempts": 1,
-      "error": null
+      "error": "parse/validate ไม่ผ่านหลัง retry 0 ครั้ง: โมเดลตอบเนื้อหาว่างเปล่า (content เป็น None) — อาจโดน content filter หรือปฏิเสธตอบ"
     },
     {
       "role": "redteam",
       "model": "gpt-5.5",
       "provider": "openai",
       "healthy": true,
-      "latency_ms": 3706.9,
+      "latency_ms": 2763.7,
       "cost_usd": 0.0007750000000000001,
       "attempts": 1,
       "error": null
@@ -48,7 +50,7 @@
       "model": "claude-opus-4-7",
       "provider": "anthropic",
       "healthy": true,
-      "latency_ms": 1751.7,
+      "latency_ms": 1540.9,
       "cost_usd": 0.0,
       "attempts": 1,
       "error": null

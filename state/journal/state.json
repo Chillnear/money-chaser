@@ -1,7 +1,15 @@
 {
   "equity_usd": 28.558308546920856,
   "peak_equity_usd": 29.171736431920856,
-  "open_position": null,
+  "open_position": {
+    "asset": "ZEC",
+    "side": "long",
+    "notional_usd": 10.0,
+    "entry_price": 1025.01225,
+    "stop_price": 963.5115149999999,
+    "take_profit_price": 1148.0137200000001,
+    "opened_at_ts": 1788582696.9169178
+  },
   "breaker": {
     "consecutive_losses": 1,
     "halving_remaining": 0,

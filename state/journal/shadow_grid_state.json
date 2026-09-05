@@ -1,15 +1,81 @@
 {
+  "engine_version": 2,
   "cash_usd": 2.8000000000000007,
   "open_position": {
     "symbol": "BTC",
-    "center_price": 77171.0,
+    "center_price": 79527.0,
     "grid_width_pct": 5.0,
     "num_levels": 5,
     "total_capital": 25.2,
-    "orders": [],
+    "orders": [
+      {
+        "price": 75550.65,
+        "size_usd": 2.4948,
+        "side": "buy",
+        "filled": false
+      },
+      {
+        "price": 76345.92,
+        "size_usd": 2.4948,
+        "side": "buy",
+        "filled": false
+      },
+      {
+        "price": 77141.19,
+        "size_usd": 2.4948,
+        "side": "buy",
+        "filled": false
+      },
+      {
+        "price": 77936.45999999999,
+        "size_usd": 2.4948,
+        "side": "buy",
+        "filled": false
+      },
+      {
+        "price": 78731.73,
+        "size_usd": 2.4948,
+        "side": "buy",
+        "filled": false
+      },
+      {
+        "price": 80322.27,
+        "size_usd": 2.4948,
+        "side": "sell",
+        "filled": false
+      },
+      {
+        "price": 81117.54000000001,
+        "size_usd": 2.4948,
+        "side": "sell",
+        "filled": false
+      },
+      {
+        "price": 81912.81,
+        "size_usd": 2.4948,
+        "side": "sell",
+        "filled": false
+      },
+      {
+        "price": 82708.08,
+        "size_usd": 2.4948,
+        "side": "sell",
+        "filled": false
+      },
+      {
+        "price": 83503.35,
+        "size_usd": 2.4948,
+        "side": "sell",
+        "filled": false
+      }
+    ],
     "filled_volume_usd": 0.0,
-    "accumulated_pnl": 2.321879070117015,
-    "entry_time": "1787450870.0930731"
+    "accumulated_pnl": 0.0,
+    "entry_time": "1788582806.0096655",
+    "quote_cash_usd": 12.6,
+    "base_qty": 0.00015843675732770004,
+    "last_price": 79527.0,
+    "last_processed_ts": 1788584399999
   },
-  "realized_pnl_usd": 2.321879070117015
+  "low_volatility_days_count": 0
 }
